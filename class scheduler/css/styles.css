@@ -46,6 +46,11 @@ footer {
     font-family: "Comic Sans MS", "Comic Sans", cursive ;
 }
 
+.sidenav #logo{
+    /* padding-left: 50px; */
+    padding: 6px 8px 25px 0px;
+}
+
 
 /* content from https://www.w3schools.com/ */
 .sidenav {
@@ -58,21 +63,26 @@ footer {
     background-color: #27405a;
     overflow-x: hidden; /* Disable horizontal scroll */
     padding-top: 20px;
+    
 }
 
 /* The navigation menu links */
+/*Cambria, Cochin, Georgia, Times, 'Times New Roman', serif */
 .sidenav a {
-    padding: 6px 8px 6px 16px;
+    padding: 6px 8px 25px 16px;
     text-decoration: none;
-    font-size: 25px;
-    color: #818181;
+    font-size: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #b2bad6;
     display: block;
 }
 
 /* When you mouse over the navigation links, change their color */
 .sidenav a:hover {
-    color: #f1f1f1;
+    color: #ffffff;
 }
+
+
 
 /* Style page content */
 .main {
@@ -96,6 +106,7 @@ footer {
     top: 0; /* Stay at the top */
     left: 0;
     padding-top: 20px;
+    margin-left: 160px;
     
     
 }
