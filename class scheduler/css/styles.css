@@ -55,7 +55,7 @@ footer {
 /* content from https://www.w3schools.com/ */
 .sidenav {
     height: 100%; /* Full-height: remove this if you want "auto" height */
-    width: 160px; /* Set the width of the sidebar */
+    width: 200px; /* Set the width of the sidebar */
     position: fixed; /* Fixed Sidebar (stay in place on scroll) */
     z-index: 1; /* Stay on top */
     top: 0; /* Stay at the top */
@@ -86,8 +86,9 @@ footer {
 
 /* Style page content */
 .main {
-    margin-left: 160px; /* Same as the width of the sidebar */
-    padding: 160px 10px;
+
+    margin-left: 200px; /* Same as the width of the sidebar */
+    margin-top: 150px
 }
 
 /* On smaller screens, where height is less than 450px, change the style of the sidebar (less padding and a smaller font size) */
@@ -106,7 +107,7 @@ footer {
     top: 0; /* Stay at the top */
     left: 0;
     padding-top: 20px;
-    margin-left: 160px;
+    margin-left: 200px;
     
     
 }
