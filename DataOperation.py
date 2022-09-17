@@ -40,6 +40,7 @@ class DataOperation:
         """
         
         self.authenticate_credentials()
+    # End of init
 
 
 
@@ -63,7 +64,7 @@ class DataOperation:
         firebase_admin.initialize_app(cred, {
             'databaseURL' : database_url
         })
-        
+    # End of authenticate_credentials
 
 
     def importCSV(filename):
@@ -101,7 +102,9 @@ class DataOperation:
         # Sets the full database
         ref = db.reference('/')
         ref.set(list_of_section_dicts)
-
+    # End of importCSV
+    
+# End of DataOperation
 
 #########################################
 #
