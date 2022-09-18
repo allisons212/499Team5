@@ -1,6 +1,8 @@
 
 body {
     background-color: #ffffff;
+    margin: 0px;
+    padding: 0px;
 }
 
 h {
@@ -46,11 +48,6 @@ footer {
     font-family: "Comic Sans MS", "Comic Sans", cursive ;
 }
 
-.sidenav #logo{
-    /* padding-left: 50px; */
-    padding: 6px 8px 25px 0px;
-}
-
 
 /* content from https://www.w3schools.com/ */
 .sidenav {
@@ -88,7 +85,6 @@ footer {
 .main {
 
     margin-left: 200px; /* Same as the width of the sidebar */
-    margin-top: 150px
 }
 
 /* On smaller screens, where height is less than 450px, change the style of the sidebar (less padding and a smaller font size) */
@@ -98,35 +94,61 @@ footer {
 }
 
 .topnav {
-    overflow: hidden;
     background-color: #0078c8;
     height: 100px; /* Full-height: remove this if you want "auto" height */
-    width: 100%; /*Set the width of the sidebar */
-     position: fixed; /* Fixed Sidebar (stay in place on scroll) */
-    z-index: 1; /* Stay on top */
-    top: 0; /* Stay at the top */
-    left: 0;
-    padding-top: 20px;
-    margin-left: 200px;
-    
+     z-index: 1;
+    margin-left: 192px;
+    text-align: end;
+    padding-right: 20px;
+    padding-top: 30px;
     
 }
 
 .topnav a {
-    float: left;
     color: #f2f2f2;
-    text-align: center;
-    padding: 14px 16px;
-    text-decoration: none;
-    font-size: 17px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: inline-block;
+    padding: 5px;
+
 }
 
 .topnav a:hover {
-    background-color: #ddd;
-    color: black;
+    color: #27405a;
 }
 
-.topnav a.active {
-    background-color: #04AA6D;
-    color: white;
+.account {
+    position: relative;
+    display: inline-block;
+
+  }
+
+/* Dropdown Content (Hidden by Default) */
+.accountDropdownContent {
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: #27405a;
+    min-width: 160px;
+    z-index: 1;
+    text-align: center;
+  }
+  
+  /* Links inside the dropdown */
+  .accountDropdownContent a {
+    color: #b2bad6;
+    text-decoration: none;
+    display: block;
+    margin: 0px;
+    padding: 10px;
+  }
+  
+  /* Change color of dropdown links on hover */
+  .accountDropdownContent a:hover {
+    background-color: #3d628a;
+    color: #ffffff;
 }
+  
+  /* Show the dropdown menu on hover */
+  .account:hover .accountDropdownContent {display: block;}
+  
+
