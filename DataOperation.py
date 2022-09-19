@@ -1,5 +1,5 @@
 ########################################################################
-# Project Title:    UAH Course Scheduler
+# Project Title:    Course Scheduling System
 # Class:            CS 499-01 - Sr. Project Design
 # Term:             FA 22
 # 
@@ -21,6 +21,7 @@
 
 
 import csv
+import re
 
 import os
 from dotenv import load_dotenv
@@ -28,6 +29,10 @@ from dotenv import load_dotenv
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import db
+
+from DataOperationException import * # Custom exceptions
+from DataOperationEnums import * # Custom enums
+
 
 class DataOperation:
     """
@@ -40,7 +45,7 @@ class DataOperation:
         """
         
         self.authenticate_credentials()
-    # End of init
+    # End of init        
 
 
 
@@ -53,7 +58,7 @@ class DataOperation:
         # Loads virtual .env variables
         load_dotenv()
 
-        # Path pointing to a downloaded private key from Project Settings > Service Accounts
+        # Path pointing to firebase key
         credentials_path = os.environ.get('credentials_path')
 
         # Reads in url to Realtime Database
@@ -67,52 +72,77 @@ class DataOperation:
     # End of authenticate_credentials
 
 
-    def importCSV(filename):
+    def importCSV(self, filename, department_abbr):
         """
         Reads CSV file with schedule data and checks for formatting.
         Afterwards, it creates database entries for each class section.
 
         Args:
             filename (string): Path directed to csv file to import
-        """        
-        
-        f = filename
-        
+            department_abbr (string): Abbreviation of the department (e.g., CS, ECE) classes to update
+            
+        Raises:
+            ImportFormatError: If imported CSV file does not adhere to specified formatting guidelines.
+        """
+                
         # Each row of the csv input will be reorganized as a nested dictionary with
         # 'Course Section' being the key to another dictionary containing the rest
         # of the csv row fields.
         # Each of these rows will be appended to the following list
         list_of_section_dicts = []
-        
+                
+        f = filename
         with open(f, mode='r', encoding='utf-8-sig') as read_obj:
             csv_dict_reader = csv.DictReader(read_obj)
             
+            row_num = 1 # Current row number
             
             # Reads in each row of csv file, 'row' is a dictionary keyed by the column headers
-            for row in csv_dict_reader:            
+            for row in csv_dict_reader:
+                row_num += 1
+                # Checking for improper fields
+                
+                # Check course section
+                course = row[ColumnHeaders.COURSE_SEC.value] # e.g., CS103-01
+                match = re.findall(r"^[A-Z]{2,3}[0-9]{3}[-][0-9]{2}$", str(course)) # Regex to check input
+                if not match:
+                    raise ImportFormatError(f"Row {row_num} is formatted incorrectly.\n" +
+                                            f"Please follow the following format for {ColumnHeaders.COURSE_SEC.value}:\n" +
+                                            "[2-3 Capital Letters][3-digit integer]-[2-digit integer]\n")
+                
+                                    
+                # No need to check faculty name
+                faculty_assignment = row[ColumnHeaders.FAC_ASSIGN.value] # e.g., Dr. Goober
+                
+                
+                # Check building number
+                #NOTE: Should we make them recreate the csv or throw up errors in GUI for building numbers that aren't open?
+                classroom_pref = row[ColumnHeaders.CLASS_PREF.value] # e.g., OKT203, SST123, MOR
+                
+                
+                
+                time_pref = row[ColumnHeaders.TIME_PREF.value] # e.g., A, B, C, D, E, F, G; designating class time blocks throughout the day
+                day_pref = row[ColumnHeaders.DAY_PREF.value] # e.g., M, T, W, R, F (R = Thursday)
+                seats_open = row[ColumnHeaders.SEATS_OPEN.value] # Positive integer denoting max number of students for that section
+                
+                
                 # Creates nested dictionary with course section as the key
                 temp = row
-                course = temp.pop('Course Section')
+                course = temp.pop(ColumnHeaders.COURSE_SEC.value)
                 course_dict = {}
                 course_dict[course] = temp
                 
                 # Appends Course Section dictionary to cumulative list of rows
                 list_of_section_dicts.append(course_dict)
-
-        # Sets the full database
+                
+            # End for loop
+        # End of file reading
+        
+        # Updates the department's database tree
+        department_dict = {f"{department_abbr}": list_of_section_dicts}
         ref = db.reference('/')
-        ref.set(list_of_section_dicts)
+        ref.update(department_dict)
+        
     # End of importCSV
     
 # End of DataOperation
-
-#########################################
-#
-# Main
-#
-#########################################
-
-csv_file = "path/to/file.csv"
-
-DataOperation() # Runs constructor to authenticate credentials
-DataOperation.importCSV(csv_file) # Test a csv file
