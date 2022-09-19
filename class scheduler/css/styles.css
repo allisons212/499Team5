@@ -84,7 +84,7 @@ footer {
 /* Style page content */
 .main {
 
-    margin-left: 200px; /* Same as the width of the sidebar */
+    margin-left: 225px; /* Same as the width of the sidebar */
 }
 
 /* On smaller screens, where height is less than 450px, change the style of the sidebar (less padding and a smaller font size) */
@@ -116,11 +116,13 @@ footer {
     color: #27405a;
 }
 
+/* content from https://www.w3schools.com/ */
 .account {
     position: relative;
     display: inline-block;
 
   }
+
 
 /* Dropdown Content (Hidden by Default) */
 .accountDropdownContent {
