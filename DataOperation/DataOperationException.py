@@ -24,9 +24,16 @@
 class ImportFormatError(Exception):
     """
     Import CSV file is not the right format.
-    
-    Default exception message: "Bad input formatting. Check input csv guidelines."
     """
     
-    def __init__(self, msg="Bad input formatting. Check input csv guidelines."):
+    def __init__(self, msg="Incorrect input formatting. Please check import CSV guidelines."):
+        super().__init__(msg)
+
+
+class QueryNotFoundError(Exception):
+    """
+    Database query returned no data or findings.
+    """
+    
+    def __init__(self, msg="Database query returned no data."):
         super().__init__(msg)

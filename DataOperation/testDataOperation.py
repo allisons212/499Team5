@@ -17,8 +17,15 @@ def main():
         
     except ImportFormatError as ife:
         print(f"{ife}\n")
-
-
+        
+    
+    try:
+        r = data_operation.getDB("EMS")
+        print(r)
+        print(f"Type: {type(r)}")
+        
+    except QueryNotFoundError as qnfe:
+        print(f"{qnfe}")
 
 
 
