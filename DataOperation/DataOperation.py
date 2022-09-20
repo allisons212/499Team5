@@ -161,7 +161,10 @@ class DataOperation:
         (e.g., CS, ECE) followed by the course section
         (e.g., CS100-01, ECE100-01).
         
-        Example database paths: CS, CS/CS100-01, ECE, ECE/100-01
+        Example database paths: CS
+                                ECE
+                                CS/CS100-01
+                                ECE/ECE100-01
 
         Args:
             database_path (string): Realtime Database path
