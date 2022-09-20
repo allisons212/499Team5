@@ -90,7 +90,7 @@ class DataOperation:
         # 'Course Section' being the key to another dictionary containing the rest
         # of the csv row fields.
         # Each of these rows will be appended to the following list
-        list_of_section_dicts = []
+        dict_of_section_dicts = {}
                 
         f = filename
         with open(f, mode='r', encoding='utf-8-sig') as read_obj:
@@ -128,27 +128,23 @@ class DataOperation:
                 
                 
                 # Creates nested dictionary with course section as the key
-                temp = row
-                course = temp.pop(ColumnHeaders.COURSE_SEC.value)
+                course_dict = row
+                course = course_dict.pop(ColumnHeaders.COURSE_SEC.value)
                 
                 # Appends three key-value pairs for assignments
-                temp[ColumnHeaders.ROOM_ASS.value] = ""
-                temp[ColumnHeaders.TIME_ASS.value] = ""
-                temp[ColumnHeaders.DAY_ASS.value] = ""
-                
-                # Completes directory
-                course_dict = {}
-                course_dict[course] = temp
+                course_dict[ColumnHeaders.ROOM_ASS.value] = ""
+                course_dict[ColumnHeaders.TIME_ASS.value] = ""
+                course_dict[ColumnHeaders.DAY_ASS.value] = ""
 
                 
-                # Appends Course Section dictionary to cumulative list of rows
-                list_of_section_dicts.append(course_dict)
+                # Appends Course Section dictionary to cumulative dictionary of sections
+                dict_of_section_dicts[course] = course_dict
                 
             # End for loop
         # End of file reading
         
         # Updates the department's database tree
-        department_dict = {f"{department_abbr}": list_of_section_dicts}
+        department_dict = {f"{department_abbr}": dict_of_section_dicts}
         ref = db.reference('/')
         ref.update(department_dict)
         
@@ -158,8 +154,36 @@ class DataOperation:
 
 
 
+    def getDB(self, database_path):
+        """
+        Returns information based on the database_path query.
+        Query must be a path denoting a department abbreviation
+        (e.g., CS, ECE) followed by the course section
+        (e.g., CS100-01, ECE100-01).
+        
+        Example database paths: CS, CS/CS100-01, ECE, ECE/100-01
 
-def setField(database_path):
-    pass
+        Args:
+            database_path (string): Realtime Database path
+
+        Returns:
+            Dictionary: All info in Realtime Database is stored as dictionary
+        
+        Raises:
+            QueryNotFoundError: database_path doesn't return data
+        """
+        
+        ref = db.reference(f'/{database_path}')
+        retrieved = ref.get()
+        
+        if retrieved:
+            return retrieved
+        else:
+            raise QueryNotFoundError()
+
+
+
+    def updateDB(database_path):
+        pass
     
 # End of DataOperation
