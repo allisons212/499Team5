@@ -79,12 +79,30 @@ footer {
     color: #ffffff;
 }
 
+.sidenav a.currentPage {
+    color: #fcda23;
+    background-color: #1e3044;
+}
+
+.sidenav a.currentPage:hover {
+    color: #ffe341;
+    background-color: #21364d;
+}
+
+
+
 
 
 /* Style page content */
 .main {
 
     margin-left: 225px; /* Same as the width of the sidebar */
+    padding: 25px;
+}
+
+.generateEditors{
+    font-size: 30px;
+    text-align: end;
 }
 
 /* On smaller screens, where height is less than 450px, change the style of the sidebar (less padding and a smaller font size) */
@@ -101,7 +119,10 @@ footer {
     text-align: end;
     padding-right: 20px;
     padding-top: 30px;
-    
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-items: right; 
 }
 
 .topnav a {
@@ -109,7 +130,7 @@ footer {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     display: inline-block;
     padding: 5px;
-
+    margin-left: auto;
 }
 
 .topnav a:hover {
@@ -152,5 +173,6 @@ footer {
   
   /* Show the dropdown menu on hover */
   .account:hover .accountDropdownContent {display: block;}
-  
 
+
+  
