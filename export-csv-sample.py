@@ -24,7 +24,7 @@ def doCSV(filename):
             
             # Initializes row dict info
             
-            course = row['Course Section']                              # e.g., CS103-01
+            course = row['Course Section']                      # e.g., CS103-01
             faculty_assignment = row['Faculty Assignment']      # e.g., Dr. Goober
             classroom_pref = row['Classroom Preferences']       # e.g., OKT203, SST123, MOR
             time_pref = row['Time Block Preferences']           # e.g., A, B, C, D, E, F, G; designating class time blocks throughout the day
