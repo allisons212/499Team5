@@ -31,6 +31,10 @@ class ColumnHeaders(Enum):
     TIME_PREF = 'Time Block Preferences'
     DAY_PREF = 'Day Preferences'
     SEATS_OPEN = 'Seats Open'
+    ROOM_ASS = 'Classroom Assignment'
+    TIME_ASS = 'Time Assignment'
+    DAY_ASS = 'Day Assignment'
+    
     
 class DepartmentAbbreviations(Enum):
     """

@@ -82,6 +82,7 @@ class DataOperation:
             department_abbr (string): Abbreviation of the department (e.g., CS, ECE) classes to update
             
         Raises:
+            FileNotFoundError: If filename does not get resolved to a csv file.
             ImportFormatError: If imported CSV file does not adhere to specified formatting guidelines.
         """
                 
@@ -129,8 +130,16 @@ class DataOperation:
                 # Creates nested dictionary with course section as the key
                 temp = row
                 course = temp.pop(ColumnHeaders.COURSE_SEC.value)
+                
+                # Appends three key-value pairs for assignments
+                temp[ColumnHeaders.ROOM_ASS.value] = ""
+                temp[ColumnHeaders.TIME_ASS.value] = ""
+                temp[ColumnHeaders.DAY_ASS.value] = ""
+                
+                # Completes directory
                 course_dict = {}
                 course_dict[course] = temp
+
                 
                 # Appends Course Section dictionary to cumulative list of rows
                 list_of_section_dicts.append(course_dict)
@@ -144,5 +153,13 @@ class DataOperation:
         ref.update(department_dict)
         
     # End of importCSV
+
+
+
+
+
+
+def setField(database_path):
+    pass
     
 # End of DataOperation
