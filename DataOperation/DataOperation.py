@@ -183,10 +183,12 @@ class DataOperation:
             return retrieved
         else:
             raise QueryNotFoundError()
+    # End of getDB
 
 
 
     def updateDB(database_path):
         pass
+    # End if update DB
     
 # End of DataOperation
