@@ -1,46 +1,46 @@
 ﻿Course Section,Faculty Assignment,Classroom Preferences,Time Block Preferences,Day Preferences,Seats Open
-CS100-01,Dr. Mike,OKT,,,
-CS106-01,Dr. Able,OKT,,,
-CS134-01,Dr. Charlie,OKT 342,,,
-CS136-01,Dr. Golf,OKT,,,
-CS158-01,Dr. Echo,OKT,,,
-CS172-01,Dr. Kilo,OKT,,,
-CS193-01,Dr. Oscar,OKT,,"M, W",
-CS199-01,Dr. India,OKT,"A, B, C",,
-CS217-01,Dr. Oscar,OKT,,"M, W",
-CS225-01,Dr. Golf,OKT,,,
-CS241-01,Dr. Mike,OKT,,,
-CS242-01,Dr. Kilo,OKT,,,
-CS245-01,Dr. India,OKT,"A, B, C",,
-CS253-01,Dr. Echo,OKT,,,
-CS257-01,Dr. Able,OKT,,,
-CS299-01,Dr. Charlie,OKT,,,
-CS305-01,Dr. Kilo,OKT,,,
-CS306-01,Dr. Golf,OKT,,,
-CS309-01,Dr. Lima,OKT,,,
-CS316-01,Dr. Hotel,OKT,,,
-CS325-01,Dr. India,OKT,"A, B, C",,
-CS330-01,Dr. Echo,OKT,,,
-CS334-01,Dr. November,OKT,,"T, R",
-CS353-01,Dr. Foxtrot,OKT,,,
-CS367-01,Dr. Charlie,OKT,,,
-CS378-01,Dr. Able,OKT,,,
-CS384-01,Dr. Mike,OKT,,,
-CS385-01,Dr. Dog,OKT 133,,,
-CS391-01,Dr. Juliet,OKT,,,
-CS395-01,Dr. Brovo,OKT,,,
-CS397-01,Dr. Oscar,OKT,,"M, W",
-CS406-01,Dr. Lima,OKT,,,
-CS416-01,Dr. Brovo,OKT,,,
-CS433-01,Dr. Hotel,OKT,,,
-CS452-01,Dr. Foxtrot,OKT,,,
-CS458-01,Dr. Juliet,OKT,,,
-CS465-01,Dr. Dog,OKT,,,
-CS471-01,Dr. November,OKT,,"T, R",
-CS527-01,Dr. Lima,OKT,,,
-CS532-01,Dr. Foxtrot,OKT,,,
-CS540-01,Dr. Hotel,OKT,,,
-CS561-01,Dr. Juliet,OKT,,,
-CS567-01,Dr. Dog,OKT,,,
-CS574-01,Dr. November,OKT,,"T, R",
-CS585-01,Dr. Brovo,OKT,,,
+CS100-01,Dr. Mike,OKT,,,60
+CS106-01,Dr. Able,OKT,,,60
+CS134-01,Dr. Charlie,OKT342,,,60
+CS136-01,Dr. Golf,OKT,,,60
+CS158-01,Dr. Echo,OKT,,,60
+CS172-01,Dr. Kilo,OKT,,,60
+CS193-01,Dr. Oscar,OKT,,"M, W",60
+CS199-01,Dr. India,OKT,"A, B, C",,60
+CS217-01,Dr. Oscar,OKT,,"M, W",60
+CS225-01,Dr. Golf,OKT,,,60
+CS241-01,Dr. Mike,OKT,,,60
+CS242-01,Dr. Kilo,OKT,,,60
+CS245-01,Dr. India,OKT,"A, B, C",,60
+CS253-01,Dr. Echo,OKT,,,60
+CS257-01,Dr. Able,OKT,,,60
+CS299-01,Dr. Charlie,OKT,,,60
+CS305-01,Dr. Kilo,OKT,,,60
+CS306-01,Dr. Golf,OKT,,,60
+CS309-01,Dr. Lima,OKT,,,60
+CS316-01,Dr. Hotel,OKT,,,60
+CS325-01,Dr. India,OKT,"A, B, C",,60
+CS330-01,Dr. Echo,OKT,,,60
+CS334-01,Dr. November,OKT,,"T, R",60
+CS353-01,Dr. Foxtrot,OKT,,,60
+CS367-01,Dr. Charlie,OKT,,,60
+CS378-01,Dr. Able,OKT,,,60
+CS384-01,Dr. Mike,OKT,,,60
+CS385-01,Dr. Dog,OKT133,,,60
+CS391-01,Dr. Juliet,OKT,,,60
+CS395-01,Dr. Brovo,OKT,,,60
+CS397-01,Dr. Oscar,OKT,,"M, W",60
+CS406-01,Dr. Lima,OKT,,,60
+CS416-01,Dr. Brovo,OKT,,,60
+CS433-01,Dr. Hotel,OKT,,,60
+CS452-01,Dr. Foxtrot,OKT,,,60
+CS458-01,Dr. Juliet,OKT,,,60
+CS465-01,Dr. Dog,OKT,,,60
+CS471-01,Dr. November,OKT,,"T, R",60
+CS527-01,Dr. Lima,OKT,,,60
+CS532-01,Dr. Foxtrot,OKT,,,60
+CS540-01,Dr. Hotel,OKT,,,60
+CS561-01,Dr. Juliet,OKT,,,60
+CS567-01,Dr. Dog,OKT,,,60
+CS574-01,Dr. November,OKT,,"T, R",60
+CS585-01,Dr. Brovo,OKT,,,60
