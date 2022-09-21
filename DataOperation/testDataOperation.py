@@ -9,7 +9,7 @@ def main():
     
     # Sample try-catch block for importCSV()
     try:
-        csv_file = "C:/Users/hmatt/OneDrive/Documents/dev/project/499Team5/ClassData/Dept1ClassData.csv" # This is provided from GUI
+        csv_file = "/file/path/to/.csv" # This is provided from GUI
         department_abbr = "CS"                   # This is provided from GUI
         data_operation.importCSV(csv_file, department_abbr) # Test a csv file
     

@@ -190,9 +190,6 @@ class DataOperation:
         else:
             raise QueryNotFoundError()
         
-    def mergedict(a,b):
-        a.update(b)
-        return a
         
     def exportCSV(self, department_data):
         """
@@ -214,16 +211,24 @@ class DataOperation:
         # Now lets open a CSV file to write to
         with open('exportData.csv', 'w', encoding='utf-8-sig') as csvfile:
             
-            # Create a writer that has fieldnames equal to column_information
+            # Create a writer that has fieldnames equal to column_information. 
+            # Line Terminator must be set to \n or it will skip lines in the export CSV
             writer = csv.DictWriter(csvfile, fieldnames = fieldnames, lineterminator = '\n')
             writer.writeheader()
 
+            # new_list will hold our new dictionary that is not nested.
+            # this makes it much easier to use writerow()
             new_list = {}
-               
+            
+            # Counter variable will keep track of which index we are at
             counter = 0
             for i in department_data.keys():
+                
+                # Set the Classroom Assignment equal to the first key EX. 'CS100-01
                 new_list["Classroom Assignment"] = i
             
+                # use another for loopo to access each value using [i] as the index
+                # This loop will print out the data in the order that is seen EX. Classroom Preferences, Day Assignment, ....
                 for j in department_data[i].values():
                     if counter == 1:
                         new_list["Classroom Preferences"] = j
@@ -242,12 +247,11 @@ class DataOperation:
                     counter = counter + 1
                 counter = 0
                 print(new_list)
+                
+                # Write to the exportCSV file with the information from new_list that was parsed from department_data
                 writer.writerow(new_list)
-        
-        
-
-
-
+                
+                
     def updateDB(database_path):
         pass
     
