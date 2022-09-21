@@ -22,6 +22,7 @@
 
 import csv
 import re
+import pandas as pd
 
 import os
 from dotenv import load_dotenv
@@ -106,6 +107,7 @@ class DataOperation:
                 # Check course section
                 course = row[ColumnHeaders.COURSE_SEC.value] # e.g., CS103-01
                 match = re.findall(r"^[A-Z]{2,3}[0-9]{3}[-][0-9]{2}$", str(course)) # Regex to check input
+                
                 if not match:
                     raise ImportFormatError(f"Row {row_num} is formatted incorrectly.\n" +
                                             f"Please follow the following format for {ColumnHeaders.COURSE_SEC.value}:\n" +
@@ -121,9 +123,13 @@ class DataOperation:
                 classroom_pref = row[ColumnHeaders.CLASS_PREF.value] # e.g., OKT203, SST123, MOR
                 
                 
-                
+                # Check time_pref to make sure it is in correct format
                 time_pref = row[ColumnHeaders.TIME_PREF.value] # e.g., A, B, C, D, E, F, G; designating class time blocks throughout the day
+                
+                # Check day_pref to make sure it is in correct format
                 day_pref = row[ColumnHeaders.DAY_PREF.value] # e.g., M, T, W, R, F (R = Thursday)
+                
+                # Check seats_open to make sure it is a unsigned positive integer
                 seats_open = row[ColumnHeaders.SEATS_OPEN.value] # Positive integer denoting max number of students for that section
                 
                 
@@ -183,6 +189,62 @@ class DataOperation:
             return retrieved
         else:
             raise QueryNotFoundError()
+        
+    def mergedict(a,b):
+        a.update(b)
+        return a
+        
+    def exportCSV(self, department_data):
+        """
+        Exports a CSV from the database. This function depends on output generated from the getDB function
+
+        Args:
+            department_data (dictionary): Data from the firebase db for a specfic department.
+            EX. It could be the CS data or the ECE data depending on parameter that was given to getDB
+        """
+        
+        print("IN EXPORT CSV")
+        # TEST: Print out information to make sure department_data is a dict
+        #print(department_data)
+        
+        # Column headers for output CSV
+        fieldnames = ['Classroom Assignment', 'Classroom Preferences', 'Day Assignment', 'Day Preferences', 'Faculty Assignment',
+                    'Seats Open', 'Time Assignment', 'Time Block Preferences']
+        
+        # Now lets open a CSV file to write to
+        with open('exportData.csv', 'w', encoding='utf-8-sig') as csvfile:
+            
+            # Create a writer that has fieldnames equal to column_information
+            writer = csv.DictWriter(csvfile, fieldnames = fieldnames, lineterminator = '\n')
+            writer.writeheader()
+
+            new_list = {}
+               
+            counter = 0
+            for i in department_data.keys():
+                new_list["Classroom Assignment"] = i
+            
+                for j in department_data[i].values():
+                    if counter == 1:
+                        new_list["Classroom Preferences"] = j
+                    elif counter == 2:
+                        new_list["Day Assignment"] = j
+                    elif counter == 3:
+                        new_list["Day Preferences"] = j
+                    elif counter == 4:
+                        new_list["Faculty Assignment"] = j
+                    elif counter == 5:
+                        new_list["Seats Open"] = j
+                    elif counter == 6:
+                        new_list["Time Assignment"] = j
+                    elif counter == 7:
+                        new_list["Time Block Preferences"] = j
+                    counter = counter + 1
+                counter = 0
+                print(new_list)
+                writer.writerow(new_list)
+        
+        
 
 
 

@@ -1,5 +1,6 @@
 from DataOperation import DataOperation
 from DataOperationException import * # Custom exceptions
+import pprint
 
 
 def main():
@@ -8,8 +9,8 @@ def main():
     
     # Sample try-catch block for importCSV()
     try:
-        csv_file = "ClassData/Dept2ClassData.csv" # This is provided from GUI
-        department_abbr = "ECE"                   # This is provided from GUI
+        csv_file = "C:/Users/hmatt/OneDrive/Documents/dev/project/499Team5/ClassData/Dept1ClassData.csv" # This is provided from GUI
+        department_abbr = "CS"                   # This is provided from GUI
         data_operation.importCSV(csv_file, department_abbr) # Test a csv file
     
     except FileNotFoundError as fnfe:
@@ -20,8 +21,10 @@ def main():
         
     
     try:
-        r = data_operation.getDB("EMS")
-        print(r)
+        r = data_operation.getDB("ECE")
+        
+        # Testing the exportCSV function by sending it the dictionary that we got from getDB
+        data_operation.exportCSV(r)
         print(f"Type: {type(r)}")
         
     except QueryNotFoundError as qnfe:

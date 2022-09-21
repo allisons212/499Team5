@@ -15,7 +15,7 @@ def importCSV(filename):
         # Reads in each row of csv file, 'row' is a dictionary keyed by the column headers
         for row in csv_dict_reader:            
             # Initializes row dict info
-            course = row['Course']                              # e.g., CS103-01
+            course = row['Course Section']                              # e.g., CS103-01
             faculty_assignment = row['Faculty Assignment']      # e.g., Dr. Goober
             classroom_pref = row['Classroom Preferences']       # e.g., OKT203, SST123, MOR
             time_pref = row['Time Block Preferences']           # e.g., A, B, C, D, E, F, G; designating class time blocks throughout the day
@@ -28,7 +28,7 @@ def importCSV(filename):
 
 
 # File path of csv file
-filename = ""
+filename = "ClassData/Dept1ClassData.csv"
 
 if len(filename) == 0:
     print("Specify a filename or file path in main")
