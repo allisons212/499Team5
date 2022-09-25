@@ -13,6 +13,7 @@
 # Purpose:      To establish a set of enums for DataOperation.py
 #
 # Editors of this file:     Devin Patel
+#                           Harrison Matthews
 # 
 # NOTES:
 #   1) To access a value of an enum, do <EnumClass>.<EnumName>.value
@@ -27,7 +28,7 @@ class ColumnHeaders(Enum):
     """
     COURSE_SEC = 'Course Section'
     FAC_ASSIGN = 'Faculty Assignment'
-    CLASS_PREF = 'Classroom Preferences'
+    ROOM_PREF = 'Classroom Preferences'
     TIME_PREF = 'Time Block Preferences'
     DAY_PREF = 'Day Preferences'
     SEATS_OPEN = 'Seats Open'
