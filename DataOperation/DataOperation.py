@@ -203,7 +203,6 @@ class DataOperation:
             database_path (string): Realtime Database path that will be updated by new_database_entry
         
         Raises:
-            ValueError: When new_database_entry is not a non-empty dictionary.
             ImproperDictionaryError: When new_database_entry does not contain all the proper keys.
         """
         
