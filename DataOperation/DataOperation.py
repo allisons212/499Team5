@@ -221,6 +221,7 @@ class DataOperation:
             for header in ColumnHeaders:
                 if key == header.value:
                     key_isFound = True
+                    break
             
             if not key_isFound:
                 raise ImproperDictionaryError(f"\"{key}\" is not an acceptable key in this database entry.")
