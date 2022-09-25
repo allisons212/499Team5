@@ -14,6 +14,7 @@
 #               operations can be called by a web server host.
 #
 # Editors of this file:     Devin Patel
+#                           Harrison Matthews
 # 
 # NOTES:
 #
@@ -118,7 +119,7 @@ class DataOperation:
                 
                 # Check building number
                 #NOTE: Should we make them recreate the csv or throw up errors in GUI for building numbers that aren't open?
-                classroom_pref = row[ColumnHeaders.CLASS_PREF.value] # e.g., OKT203, SST123, MOR
+                classroom_pref = row[ColumnHeaders.ROOM_PREF.value] # e.g., OKT203, SST123, MOR
                 
                 
                 
@@ -144,13 +145,11 @@ class DataOperation:
         # End of file reading
         
         # Updates the department's database tree
-        department_dict = {f"{department_abbr}": dict_of_section_dicts}
+        department_dict = {department_abbr : dict_of_section_dicts}
         ref = db.reference('/')
         ref.update(department_dict)
         
     # End of importCSV
-
-
 
 
 
@@ -187,8 +186,52 @@ class DataOperation:
 
 
 
-    def updateDB(database_path):
-        pass
-    # End if update DB
+    def updateDB(self, new_database_entry, database_path):
+        """
+        Creates or updates a database entry with the new entry.
+        Database path must be a path denoting a department abbreviation
+        (e.g., CS, ECE) followed by the course section
+        (e.g., CS100-01, ECE100-01).
+        
+        Example database paths: CS
+                                ECE
+                                CS/CS100-01
+                                ECE/ECE100-01
+
+        Args:
+            new_database_entry (Dictionary): Must contain all keys from csv header
+            database_path (string): Realtime Database path that will be updated by new_database_entry
+        
+        Raises:
+            ValueError: When new_database_entry is not a non-empty dictionary.
+            ImproperDictionaryError: When new_database_entry does not contain all the proper keys.
+        """
+        
+        # Checks new_database_entry if all keys are present
+        list_of_keys = list(new_database_entry.keys())
+        
+        # Checks if proper amount of keys is there
+        if len(list_of_keys) != len(ColumnHeaders)-1:
+            raise ImproperDictionaryError("The number of dictionary keys does not match the appropriate format.")
+        
+        
+        # Checks if all appropriate keys are present
+        for key in list_of_keys:
+            key_isFound = False
+            
+            for header in ColumnHeaders:
+                if key == header.value:
+                    key_isFound = True
+            
+            if not key_isFound:
+                raise ImproperDictionaryError(f"\"{key}\" is not an acceptable key in this database entry.")
+        
+        
+        # Updates the database if it passes the previous checks
+        ref = db.reference(f'/{database_path}')
+        ref.update(new_database_entry)
+        
+        
+    # End of update DB
     
 # End of DataOperation

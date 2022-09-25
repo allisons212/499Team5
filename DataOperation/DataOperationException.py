@@ -14,6 +14,7 @@
 #               in DataOperation.py to warn against improper inputs.
 #
 # Editors of this file:     Devin Patel
+#                           Harrison Matthews
 # 
 # NOTES:
 #   1) Ensure each exception class has a default message
@@ -36,4 +37,13 @@ class QueryNotFoundError(Exception):
     """
     
     def __init__(self, msg="Database query returned no data."):
+        super().__init__(msg)
+
+
+class ImproperDictionaryError(Exception):
+    """
+    When a database entry dict does not contain all the proper fields/keys
+    """
+    
+    def __init__(self, msg="Database entry does not contain all the appropriate keys."):
         super().__init__(msg)
