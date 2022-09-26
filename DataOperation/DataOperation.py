@@ -112,19 +112,29 @@ class DataOperation:
                                             f"Please follow the following format for {ColumnHeaders.COURSE_SEC.value}:\n" +
                                             "[2-3 Capital Letters][3-digit integer]-[2-digit integer]\n")
                 
+                
                                     
-                # No need to check faculty name
+                # No real need to check faculty name, but input must be sanitized
                 faculty_assignment = row[ColumnHeaders.FAC_ASSIGN.value] # e.g., Dr. Goober
+                match = re.findall(r"^[A-Za-z.' ]{1,40}", str(faculty_assignment))
+                if not match or len(faculty_assignment) > 40: # Caps character length for names at 40
+                    raise ImportFormatError(f"Row {row_num} is formatted incorrectly.\n" +
+                                            f"Please follow the following format for {ColumnHeaders.FAC_ASSIGN.value}:\n" +
+                                            "40 characters or less using only letters, periods, and apostrophes\n")
+
                 
                 
-                # Check building number
-                #NOTE: Should we make them recreate the csv or throw up errors in GUI for building numbers that aren't open?
-                classroom_pref = row[ColumnHeaders.ROOM_PREF.value] # e.g., OKT203, SST123, MOR
+                # Check building code and room number
+                room_pref = row[ColumnHeaders.ROOM_PREF.value] # e.g., OKT203, SST123, MOR
+                match = re.findall(r"^(?(?![0-9]{3})[A-Z]{3}[0-9]{3}|[A-Z]{3})$", str(room_pref))
+                if not match:
+                    raise ImportFormatError(f"Row {row_num} is formatted incorrectly.\n" +
+                                            f"Please follow the following format for {ColumnHeaders.ROOM_PREF.value}:\n" +
+                                            "[3 Capital Letters][Optional: 3-digit integer]\n")
                 
                 
-                
-                time_pref = row[ColumnHeaders.TIME_PREF.value] # e.g., A, B, C, D, E, F, G; designating class time blocks throughout the day
-                day_pref = row[ColumnHeaders.DAY_PREF.value] # e.g., M, T, W, R, F (R = Thursday)
+                time_pref = row[ColumnHeaders.TIME_PREF.value] # e.g., ABCDEFG; designating class time blocks throughout the day
+                day_pref = row[ColumnHeaders.DAY_PREF.value] # e.g., MTWRF (R = Thursday)
                 seats_open = row[ColumnHeaders.SEATS_OPEN.value] # Positive integer denoting max number of students for that section
                 
                 
