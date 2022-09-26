@@ -22,7 +22,6 @@
 
 import csv
 import re
-import pandas as pd
 
 import os
 from dotenv import load_dotenv
@@ -107,20 +106,31 @@ class DataOperation:
                 # Check course section
                 course = row[ColumnHeaders.COURSE_SEC.value] # e.g., CS103-01
                 match = re.findall(r"^[A-Z]{2,3}[0-9]{3}[-][0-9]{2}$", str(course)) # Regex to check input
-                
                 if not match:
                     raise ImportFormatError(f"Row {row_num} is formatted incorrectly.\n" +
                                             f"Please follow the following format for {ColumnHeaders.COURSE_SEC.value}:\n" +
                                             "[2-3 Capital Letters][3-digit integer]-[2-digit integer]\n")
                 
                                     
-                # No need to check faculty name
+                # Check faculty name for errors
+                # Errors consist of 40 characters or less using only letter, periods, and apostrophes
                 faculty_assignment = row[ColumnHeaders.FAC_ASSIGN.value] # e.g., Dr. Goober
+                match = re.findall(r"^[A-Za-z.' ]{1,40}", str(faculty_assignment))
+                if not match or len(faculty_assignment) > 40:
+                    raise ImportFormatError(f"Row {row_num} is formatted incorrectly. \n" +
+                                            f"Please follow the following format for {ColumnHeaders.FAC_ASSIGN.value}:\n" +
+                                            "40 characters or less using only letters, periods, and apostrophes\n")
                 
                 
                 # Check building number
                 #NOTE: Should we make them recreate the csv or throw up errors in GUI for building numbers that aren't open?
-                classroom_pref = row[ColumnHeaders.CLASS_PREF.value] # e.g., OKT203, SST123, MOR
+                room_pref = row[ColumnHeaders.ROOM_PREF.value] # e.g., OKT203, SST123, MOR
+                match = re.findall(r"^[A-Z]{3}[0-9]{3}|([A-Z]{3})$", str(room_pref))
+                
+                if not match:
+                    raise ImportFormatError(f"Row {row_num} is formatted incorrectly.\n" + 
+                                            f"Please follow the following format for {ColumnHeaders.ROOM_PREF.value}:\n" +
+                                            "[3 Capital Letters][Optional: 3-digit integer]")
                 
                 
                 # Check time_pref to make sure it is in correct format
@@ -191,21 +201,22 @@ class DataOperation:
             raise QueryNotFoundError()
         
         
-    def exportCSV(self, department_data):
+    def exportCSV(self, department_abbr):
         """
         Exports a CSV from the database. This function depends on output generated from the getDB function
 
         Args:
-            department_data (dictionary): Data from the firebase db for a specfic department.
+            department_abbr (string): Data from the firebase db for a specfic department.
             EX. It could be the CS data or the ECE data depending on parameter that was given to getDB
         """
         
         print("IN EXPORT CSV")
-        # TEST: Print out information to make sure department_data is a dict
-        #print(department_data)
         
-        # Column headers for output CSV
-        fieldnames = ['Classroom Assignment', 'Classroom Preferences', 'Day Assignment', 'Day Preferences', 'Faculty Assignment',
+        # Get the dictionary from getDB function
+        department_dict = self.getDB(department_abbr)
+        
+         # Column headers for output CSV
+        fieldnames = ['Course Section', 'Classroom Assignment', 'Classroom Preferences', 'Day Assignment', 'Day Preferences', 'Faculty Assignment',
                     'Seats Open', 'Time Assignment', 'Time Block Preferences']
         
         # Now lets open a CSV file to write to
@@ -219,19 +230,43 @@ class DataOperation:
             # new_list will hold our new dictionary that is not nested.
             # this makes it much easier to use writerow()
             new_list = {}
-            
-            # Counter variable will keep track of which index we are at
-            counter = 0
-            for i in department_data.keys():
+        
+            # Iterate through the first part of the dictionary department_dict and get the section
+            for section in department_dict:
                 
-                # Set the Classroom Assignment equal to the first key EX. 'CS100-01
-                new_list["Classroom Assignment"] = i
-            
+                # Put the Course Section
+                new_list[ColumnHeaders.COURSE_SEC.value] = section
+                
+                # Iterate through the fields of each section
+                for section_field in department_dict[section]:
+                    # Put fields into the dictionary new_list if we are in that section_field
+                    if(section_field == ColumnHeaders.ROOM_ASS.value):
+                        new_list[section_field] = {department_dict[section][section_field]}
+                    elif(section_field == ColumnHeaders.ROOM_PREF.value):
+                        new_list[section_field] = {department_dict[section][section_field]}
+                    elif(section_field == ColumnHeaders.DAY_ASS.value):
+                        new_list[section_field] = {department_dict[section][section_field]}
+                    elif(section_field == ColumnHeaders.DAY_PREF.value):
+                        new_list[section_field] = {department_dict[section][section_field]}
+                    elif(section_field == ColumnHeaders.FAC_ASSIGN.value):
+                        new_list[section_field] = {department_dict[section][section_field]}
+                    elif(section_field == ColumnHeaders.SEATS_OPEN.value):
+                        new_list[section_field] = {department_dict[section][section_field]}
+                    elif(section_field == ColumnHeaders.TIME_ASS.value):
+                        new_list[section_field] = {department_dict[section][section_field]}
+                    elif(section_field == ColumnHeaders.TIME_PREF.value):
+                        new_list[section_field] = {department_dict[section][section_field]}
+
+                # Once we obtained an entire row for the csv, write to the file
+                writer.writerow(new_list)
+                
+                
+        """ for i in department_dict.keys():
                 # use another for loopo to access each value using [i] as the index
                 # This loop will print out the data in the order that is seen EX. Classroom Preferences, Day Assignment, ....
-                for j in department_data[i].values():
+                for j in department_dict[i].values():
                     if counter == 1:
-                        new_list["Classroom Preferences"] = j
+                        new_list[ColumnHeaders.CLASS_PREF.value] = j
                     elif counter == 2:
                         new_list["Day Assignment"] = j
                     elif counter == 3:
@@ -246,10 +281,12 @@ class DataOperation:
                         new_list["Time Block Preferences"] = j
                     counter = counter + 1
                 counter = 0
-                print(new_list)
+                #print(new_list)
                 
                 # Write to the exportCSV file with the information from new_list that was parsed from department_data
                 writer.writerow(new_list)
+        
+        """
                 
                 
     def updateDB(database_path):

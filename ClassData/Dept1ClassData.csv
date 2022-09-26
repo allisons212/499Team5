@@ -1,7 +1,7 @@
-﻿Course Section,Faculty Assignment,Classroom Preferences,Time Block Preferences,Day Preferences,Seats Open
+﻿Course Section,Faculty Assignment,Room Preferences,Time Block Preferences,Day Preferences,Seats Open
 CS100-01,Dr. Mike,OKT,,,
 CS106-01,Dr. Able,OKT,,,
-CS134-01,Dr. Charlie,OKT 342,,,
+CS134-01,Dr. Charlie,OKT342,,,
 CS136-01,Dr. Golf,OKT,,,
 CS158-01,Dr. Echo,OKT,,,
 CS172-01,Dr. Kilo,OKT,,,
@@ -26,7 +26,7 @@ CS353-01,Dr. Foxtrot,OKT,,,
 CS367-01,Dr. Charlie,OKT,,,
 CS378-01,Dr. Able,OKT,,,
 CS384-01,Dr. Mike,OKT,,,
-CS385-01,Dr. Dog,OKT 133,,,
+CS385-01,Dr. Dog,OKT133,,,
 CS391-01,Dr. Juliet,OKT,,,
 CS395-01,Dr. Brovo,OKT,,,
 CS397-01,Dr. Oscar,OKT,,"M, W",
