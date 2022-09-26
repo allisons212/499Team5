@@ -1,46 +1,46 @@
-﻿Course Section,Faculty Assignment,Classroom Preferences,Time Block Preferences,Day Preferences,Seats Open
-ECE117-01,Dr. Kappa,ENG,"A, B, C",,60
-ECE120-01,Dr. Delta,ENG,,"M, W",60
-ECE132-01,Dr. Zeta,ENG,,"T, R",60
-ECE134-01,Dr. Mu,ENG,,,60
-ECE139-01,Dr. Xi,ENG,"A, B, C",,60
-ECE152-01,Dr. Theta,ENG,,,60
-ECE163-01,Dr. Beta,ENG,,,60
-ECE202-01,Dr. Zeta,ENG,,"T, R",60
-ECE208-01,Dr. Theta,ENG,,,60
-ECE216-01,Dr. Delta,ENG,,"M, W",60
-ECE217-01,Dr. Mu,ENG,,,60
-ECE267-01,Dr. Kappa,ENG,"A, B, C",,60
-ECE272-01,Dr. Xi,ENG,"A, B, C",,60
-ECE278-01,Dr. Beta,ENG,,,60
-ECE305-01,Dr. Theta,ENG,,,60
-ECE309-01,Dr. Omicron,ENG,"F, G",,60
-ECE311-01,Dr. Alpha,ENG,,,60
-ECE313-01,Dr. Iota,ENG,,,60
-ECE316-01,Dr. Beta,ENG,,,60
-ECE322-01,Dr. Zeta,ENG,,"T, R",60
-ECE338-01,Dr. Kappa,ENG,"A, B, C",,60
-ECE339-01,Dr. Mu,ENG,,,60
-ECE342-01,Dr. Lamda,ENG,,,60
-ECE344-01,Dr. Gamma,ENG,"F, G",,60
-ECE350-01,Dr. Xi,ENG,"A, B, C",,60
-ECE356-01,Dr. Epsilon,ENG,,,60
-ECE359-01,Dr. Eta,ENG,,,60
-ECE366-01,Dr. Nu,ENG,,"M, W",60
-ECE398-01,Dr. Delta,ENG,,"M, W",60
-ECE427-01,Dr. Epsilon,ENG,,,60
-ECE440-01,Dr. Gamma,ENG125,"F, G",,60
-ECE454-01,Dr. Lamda,ENG125,,,60
-ECE474-01,Dr. Eta,ENG,,,60
-ECE480-01,Dr. Iota,ENG,,,60
-ECE481-01,Dr. Alpha,ENG,,,60
-ECE487-01,Dr. Nu,ENG,,"M, W",60
-ECE491-01,Dr. Omicron,ENG,"F, G",,60
-ECE508-01,Dr. Omicron,ENG,"F, G",,60
-ECE511-01,Dr. Lamda,ENG,,,60
-ECE521-01,Dr. Epsilon,ENG,,,60
-ECE533-01,Dr. Gamma,ENG,"F, G",,60
-ECE549-01,Dr. Alpha,ENG,,,60
-ECE553-01,Dr. Iota,ENG,,,60
-ECE561-01,Dr. Nu,ENG,,"M, W",60
-ECE599-01,Dr. Eta,ENG,,,60
+﻿Course Section,Faculty Assignment,Room Preferences,Time Block Preferences,Day Preferences,Seats Open
+ECE117-01,Dr. Kappa,ENG,ABC,,
+ECE120-01,Dr. Delta,ENG,,MW,
+ECE132-01,Dr. Zeta,ENG,,TR,
+ECE134-01,Dr. Mu,ENG,,,
+ECE139-01,Dr. Xi,ENG,ABC,,
+ECE152-01,Dr. Theta,ENG,,,
+ECE163-01,Dr. Beta,ENG,,,
+ECE202-01,Dr. Zeta,ENG,,TR,
+ECE208-01,Dr. Theta,ENG,,,
+ECE216-01,Dr. Delta,ENG,,MW,
+ECE217-01,Dr. Mu,ENG,,,
+ECE267-01,Dr. Kappa,ENG,ABC,,
+ECE272-01,Dr. Xi,ENG,ABC,,
+ECE278-01,Dr. Beta,ENG,,,
+ECE305-01,Dr. Theta,ENG,,,
+ECE309-01,Dr. Omicron,ENG,FG,,
+ECE311-01,Dr. Alpha,ENG,,,
+ECE313-01,Dr. Iota,ENG,,,
+ECE316-01,Dr. Beta,ENG,,,
+ECE322-01,Dr. Zeta,ENG,,TR,
+ECE338-01,Dr. Kappa,ENG,ABC,,
+ECE339-01,Dr. Mu,ENG,,,
+ECE342-01,Dr. Lamda,ENG,,,
+ECE344-01,Dr. Gamma,ENG,FG,,
+ECE350-01,Dr. Xi,ENG,ABC,,
+ECE356-01,Dr. Epsilon,ENG,,,
+ECE359-01,Dr. Eta,ENG,,,
+ECE366-01,Dr. Nu,ENG,,MW,
+ECE398-01,Dr. Delta,ENG,,MW,
+ECE427-01,Dr. Epsilon,ENG,,,
+ECE440-01,Dr. Gamma,ENG125,FG,,
+ECE454-01,Dr. Lamda,ENG125,,,
+ECE474-01,Dr. Eta,ENG,,,
+ECE480-01,Dr. Iota,ENG,,,
+ECE481-01,Dr. Alpha,ENG,,,
+ECE487-01,Dr. Nu,ENG,,MW,
+ECE491-01,Dr. Omicron,ENG,FG,,
+ECE508-01,Dr. Omicron,ENG,FG,,
+ECE511-01,Dr. Lamda,ENG,,,
+ECE521-01,Dr. Epsilon,ENG,,,
+ECE533-01,Dr. Gamma,ENG,FG,,
+ECE549-01,Dr. Alpha,ENG,,,
+ECE553-01,Dr. Iota,ENG,,,
+ECE561-01,Dr. Nu,ENG,,MW,
+ECE599-01,Dr. Eta,ENG,,,

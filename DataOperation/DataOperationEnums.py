@@ -28,7 +28,7 @@ class ColumnHeaders(Enum):
     """
     COURSE_SEC = 'Course Section'
     FAC_ASSIGN = 'Faculty Assignment'
-    ROOM_PREF = 'Classroom Preferences'
+    ROOM_PREF = 'Room Preferences'
     TIME_PREF = 'Time Block Preferences'
     DAY_PREF = 'Day Preferences'
     SEATS_OPEN = 'Seats Open'
