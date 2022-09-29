@@ -208,9 +208,9 @@ class DataOperation:
         Args:
             department_abbr (string): Data from the firebase db for a specfic department.
             EX. It could be the CS data or the ECE data depending on parameter that was given to getDB
+            department_abbr = CS
+            department_abbr = ECE
         """
-        
-        print("IN EXPORT CSV")
         
         # Get the dictionary from getDB function
         department_dict = self.getDB(department_abbr)
@@ -259,34 +259,6 @@ class DataOperation:
 
                 # Once we obtained an entire row for the csv, write to the file
                 writer.writerow(new_list)
-                
-                
-        """ for i in department_dict.keys():
-                # use another for loopo to access each value using [i] as the index
-                # This loop will print out the data in the order that is seen EX. Classroom Preferences, Day Assignment, ....
-                for j in department_dict[i].values():
-                    if counter == 1:
-                        new_list[ColumnHeaders.CLASS_PREF.value] = j
-                    elif counter == 2:
-                        new_list["Day Assignment"] = j
-                    elif counter == 3:
-                        new_list["Day Preferences"] = j
-                    elif counter == 4:
-                        new_list["Faculty Assignment"] = j
-                    elif counter == 5:
-                        new_list["Seats Open"] = j
-                    elif counter == 6:
-                        new_list["Time Assignment"] = j
-                    elif counter == 7:
-                        new_list["Time Block Preferences"] = j
-                    counter = counter + 1
-                counter = 0
-                #print(new_list)
-                
-                # Write to the exportCSV file with the information from new_list that was parsed from department_data
-                writer.writerow(new_list)
-        
-        """
                 
                 
     def updateDB(database_path):
