@@ -20,11 +20,14 @@ def main():
         print(f"{ife}\n")
         
     
+    
     try:
-        r = data_operation.getDB("ECE")
+        # Get the CS department in database
+        r = data_operation.getDB("CS")
         
         # Testing the exportCSV function by sending it the dictionary that we got from getDB
-        abbr = "ECE"
+        # Export a department from database into a csv file in this case we want CS
+        abbr = "CS"
         data_operation.exportCSV(abbr)
         
         

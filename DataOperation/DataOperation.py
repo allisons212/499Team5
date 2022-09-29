@@ -216,7 +216,7 @@ class DataOperation:
         department_dict = self.getDB(department_abbr)
         
          # Column headers for output CSV
-        fieldnames = ['Course Section', 'Classroom Assignment', 'Classroom Preferences', 'Day Assignment', 'Day Preferences', 'Faculty Assignment',
+        fieldnames = ['Course Section', 'Classroom Assignment', 'Room Preferences', 'Day Assignment', 'Day Preferences', 'Faculty Assignment',
                     'Seats Open', 'Time Assignment', 'Time Block Preferences']
         
         # Now lets open a CSV file to write to
