@@ -128,17 +128,19 @@ footer {
 .generateEditors{
     font-size: 40px;
     cursor: pointer;
-    color: #1e3044;
-    padding-right: 32px;
+    color: #1f3347;
+    padding-right: 8px;
+    padding-top: 25px;
 }
 .generateEditors:hover{
-    color: #27405a;
+    color: #283c52;
+
 }
 
 .scheduleTable table {
     border-collapse: collapse;
     width: 100%;
-    margin-top: 50px;
+    margin-top: 15px;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   }
   
@@ -154,7 +156,13 @@ footer {
     color: #ffffff;
     text-align: center;
     padding: 20px;
+
   }
+
+  .scheduleTime{
+    width:100px;
+  }
+
 
 /* On smaller screens, where height is less than 450px, change the style of the sidebar (less padding and a smaller font size) */
 @media screen and (max-height: 450px) {
