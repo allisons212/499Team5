@@ -96,7 +96,7 @@ footer {
 /* Style page content */
 .main {
 
-    margin-left: 225px; /* Same as the width of the sidebar */
+    margin-left: 200px; /* Same as the width of the sidebar */
     padding: 25px;
     margin-top: 15px;
 }
@@ -134,7 +134,6 @@ footer {
 }
 .generateEditors:hover{
     color: #283c52;
-
 }
 
 .scheduleTable table {
@@ -142,6 +141,8 @@ footer {
     width: 100%;
     margin-top: 15px;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    table-layout: fixed;
+
   }
   
   .scheduleTable td {
@@ -160,7 +161,14 @@ footer {
   }
 
   .scheduleTime{
-    width:100px;
+    width:200px;
+    overflow: hidden;
+
+  }
+
+  .scheduleHeader th{
+    /* width:200px; */
+    /* overflow: hidden; */
   }
 
 
