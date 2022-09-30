@@ -10,7 +10,7 @@ def main():
     # Sample try-catch block for importCSV()
     try:
         csv_file = "/file/path" # This is provided from GUI
-        department_abbr = "CS"                   # This is provided from GUI
+        department_abbr = "CS"                              # This is provided from GUI
         data_operation.importCSV(csv_file, department_abbr) # Test a csv file
     
     except FileNotFoundError as fnfe:
@@ -31,7 +31,7 @@ def main():
         data_operation.exportCSV(abbr)
         
         
-        print(f"Type: {type(r)}")
+        #print(f"Type: {type(r)}")
         
     except QueryNotFoundError as qnfe:
         print(f"{qnfe}")

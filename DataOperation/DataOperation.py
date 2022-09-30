@@ -22,6 +22,7 @@
 
 import csv
 import re
+import collections
 
 import os
 from dotenv import load_dotenv
@@ -125,7 +126,7 @@ class DataOperation:
                 # Check building number
                 #NOTE: Should we make them recreate the csv or throw up errors in GUI for building numbers that aren't open?
                 room_pref = row[ColumnHeaders.ROOM_PREF.value] # e.g., OKT203, SST123, MOR
-                match = re.findall(r"^[A-Z]{3}[0-9]{3}|([A-Z]{3})$", str(room_pref))
+                match = re.findall(r"^[A-Z]{3}[0-9]{3}(?![0-9A-Za-z ])|^[A-Z]{3}(?![0-9A-Za-z ])", str(room_pref))
                 
                 if not match:
                     raise ImportFormatError(f"Row {row_num} is formatted incorrectly.\n" + 
@@ -136,13 +137,63 @@ class DataOperation:
                 # Check time_pref to make sure it is in correct format
                 time_pref = row[ColumnHeaders.TIME_PREF.value] # e.g., A, B, C, D, E, F, G; designating class time blocks throughout the day
                 
-                # Check day_pref to make sure it is in correct format
-                day_pref = row[ColumnHeaders.DAY_PREF.value] # e.g., M, T, W, R, F (R = Thursday)
+                # d represents a bag data structure that will store time_pref as a key and the value will be
+                # the amount of times it appears in the string
+                d = collections.defaultdict(int)
                 
-                # Check seats_open to make sure it is a unsigned positive integer
+                # List is used to convert the letters in the string to ascii_values to check if its within range
+                # [65 - 71]
+                ascii_values = []
+                
+                # For loop that puts the key-value pairs into the dictionary and populates ascii_values
+                for c in str(time_pref):
+                    d[c] = d[c] + 1
+                    ascii_values.append(ord(c))
+                    
+                # For Loop that Raises an ImportFormatError if the string includes letters that are not A-G
+                for value in ascii_values:
+                    if(value < 65 or value > 71):
+                        raise ImportFormatError(f"Row {row_num} is formatted incorrectly.\n" + 
+                                            f"Please follow the following format for {ColumnHeaders.TIME_PREF.value}:\n" +
+                                            "[Any letter A-G, and NO duplicate letters] EX. AB, DFG")
+                
+                # For loop Raises an ImportFormatError if the string includes duplicate letters A-G
+                for c in d:
+                    if(d[c] > 1):
+                        raise ImportFormatError(f"Row {row_num} is formatted incorrectly.\n" + 
+                                            f"Please follow the following format for {ColumnHeaders.TIME_PREF.value}:\n" +
+                                            "[Any letter A-G, and NO duplicate letters] EX. AB, DFG")
+                        
+                # Clear the Dicionary and List for next iteration
+                d.clear()
+                ascii_values.clear()
+                
+                # Check day_pref to make sure it is in correct format
+                
+                day_pref = row[ColumnHeaders.DAY_PREF.value] # e.g., MW, TR
+                
+                # Find all matches in the string with the regular expression given below
+                match = re.findall(r"^([M]{1}[W]{1})(?![0-9A-Za-z])|^([T]{1}[R]{1})(?![0-9A-Za-z])", str(day_pref))
+                
+                # IF it does not find a match then raise an ImportFormatError
+                if not match:
+                    raise ImportFormatError(f"Row {row_num} is formatted incorrectly.\n" + 
+                                            f"Please follow the following format for {ColumnHeaders.DAY_PREF.value}:\n" +
+                                            "[MW, TR] Only two options for this field")
+                
+                # Check seats_open to make sure it is a unsigned positive integer greater than or equaol to 3
                 seats_open = row[ColumnHeaders.SEATS_OPEN.value] # Positive integer denoting max number of students for that section
                 
+                # Convert seats_oepn to an integer
+                seats_open = int(seats_open)
                 
+                # IF seats_open is < 3 than raise an ImportFormatError
+                if(seats_open < 3):
+                    raise ImportFormatError(f"Row {row_num} is formatted incorrectly.\n" + 
+                                                f"Please follow the following format for {ColumnHeaders.SEATS_OPEN.value}:\n" +
+                                                "[Must be a positive unsigned pos integer greater than or equal to 3] EX. 3, 50")
+                
+                #input("pause")
                 # Creates nested dictionary with course section as the key
                 course_dict = row
                 course = course_dict.pop(ColumnHeaders.COURSE_SEC.value)
@@ -241,21 +292,21 @@ class DataOperation:
                 for section_field in department_dict[section]:
                     # Put fields into the dictionary new_list if we are in that section_field
                     if(section_field == ColumnHeaders.ROOM_ASS.value):
-                        new_list[section_field] = {department_dict[section][section_field]}
+                        new_list[section_field] = str(department_dict[section][section_field])
                     elif(section_field == ColumnHeaders.ROOM_PREF.value):
-                        new_list[section_field] = {department_dict[section][section_field]}
+                        new_list[section_field] = str(department_dict[section][section_field])
                     elif(section_field == ColumnHeaders.DAY_ASS.value):
-                        new_list[section_field] = {department_dict[section][section_field]}
+                        new_list[section_field] = str(department_dict[section][section_field])
                     elif(section_field == ColumnHeaders.DAY_PREF.value):
-                        new_list[section_field] = {department_dict[section][section_field]}
+                        new_list[section_field] = str(department_dict[section][section_field])
                     elif(section_field == ColumnHeaders.FAC_ASSIGN.value):
-                        new_list[section_field] = {department_dict[section][section_field]}
+                        new_list[section_field] = str(department_dict[section][section_field])
                     elif(section_field == ColumnHeaders.SEATS_OPEN.value):
-                        new_list[section_field] = {department_dict[section][section_field]}
+                        new_list[section_field] = str(department_dict[section][section_field])
                     elif(section_field == ColumnHeaders.TIME_ASS.value):
-                        new_list[section_field] = {department_dict[section][section_field]}
+                        new_list[section_field] = str(department_dict[section][section_field])
                     elif(section_field == ColumnHeaders.TIME_PREF.value):
-                        new_list[section_field] = {department_dict[section][section_field]}
+                        new_list[section_field] = str(department_dict[section][section_field])
 
                 # Once we obtained an entire row for the csv, write to the file
                 writer.writerow(new_list)
