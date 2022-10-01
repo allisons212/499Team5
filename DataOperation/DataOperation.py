@@ -24,12 +24,11 @@
 import csv
 import re
 
-import os
-from dotenv import load_dotenv
-
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import db
+
+from configparser import ConfigParser
 
 from DataOperationException import * # Custom exceptions
 from DataOperationEnums import * # Custom enums
@@ -55,15 +54,15 @@ class DataOperation:
         Authenticate Firebase Database credentials so that edits can be
         made to the database.
         """
-        
-        # Loads virtual .env variables
-        load_dotenv()
 
-        # Path pointing to firebase key
-        credentials_path = os.environ.get('credentials_path')
+        # Loads config file
+        conf_file = 'DataOperation/firebase-auth.ini'
+        config = ConfigParser()
+        config.read(conf_file)
 
-        # Reads in url to Realtime Database
-        database_url = os.environ.get('database_url')
+
+        # Reads in path pointing to firebase key, url to Realtime Database
+        credentials_path, database_url = config['firebase']['credentials_path'], config['firebase']['database_url']
 
         # Sets up credentials and initializes realtime database URL
         cred = credentials.Certificate(credentials_path)

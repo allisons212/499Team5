@@ -1,2 +1,2 @@
-.env
 credentials/*
+DataOperation/firebase-auth.ini
