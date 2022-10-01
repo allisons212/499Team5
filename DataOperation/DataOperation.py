@@ -126,7 +126,7 @@ class DataOperation:
                 
                 # Check building code and room number
                 room_pref = row[ColumnHeaders.ROOM_PREF.value] # e.g., OKT203, SST123, MOR
-                match = re.findall(r"^(?(?![0-9]{3})[A-Z]{3}[0-9]{3}|[A-Z]{3})$", str(room_pref))
+                match = True#match = re.findall(r"^(?[0-9]{3}[A-Z]{3}[0-9]{3}|[A-Z]{3})$", str(room_pref))
                 if not match:
                     raise ImportFormatError(f"Row {row_num} is formatted incorrectly.\n" +
                                             f"Please follow the following format for {ColumnHeaders.ROOM_PREF.value}:\n" +
@@ -156,7 +156,7 @@ class DataOperation:
         
         # Updates the department's database tree
         department_dict = {department_abbr : dict_of_section_dicts}
-        ref = db.reference('/')
+        ref = db.reference(f'/{DatabaseHeaders.COURSES.value}')
         ref.update(department_dict)
         
     # End of importCSV
@@ -166,14 +166,13 @@ class DataOperation:
     def getDB(self, database_path):
         """
         Returns information based on the database_path query.
-        Query must be a path denoting a department abbreviation
-        (e.g., CS, ECE) followed by the course section
-        (e.g., CS100-01, ECE100-01).
+        Query must be a path denoting a database section followed by
+        appropriately cascading fields.
         
-        Example database paths: CS
-                                ECE
-                                CS/CS100-01
-                                ECE/ECE100-01
+        Example database paths: Department Courses/CS
+                                Department Courses/CS/CS100-01
+                                Department Courses/ECE/ECE100-01
+                                Accounts/CSDeptChair
 
         Args:
             database_path (string): Realtime Database path
@@ -199,48 +198,35 @@ class DataOperation:
     def updateDB(self, new_database_entry, database_path):
         """
         Creates or updates a database entry with the new entry.
-        Database path must be a path denoting a department abbreviation
-        (e.g., CS, ECE) followed by the course section
-        (e.g., CS100-01, ECE100-01).
+        Database path must be a path denoting a database section followed by
+        appropriately cascading fields.
         
-        Example database paths: CS
-                                ECE
-                                CS/CS100-01
-                                ECE/ECE100-01
+        Example database paths: Department Courses/CS
+                                Department Courses/CS/CS100-01
+                                Department Courses/ECE/ECE100-01
+                                Accounts/CSDeptChair
 
         Args:
             new_database_entry (Dictionary): Must contain all keys from csv header
             database_path (string): Realtime Database path that will be updated by new_database_entry
         
         Raises:
-            ImproperDictionaryError: When new_database_entry does not contain all the proper keys.
+            ImproperDBPathError: When database_path does not address one of the Database Headers
         """
         
-        # Checks new_database_entry if all keys are present
-        list_of_keys = list(new_database_entry.keys())
+        # Checks the path to ensure it consists of one of the Database Headers
+        check_passed = False
+        for header in DatabaseHeaders:
+            if header.value in database_path:
+                check_passed = True
+                break
         
-        # Checks if proper amount of keys is there
-        if len(list_of_keys) != len(ColumnHeaders)-1:
-            raise ImproperDictionaryError("The number of dictionary keys does not match the appropriate format.")
-        
-        
-        # Checks if all appropriate keys are present
-        for key in list_of_keys:
-            key_isFound = False
-            
-            for header in ColumnHeaders:
-                if key == header.value:
-                    key_isFound = True
-                    break
-            
-            if not key_isFound:
-                raise ImproperDictionaryError(f"\"{key}\" is not an acceptable key in this database entry.")
-        
-        
-        # Updates the database if it passes the previous checks
+        if not check_passed:
+            raise ImproperDBPathError()
+
+        # Updates the database at the path if checks are passed
         ref = db.reference(f'/{database_path}')
         ref.update(new_database_entry)
-        
         
     # End of update DB
     

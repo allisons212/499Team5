@@ -24,7 +24,7 @@ from enum import Enum
 
 class ColumnHeaders(Enum):
     """
-    Used for importing CSV column headers
+    Used for importing CSV column headers.
     """
     COURSE_SEC = 'Course Section'
     FAC_ASSIGN = 'Faculty Assignment'
@@ -37,11 +37,12 @@ class ColumnHeaders(Enum):
     DAY_ASS = 'Day Assignment'
     
     
-class DepartmentAbbreviations(Enum):
+class DatabaseHeaders(Enum):
     """
-    Abbreviations for subject departments like CS = Computer Science,
-    PY = Physics, etc. will be here.
+    Selects which section of the database to move the reference to.
+    Used for generating a database path.
+    e.g., /[Accounts]/CSDeptChair
     """
-    CS = 'Computer Science'
-    ECE = 'Electrical and Computer Engineering'
-
+    ACCOUNTS = 'Accounts'
+    COURSES = 'Department Courses'
+    ROOMS = 'Available Classrooms'

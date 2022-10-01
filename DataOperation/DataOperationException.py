@@ -39,6 +39,13 @@ class QueryNotFoundError(Exception):
     def __init__(self, msg="Database query returned no data."):
         super().__init__(msg)
 
+class ImproperDBPathError(Exception):
+    """
+    When a database path does not use any of the headers defined in DataOperationEnums.DatabaseHeaders
+    """
+    
+    def __init__(self, msg="The database query does not address any existing database headers."):
+        super().__init__(msg)
 
 class ImproperDictionaryError(Exception):
     """
