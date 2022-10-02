@@ -229,4 +229,86 @@ class DataOperation:
         
     # End of update DB
     
+    
+    def generate_assignments(self):
+        """
+        Generates all the class assignments and marks conflicting assignments
+        """
+        
+        # Gets all the departments
+        all_departments_dict = self.getDB(f"/{DatabaseHeaders.COURSES.value}")
+        
+        # For each department, we need to make the assignments
+        for department in all_departments_dict:
+            # Grabs all course listings for one department
+            courses_dict = all_departments_dict[department]
+            
+            # Grabs all available rooms
+            ## First 3 letters of room preference will have building acronym,
+            ## so we use that to determine which list of available rooms to pull.
+            sample_room = courses_dict[list(courses_dict.keys())[0]][ColumnHeaders.ROOM_PREF.value] # Returns room preference of first section
+            building_name = sample_room[:3] # Grabs first 3 letters
+            
+            # Gets list of room numbers
+            list_of_rooms = self.getDB(f"/{DatabaseHeaders.ROOMS.value}/{building_name}")
+            list_of_rooms = [int(x) for x in list_of_rooms] # Converts any string values to int
+            
+            # At this point, we have a dictionary of all the course sections as well
+            # as a list of all the available rooms for that department.
+            
+            # Time to make assignments. Start with courses with preferences.
+            
+            # Address Classroom Preferences
+            ## Sets room assignment = room preference
+            for course_name in courses_dict:
+                courses_dict[course_name][ColumnHeaders.ROOM_ASS.value] = courses_dict[course_name][ColumnHeaders.ROOM_PREF.value]
+            
+            
+            # Address Faculty Preferences (i.e., time and day preferences)
+            ## Focus on stricter preferences first, assign professors with
+            ## time AND day preferences, then assign professors with only time
+            ## or only day preferences.
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            for course_name in courses_dict:
+                # Grabs course dict info for ready use
+                course = courses_dict[course_name]
+                time_pref = course[ColumnHeaders.TIME_PREF.value]
+                day_pref = course[ColumnHeaders.DAY_PREF.value]
+                
+                # Checks for time preference
+                if time_pref:
+                    #! Time AND Day are preferred
+                    if day_pref:
+                        pass
+                    
+                    #! ONLY time is preferred
+                    else:
+                        pass
+                
+                #! ONLY day is preferred
+                elif day_pref:
+                    pass
+                
+                #! NEITHER day nor time is preferred
+                else:
+                    pass
+                
+            
+            
+        
+        
+    # End of generate_assignments
+    
 # End of DataOperation
