@@ -313,6 +313,12 @@ class DataOperation:
             room_tables = self._assign_rest_of_courses(courses_dict, room_tables)
             
             
+            # Now that room_tables is done, update the database with the information
+            
+            
+            
+            
+            
                 
             
     # End of generate_assignments
