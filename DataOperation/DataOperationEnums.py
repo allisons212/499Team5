@@ -25,6 +25,8 @@ from enum import Enum
 class ColumnHeaders(Enum):
     """
     Used for importing CSV column headers.
+    
+    Access by typing "ColumnHeaders.<EnumName>.value"
     """
     COURSE_SEC = 'Course Section'
     FAC_ASSIGN = 'Faculty Assignment'
@@ -42,6 +44,8 @@ class DatabaseHeaders(Enum):
     Selects which section of the database to move the reference to.
     Used for generating a database path.
     e.g., /[Accounts]/CSDeptChair
+    
+    Access by typing "DatabaseHeaders.<EnumName>.value"
     """
     ACCOUNTS = 'Accounts'
     COURSES = 'Department Courses'

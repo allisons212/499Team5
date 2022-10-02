@@ -39,6 +39,7 @@ def main():
         print(idpe)
     """
 
+    """
     # Updating Database to store other fields of data
     try:
         r = { "TestAccount" : "Test Password. This needs to be a hash when in production."
@@ -57,7 +58,10 @@ def main():
         print(idpe)
 
 
-
+    """
+    
+    # Testing generate_assignment
+    data_operation.generate_assignments()
 
 
 if __name__ == "__main__":
