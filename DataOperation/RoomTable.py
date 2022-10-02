@@ -17,7 +17,7 @@
 # 
 # NOTES:
 #
-#   Lookup Table Implementation
+#   Room Table Implementation
 #     Each room is assigned a 2D list which represents a table as follows:
 #     ROOM: OKT123
 #     -------------------------------
@@ -37,7 +37,6 @@
 #
 ########################################################################
 
-from enum import Enum
 
 class RoomTable:
     """
@@ -184,10 +183,30 @@ class RoomTable:
         """
         self.table = table
     
+    def __str__(self):
+        """
+        RoomTable toString method.
+        
+        Returns:
+            string: Returns table as a string
+        """
+        s = f"""
+        |  MW (0)  |  TR (1)  |
+-------------------------------
+| (0) A | {self.table[0][0]} | {self.table[1][0]} |
+| (1) B | {self.table[0][1]} | {self.table[1][1]} |
+| (2) C | {self.table[0][2]} | {self.table[1][2]} |
+| (3) D | {self.table[0][3]} | {self.table[1][3]} |
+| (4) E | {self.table[0][4]} | {self.table[1][4]} |
+| (5) F | {self.table[0][5]} | {self.table[1][5]} |
+| (6) G | {self.table[0][6]} | {self.table[1][6]} |"""
+        
+        return s
+        
 
 # End of RoomTable
 
-class RoomTableEnum(Enum):
+class TableIndex:
     """
     Reference dictionaries for indexing the table
     """

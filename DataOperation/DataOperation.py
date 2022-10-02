@@ -46,12 +46,12 @@ class DataOperation:
         Authenticates credentials so access to the database is established.
         """
         
-        self.authenticate_credentials()
+        self._authenticate_credentials()
     # End of init        
 
 
 
-    def authenticate_credentials(self):
+    def _authenticate_credentials(self):
         """
         Authenticate Firebase Database credentials so that edits can be
         made to the database.
@@ -231,6 +231,40 @@ class DataOperation:
         
     # End of update DB
     
+
+
+################################################################################    
+    
+    ######################################
+    #
+    # Generate Assignment Methods
+    #
+    ######################################
+    
+    def _init_tables(self):
+        """
+        Initializes room tables for each room and stores them out to database.
+        """
+        
+        # Gets all the buildings
+        buildings_dict = self.getDB(f"/{DatabaseHeaders.ROOMS.value}")
+        tables_dict = {}
+        
+        # For each building, we need to make the tables
+        for building, list_of_rooms in buildings_dict.items():            
+            # Creates new dictionary of rooms, each room keying a dictionary to a RoomTable 2D List
+            new_building_dict = {}
+            for room in list_of_rooms:
+                empty_table = RoomTable()
+                new_building_dict[room] = empty_table.getTable()
+            tables_dict[building] = new_building_dict
+        
+        # Stores dictionary to database
+        self.updateDB(tables_dict, f"/{DatabaseHeaders.TABLES.value}")
+            
+    # End of init_tables
+    
+    
     
     def generate_assignments(self):
         """
@@ -238,7 +272,7 @@ class DataOperation:
         """
         
         # Generates schedule tables
-        self.init_tables()
+        self._init_tables()
         
         # Gets all the departments
         all_departments_dict = self.getDB(f"/{DatabaseHeaders.COURSES.value}")
@@ -264,41 +298,237 @@ class DataOperation:
                 
                 
             
-            # At this point, we have a dictionary of all the course sections as well
-            # as a dictionary of all the available rooms tables for that department's building.
-            
-            
+            #^ At this point, we have a dictionary of all the course sections as well
+            #^ as a dictionary of all the available rooms tables for that department's building.
             
             #^ Time to make assignments.
-            #^ 1st - Assign courses with Classroom Preferences
             
-            for course_name in courses_dict:
-                courses_dict[course_name][ColumnHeaders.ROOM_ASS.value] = courses_dict[course_name][ColumnHeaders.ROOM_PREF.value]
+            #^ 1st - Assign courses with Room Preferences
+            room_tables = self._assign_with_room_pref(courses_dict, room_tables)
+            
+            #^ 2nd - Assign courses with Day/Time Preferences
+            room_tables = self._assign_with_day_time_pref(courses_dict, room_tables)
+
+            #^ 3rd - Assign the rest of the courses
+            room_tables = self._assign_rest_of_courses(courses_dict, room_tables)
+            
+            
+                
             
     # End of generate_assignments
     
     
-    def init_tables(self):
+    
+    
+    
+    ######################################
+    #
+    # Assignment helper functions
+    #
+    ######################################
+    
+    def _assign_rest_of_courses(self, courses_dict, room_tables):
         """
-        Initializes room tables for each room and stores them out to database.
+        Private method to help generate_assignments in handling
+        assignments for professors without preferences.
         """
         
-        # Gets all the buildings
-        buildings_dict = self.getDB(f"/{DatabaseHeaders.ROOMS.value}")
-        tables_dict = {}
-        
-        # For each building, we need to make the tables
-        for building, list_of_rooms in buildings_dict.items():            
-            # Creates new dictionary of rooms, each room keying a dictionary to a RoomTable 2D List
-            new_building_dict = {}
-            for room in list_of_rooms:
-                empty_table = RoomTable()
-                new_building_dict[room] = empty_table.getTable()
-            tables_dict[building] = new_building_dict
-        
-        # Stores dictionary to database
-        self.updateDB(tables_dict, f"/{DatabaseHeaders.TABLES.value}")
+        for course_name, course_info in courses_dict.items():
             
-    # End of init_tables
+            # Gets time/day fields
+            c_time_pref = course_info[ColumnHeaders.TIME_PREF.value]
+            c_day_pref = course_info[ColumnHeaders.DAY_PREF.value]
+            
+            # 4 combinations of day/time preferences:
+            #     1) Day and Time, 2) Only day, 3) Only time, 4) Neither time nor day
+            # Must prepare for ONLY outcome 4
+            
+            if not c_day_pref and not c_time_pref: # Outcome 4
+                c_time_pref = "ABCDEFG" # Set to all possible time periods
+                c_day_pref = "MWTR" # Set to all possible days
+            
+            else: # Outcomes 1-3
+                continue # Outcomes 1-3 were already handled
+                
+            # Breaks up days into 2-character list to loop better (e.g., ['MW', 'TR'])
+            c_day_pref = list(c_day_pref[i:i+2] for i in range(0, len(c_day_pref), 2))
+
+            
+            
+            # Now, we need to loop through every room table to find the next available cell
+            assignment_made = False    # Gets changed to True when assignment made, breaks out of loop(s)
+            for room_num, table in room_tables.items():
+                
+                for day in c_day_pref: # Will be either 'MW' or 'TR'
+                    
+                    for time in c_time_pref: # Will be a letter A-G
+                        
+                        # Checks if cell is empty, then sets the cell with the course name
+                        if table.isEmptyCell(TableIndex.DAY_REF[day], TableIndex.TIME_REF[time]):
+                            table.setCell(TableIndex.DAY_REF[day], TableIndex.TIME_REF[time], str=course_name)
+                            assignment_made = True
+                            break
+                        # If the cell is not empty, move on to the next preferred one
+                    
+                    # Checks if assignment has been made
+                    if assignment_made: break
+            
+            # Checked if assignment was made, if not, then there was a conflict
+            # TODO: Conflict handling goes here
+            if not assignment_made:
+                pass
+                
+        # End of course_dict for loop
+        
+        
+        return room_tables
+    # End of _assign_rest_of_courses
+    
+    
+    def _assign_with_day_time_pref(self, courses_dict, room_tables):
+        """
+        Private method to help generate_assignments in handling
+        assignments for professors with specific day/time preferences.
+        """
+        
+        for course_name, course_info in courses_dict.items():
+            
+            # Gets time/day fields
+            c_time_pref = course_info[ColumnHeaders.TIME_PREF.value]
+            c_day_pref = course_info[ColumnHeaders.DAY_PREF.value]
+            
+            # 4 combinations of day/time preferences:
+            #     1) Day and Time, 2) Only day, 3) Only time, 4) Neither time nor day
+            # Must prepare for all but Outcome 4
+            
+            if c_day_pref and c_time_pref: # Outcome 1
+                pass # leave as is
+            
+            elif c_day_pref and not c_time_pref: # Outcome 2
+                c_time_pref = "ABCDEFG" # Set to all possible time periods
+            
+            elif c_time_pref and not c_day_pref: # Outcome 3
+                c_day_pref = "MWTR" # Set to all possible days
+            
+            else: # Outcome 4
+                continue # Prioritizing preferences right now
+                
+            # Breaks up days into 2-character list to loop better (e.g., ['MW', 'TR'])
+            c_day_pref = list(c_day_pref[i:i+2] for i in range(0, len(c_day_pref), 2))
+
+            
+            
+            # Now, we need to loop through every room table to find the next available cell
+            assignment_made = False    # Gets changed to True when assignment made, breaks out of loop(s)
+            for room_num, table in room_tables.items():
+                
+                for day in c_day_pref: # Will be either 'MW' or 'TR'
+                    
+                    for time in c_time_pref: # Will be a letter A-G
+                        
+                        # Checks if cell is empty, then sets the cell with the course name
+                        if table.isEmptyCell(TableIndex.DAY_REF[day], TableIndex.TIME_REF[time]):
+                            table.setCell(TableIndex.DAY_REF[day], TableIndex.TIME_REF[time], str=course_name)
+                            assignment_made = True
+                            break
+                        # If the cell is not empty, move on to the next preferred one
+                    
+                    # Checks if assignment has been made
+                    if assignment_made: break
+            
+            # Checked if assignment was made, if not, then there was a conflict
+            # TODO: Conflict handling goes here
+            if not assignment_made:
+                pass
+                
+        # End of course_dict for loop
+        
+        
+        return room_tables
+    # End of _assign_with_day_time_pref
+    
+    
+    def _assign_with_room_pref(self, courses_dict, room_tables):
+        """
+        Private method to help generate_assignments in handling
+        assignments for courses in specific rooms.
+        """
+        
+        for course_name, course_info in courses_dict.items():
+            # Checks if it has a room preference
+            room_pref = course_info[ColumnHeaders.ROOM_PREF.value]
+            
+            if len(room_pref) > 3:      # Would be > 3 characters if room preference is specified
+                # Gets room table
+                room_num = room_pref[3:]
+                selected_table = room_tables[room_num]
+                
+                # Gets time/day fields
+                c_time_pref = course_info[ColumnHeaders.TIME_PREF.value]
+                c_day_pref = course_info[ColumnHeaders.DAY_PREF.value]
+                
+                # 4 combinations of day/time preferences:
+                #     1) Day and Time, 2) Only day, 3) Only time, 4) Neither time nor day
+                # Must prepare for all 4 outcomes
+                
+                if c_day_pref and c_time_pref: # Outcome 1
+                    pass # leave as is
+                
+                elif c_day_pref and not c_time_pref: # Outcome 2
+                    c_time_pref = "ABCDEFG" # Set to all possible time periods
+                
+                elif c_time_pref and not c_day_pref: # Outcome 3
+                    c_day_pref = "MWTR" # Set to all possible days
+                
+                else: # Outcome 4
+                    c_time_pref = "ABCDEFG" # Set to all possible time periods
+                    c_day_pref = "MWTR" # Set to all possible days
+                
+                
+                # Breaks up days into 2-character list to loop better (e.g., ['MW', 'TR'])
+                c_day_pref = list(c_day_pref[i:i+2] for i in range(0, len(c_day_pref), 2))
+                
+                
+                # Now that table is selected, loop through room table to check for an empty PREFERRED cell.
+                assignment_made = False    # Gets changed to True when assignment made, breaks out of loop(s)
+                for day in c_day_pref: # Will be either 'MW' or 'TR'
+                    
+                    for time in c_time_pref: # Will be a letter A-G
+                        
+                        # Checks if cell is empty, then sets the cell with the course name
+                        if selected_table.isEmptyCell(TableIndex.DAY_REF[day], TableIndex.TIME_REF[time]):
+                            selected_table.setCell(TableIndex.DAY_REF[day], TableIndex.TIME_REF[time], str=course_name)
+                            assignment_made = True
+                            break
+                        # If the cell is not empty, move on to the next preferred one
+                    
+                    # Checks if assignment has been made
+                    if assignment_made: break
+                
+                # Checked if assignment was made, if not, then there was a conflict
+                # TODO: Conflict handling goes here
+                if not assignment_made:
+                    pass
+            # End of if len(room_pref) > 3
+            
+            else: # We have no interest in this course at the moment
+                continue
+            
+        return room_tables
+    # End of _assign_with_room_pref
+    
+    
+    ######################################
+    #
+    # DEBUG Methods
+    # TODO: DELETE THESE METHODS BEFORE PUSHING TO PRODUCTION
+    #
+    ######################################
+    
+    def print_room_tables(self, room_tables, building):
+        with open("test.txt",'a') as w:
+            for room, table in room_tables.items():
+                string = f"{building}{room}:{table}"
+                w.write(string+"\n")
     
 # End of DataOperation
