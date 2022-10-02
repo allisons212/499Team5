@@ -91,19 +91,6 @@ class RoomTable:
         else: return True
     
     
-    def getDay(self, day):
-        """
-        Returns list of time periods on specified day.
-        day can be either 0 (MW) or 1 (TR)
-
-        Args:
-            day (int): Integer 0 or 1
-
-        Returns:
-            list: Returns list of time periods on specified day
-        """
-    
-    
     # Getters
     def getCell(self, day, time):
         """
