@@ -127,16 +127,38 @@ class DataOperation:
                 
                 # Check building code and room number
                 room_pref = row[ColumnHeaders.ROOM_PREF.value] # e.g., OKT203, SST123, MOR
-                match = True#match = re.findall(r"^(?[0-9]{3}[A-Z]{3}[0-9]{3}|[A-Z]{3})$", str(room_pref))
+                match = re.findall(r"^[A-Z]{3}([0-9]{3}|)$", str(room_pref))
                 if not match:
                     raise ImportFormatError(f"Row {row_num} is formatted incorrectly.\n" +
                                             f"Please follow the following format for {ColumnHeaders.ROOM_PREF.value}:\n" +
                                             "[3 Capital Letters][Optional: 3-digit integer]\n")
                 
                 
+                # Check time block preferences
                 time_pref = row[ColumnHeaders.TIME_PREF.value] # e.g., ABCDEFG; designating class time blocks throughout the day
-                day_pref = row[ColumnHeaders.DAY_PREF.value] # e.g., MTWRF (R = Thursday)
+                match = re.findall(r"^[A]{0,1}[B]{0,1}[C]{0,1}[D]{0,1}[E]{0,1}[F]{0,1}[G]{0,1}$", str(time_pref))
+                if not match:
+                    raise ImportFormatError(f"Row {row_num} is formatted incorrectly.\n" +
+                                            f"Please follow the following format for {ColumnHeaders.TIME_PREF.value}:\n" +
+                                            "Capital [A-G], used at most once each, in alphabetical order\n")
+                
+                
+                # Check day preferences
+                day_pref = row[ColumnHeaders.DAY_PREF.value] # e.g., MWTR (R = Thursday)
+                match = re.findall(r"^MWTR$|^MW$|^TR$|^$", str(day_pref))
+                if not match:
+                    raise ImportFormatError(f"Row {row_num} is formatted incorrectly.\n" +
+                                            f"Please follow the following format for {ColumnHeaders.DAY_PREF.value}:\n" +
+                                            "Choose one: MW, TR, MWTR\n")
+                
+                
+                
                 seats_open = row[ColumnHeaders.SEATS_OPEN.value] # Positive integer denoting max number of students for that section
+                match = re.findall(r"^\d+$|^$", str(seats_open))
+                if not match:
+                    raise ImportFormatError(f"Row {row_num} is formatted incorrectly.\n" +
+                                            f"Please follow the following format for {ColumnHeaders.SEATS_OPEN.value}:\n" +
+                                            "An integer value\n")
                 
                 
                 # Creates nested dictionary with course section as the key
