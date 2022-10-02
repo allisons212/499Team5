@@ -30,6 +30,8 @@ from firebase_admin import db
 
 from configparser import ConfigParser
 
+from RoomTable import *
+
 from DataOperationException import * # Custom exceptions
 from DataOperationEnums import * # Custom enums
 
@@ -235,13 +237,14 @@ class DataOperation:
         Generates all the class assignments and marks conflicting assignments
         """
         
+        # Generates schedule tables
+        self.init_tables()
+        
         # Gets all the departments
         all_departments_dict = self.getDB(f"/{DatabaseHeaders.COURSES.value}")
         
         # For each department, we need to make the assignments
-        for department in all_departments_dict:
-            # Grabs all course listings for one department
-            courses_dict = all_departments_dict[department]
+        for department, courses_dict in all_departments_dict.items():
             
             # Grabs all available rooms
             ## First 3 letters of room preference will have building acronym,
@@ -249,66 +252,53 @@ class DataOperation:
             sample_room = courses_dict[list(courses_dict.keys())[0]][ColumnHeaders.ROOM_PREF.value] # Returns room preference of first section
             building_name = sample_room[:3] # Grabs first 3 letters
             
-            # Gets list of room numbers
-            list_of_rooms = self.getDB(f"/{DatabaseHeaders.ROOMS.value}/{building_name}")
-            list_of_rooms = [int(x) for x in list_of_rooms] # Converts any string values to int
+            # Gets room tables
+            r_room_tables_dict = self.getDB(f"/{DatabaseHeaders.TABLES.value}/{building_name}")
+            room_tables = {}
+            
+            # Creates room table objects
+            for room_num, table in r_room_tables_dict.items():
+                new_table = RoomTable()
+                new_table.importTable(table)
+                room_tables[room_num] = new_table
+                
+                
             
             # At this point, we have a dictionary of all the course sections as well
-            # as a list of all the available rooms for that department.
+            # as a dictionary of all the available rooms tables for that department's building.
             
-            # Time to make assignments. Start with courses with preferences.
             
-            # Address Classroom Preferences
-            ## Sets room assignment = room preference
+            
+            #^ Time to make assignments.
+            #^ 1st - Assign courses with Classroom Preferences
+            
             for course_name in courses_dict:
                 courses_dict[course_name][ColumnHeaders.ROOM_ASS.value] = courses_dict[course_name][ColumnHeaders.ROOM_PREF.value]
             
-            
-            # Address Faculty Preferences (i.e., time and day preferences)
-            ## Focus on stricter preferences first, assign professors with
-            ## time AND day preferences, then assign professors with only time
-            ## or only day preferences.
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            for course_name in courses_dict:
-                # Grabs course dict info for ready use
-                course = courses_dict[course_name]
-                time_pref = course[ColumnHeaders.TIME_PREF.value]
-                day_pref = course[ColumnHeaders.DAY_PREF.value]
-                
-                # Checks for time preference
-                if time_pref:
-                    #! Time AND Day are preferred
-                    if day_pref:
-                        pass
-                    
-                    #! ONLY time is preferred
-                    else:
-                        pass
-                
-                #! ONLY day is preferred
-                elif day_pref:
-                    pass
-                
-                #! NEITHER day nor time is preferred
-                else:
-                    pass
-                
-            
-            
-        
-        
     # End of generate_assignments
+    
+    
+    def init_tables(self):
+        """
+        Initializes room tables for each room and stores them out to database.
+        """
+        
+        # Gets all the buildings
+        buildings_dict = self.getDB(f"/{DatabaseHeaders.ROOMS.value}")
+        tables_dict = {}
+        
+        # For each building, we need to make the tables
+        for building, list_of_rooms in buildings_dict.items():            
+            # Creates new dictionary of rooms, each room keying a dictionary to a RoomTable 2D List
+            new_building_dict = {}
+            for room in list_of_rooms:
+                empty_table = RoomTable()
+                new_building_dict[room] = empty_table.getTable()
+            tables_dict[building] = new_building_dict
+        
+        # Stores dictionary to database
+        self.updateDB(tables_dict, f"/{DatabaseHeaders.TABLES.value}")
+            
+    # End of init_tables
     
 # End of DataOperation

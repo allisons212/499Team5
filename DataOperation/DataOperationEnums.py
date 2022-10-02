@@ -50,3 +50,4 @@ class DatabaseHeaders(Enum):
     ACCOUNTS = 'Accounts'
     COURSES = 'Department Courses'
     ROOMS = 'Available Classrooms'
+    TABLES = 'Room Tables'
