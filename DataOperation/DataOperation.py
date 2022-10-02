@@ -279,6 +279,7 @@ class DataOperation:
         
         # For each department, we need to make the assignments
         for department, courses_dict in all_departments_dict.items():
+            if department == "ECE": continue # DEBUG
             
             # Grabs all available rooms
             ## First 3 letters of room preference will have building acronym,
@@ -313,14 +314,30 @@ class DataOperation:
             room_tables = self._assign_rest_of_courses(courses_dict, room_tables)
             
             
-            # Now that room_tables is done, update the database with the information
-            
-            
-            
-            
-            
+            # Now that room_tables is done, loop through tables and update the database with the new assignments
+            for room_num, room_table in room_tables.items():
                 
+                for day, day_index in TableIndex.DAY_REF.items():
+                    
+                    for time, time_index in TableIndex.TIME_REF.items():
+                        
+                        if not room_table.isEmptyCell(day_index, time_index): # If table cell is occupied
+                            course_in_cell = room_table.getCell(day_index, time_index) # Gets course name in that cell
+                            
+                            # Changes the course info in courses_dict accordingly
+                            # Changes Day Assignment, Time Assignment, and Room Assignment
+                            courses_dict[course_in_cell][ColumnHeaders.ROOM_ASS.value] = building_name + room_num
+                            courses_dict[course_in_cell][ColumnHeaders.DAY_ASS.value] = day
+                            courses_dict[course_in_cell][ColumnHeaders.TIME_ASS.value] = time
             
+            # Update all_departments_dict
+            all_departments_dict[department] = courses_dict
+            
+        # End department, courses_dict for loop
+        
+        # Update database
+        self.updateDB(all_departments_dict, f"/{DatabaseHeaders.COURSES.value}")
+
     # End of generate_assignments
     
     
