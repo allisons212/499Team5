@@ -45,7 +45,6 @@ class DataOperation:
         """
         Authenticates credentials so access to the database is established.
         """
-        
         self._authenticate_credentials()
     # End of init        
 
@@ -58,7 +57,7 @@ class DataOperation:
         """
 
         # Loads config file
-        conf_file = 'DataOperation/firebase-auth.ini'
+        conf_file = 'credentials/firebase-auth.ini'
         config = ConfigParser()
         config.read(conf_file)
 
@@ -113,8 +112,7 @@ class DataOperation:
                                             f"Please follow the following format for {ColumnHeaders.COURSE_SEC.value}:\n" +
                                             "[2-3 Capital Letters][3-digit integer]-[2-digit integer]\n")
                 
-                
-                                    
+                                                    
                 # No real need to check faculty name, but input must be sanitized
                 faculty_assignment = row[ColumnHeaders.FAC_ASSIGN.value] # e.g., Dr. Goober
                 match = re.findall(r"^[A-Za-z.' ]{1,40}", str(faculty_assignment))
@@ -123,7 +121,6 @@ class DataOperation:
                                             f"Please follow the following format for {ColumnHeaders.FAC_ASSIGN.value}:\n" +
                                             "40 characters or less using only letters, periods, and apostrophes\n")
 
-                
                 
                 # Check building code and room number
                 room_pref = row[ColumnHeaders.ROOM_PREF.value] # e.g., OKT203, SST123, MOR
@@ -152,7 +149,7 @@ class DataOperation:
                                             "Choose one: MW, TR, MWTR\n")
                 
                 
-                
+                # Check seats open
                 seats_open = row[ColumnHeaders.SEATS_OPEN.value] # Positive integer denoting max number of students for that section
                 match = re.findall(r"^\d+$|^$", str(seats_open))
                 if not match:
