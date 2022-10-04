@@ -62,8 +62,40 @@
 </div>
 
 
-<div class="main">
-    <p>This is where a dean can upload a CSV to create a schedule</p>
+<div class="main" align="center">
+    <div>
+        <form>
+            <label for ="class">Choose a class:</label>
+            <select id = "class" name ="class" required>
+                <option value="100">100</option>
+                <option value="105">105</option>
+            </select>
+            <label for="day">Choose a day:</label>
+            <select id = "day" name="day" required>
+                <option value="M">Monday</option>
+                <option value="T">Tuesday</option>
+                <option value="W">Wednesday</option>
+                <option value="R">Thursday</option>
+                <option value="F">Friday</option>
+            </select>
+            <input type="submit" value="Submit Manual Input"/>
+        </form>
+    </div>
+    <div>
+        <p>OR</p>
+    </div>
+    <div>
+        <form action="">
+            <label for="department">Choose a department:</label>
+            <select id="department" name="dept" required>
+                <option value="CS">CS</option>
+                <option value="ECE">ECE</option>
+                <option value="CPE">CPE</option>
+            </select>
+            <input type="file" id="uploadCSV" accept="text/csv" required/>
+            <input type="submit" value="Submit CSV"/>
+        </form>
+    </div>
 </div>
 </body>
 
