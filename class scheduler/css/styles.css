@@ -79,13 +79,98 @@ footer {
     color: #ffffff;
 }
 
+.sidenav a.currentPage {
+    color: #fcda23;
+    background-color: #1e3044;
+}
+
+.sidenav a.currentPage:hover {
+    color: #ffe341;
+    background-color: #21364d;
+}
+
+
+
 
 
 /* Style page content */
 .main {
 
     margin-left: 200px; /* Same as the width of the sidebar */
+    padding: 25px;
+    margin-top: 15px;
 }
+
+.generateScheduleHeader{
+    display: flex;
+    justify-content: space-between;
+}
+
+/* Style for the generate button on generateSchedule page */
+.generateButton{
+    background-color: #0078c8; 
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    padding: 15px 32px;
+    text-align: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 20px;
+    cursor: pointer;
+    display: inline-block;
+}
+/* The style of the generate button when it hovered over */
+.generateButton:hover{
+    background-color: #016bb3;
+    color: #e4e4e4; 
+}
+
+.generateEditors{
+    font-size: 40px;
+    cursor: pointer;
+    color: #1f3347;
+    padding-right: 8px;
+    padding-top: 25px;
+}
+.generateEditors:hover{
+    color: #283c52;
+}
+
+.scheduleTable table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 15px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    table-layout: fixed;
+
+  }
+  
+  .scheduleTable td {
+    text-align: left;
+    padding: 8px;
+    border: 2px solid #b2bad6;
+    background-color: #e4e4e4;
+  }
+
+  .scheduleTable th{
+    background-color: #0078c8;
+    color: #ffffff;
+    text-align: center;
+    padding: 20px;
+
+  }
+
+  .scheduleTime{
+    width:200px;
+    overflow: hidden;
+
+  }
+
+  .scheduleHeader th{
+    /* width:200px; */
+    /* overflow: hidden; */
+  }
+
 
 /* On smaller screens, where height is less than 450px, change the style of the sidebar (less padding and a smaller font size) */
 @media screen and (max-height: 450px) {
@@ -101,7 +186,10 @@ footer {
     text-align: end;
     padding-right: 20px;
     padding-top: 30px;
-    
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-items: right; 
 }
 
 .topnav a {
@@ -109,18 +197,21 @@ footer {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     display: inline-block;
     padding: 5px;
-
+    margin-left: auto;
+    cursor:pointer;
 }
 
 .topnav a:hover {
     color: #27405a;
 }
 
+/* content from https://www.w3schools.com/ */
 .account {
     position: relative;
     display: inline-block;
 
   }
+
 
 /* Dropdown Content (Hidden by Default) */
 .accountDropdownContent {
@@ -140,6 +231,7 @@ footer {
     display: block;
     margin: 0px;
     padding: 10px;
+    cursor:pointer;
   }
   
   /* Change color of dropdown links on hover */
@@ -150,5 +242,6 @@ footer {
   
   /* Show the dropdown menu on hover */
   .account:hover .accountDropdownContent {display: block;}
-  
 
+
+  

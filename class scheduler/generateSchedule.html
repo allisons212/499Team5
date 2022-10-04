@@ -6,65 +6,163 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
+    <title>Schedule Builder | Generate Schedule</title>
 
 </head>
 
 <body>
-<div class="topnav">
-    <a href="#html1" style="margin-top: 0px;">
-        <i class="fa fa-bell-o" style="font-size: 25px;"></i>
-    </a>
-    <div class="account">
-        <a href="account.html" class="accountIcon">
-            <i class="fa fa-user" style="font-size: 50px;"></i>
+    <div class="topnav">
+        <a href="#html1" style="margin-top: 0px;">
+            <i class="fa fa-bell-o" style="font-size: 25px;"></i>
         </a>
-        <div class="accountDropdownContent">
-            <a href="account.html">
-                <i class="fa fa-user"></i>
-                View Account
+        <div class="account">
+            <a href="account.html" class="accountIcon">
+                <i class="fa fa-user" style="font-size: 50px;"></i>
             </a>
-            <a href="#">Link 2</a>
-            <a href="#">
-                <i class="fa fa-sign-out"></i>
-                Log Out
-            </a>
+            <div class="accountDropdownContent">
+                <a href="account.html">
+                    <i class="fa fa-user"></i>
+                    View Account
+                </a>
+                <a href="#">Link 2</a>
+                <a href="#">
+                    <i class="fa fa-sign-out"></i>
+                    Log Out
+                </a>
+            </div>
         </div>
+
+
     </div>
 
 
-</div>
+    <div class="sidenav">
+        <a href="generateSchedule.html">
+            <img src="logo.png">
+        </a>
+        <a href="generateSchedule.html" class="currentPage">
+            <i class="fa fa-table"></i>
+            Create Schedule
+        </a>
+        <a href="uploadCSV.html">
+            <i class="fa fa-upload"></i>
+            Upload CSV
+        </a>
+        <a href="settings.html">
+            <i class="fa fa-gear"></i>
+            Settings
+        </a>
+        <a href="faq.html">
+            <i class="fa fa-question-circle"></i>
+            FAQs
+        </a>
+        <a href="aboutUs.html">
+            <i class="fa fa-group"></i>
+            About Us
+        </a>
+    </div>
 
 
-<div class="sidenav">
-    <a href="index.html">
-        <img src="logo.png">
-    </a>
-    <a href="generateSchedule.html">
-        <i class="fa fa-table"></i>
-        Create Schedule
-    </a>
-    <a href="uploadCSV.html">
-        <i class="fa fa-upload"></i>
-        Upload CSV
-    </a>
-    <a href="settings.html">
-        <i class="fa fa-gear"></i>
-        Settings
-    </a>
-    <a href="faq.html">
-        <i class="fa fa-question-circle"></i>
-        FAQs
-    </a>
-    <a href="aboutUs.html">
-        <i class="fa fa-group"></i>
-        About Us
-    </a>
-</div>
+    <div class="main">
+        <div class="generateScheduleHeader">
+            <button class="generateButton">Generate</button>
+            <div class="generateEditors">
+                <i class="fa fa-download "></i>
+            </div>
+        </div>
 
+        <div class="scheduleTable">
+            <table>
+                <tr class = "scheduleHeader">
+                    <td style="background-color: #0078c8; border: 0px;"></td>
+                    <th>Monday</th>
+                    <th>Tuesday</th>
+                    <th>Wednesday</th>
+                    <th>Thursday</th>
+                    <th>Friday</th>
+                </tr>
+                <tr>
+                    <th class="scheduleTime">
+                        A <br>
+                        8:00 - 9:20
+                    </th>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th class="scheduleTime">
+                        B <br>
+                        9:40 - 11:00
+                    </th>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th class="scheduleTime">
+                        C <br>
+                        11:20 - 12:40
+                    </th>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th class="scheduleTime">
+                        D <br>
+                        1:00 - 2:20
+                    </th>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th class="scheduleTime">
+                        E <br>
+                        2:40 - 4:00
+                    </th>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th class="scheduleTime">
+                        F <br>
+                        4:20 - 5:40
+                    </th>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th class="scheduleTime">
+                        G <br>
+                        6:00 - 7:20
+                    </th>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </table>
+        </div>
 
-<div class="main">
-    <p>Here is where you would generate a schedule</p>
-</div>
+    </div>
+
 </body>
 
 </html>
