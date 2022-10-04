@@ -23,6 +23,7 @@
 
 import csv
 import re
+import os.path
 
 import firebase_admin
 from firebase_admin import credentials
@@ -91,13 +92,18 @@ class DataOperation:
         # 'Course Section' being the key to another dictionary containing the rest
         # of the csv row fields.
         # Each of these rows will be appended to the following list
-        dict_of_section_dicts = {}
-                
+        dict_of_course_dicts = {}
+        
+        format_error_count = 0 # Counts all format errors before raising the exception
+        format_error_msg = ""  # Cumulative string to store all exception/error messages for each wrongly formatted entry
+        
         f = filename
+        filename = os.path.split(filename)[1] # Extracts file name from path, if applicable
+        
         with open(f, mode='r', encoding='utf-8-sig') as read_obj:
             csv_dict_reader = csv.DictReader(read_obj)
             
-            row_num = 1 # Current row number
+            row_num = 1            # Current row number
             
             # Reads in each row of csv file, 'row' is a dictionary keyed by the column headers
             for row in csv_dict_reader:
@@ -108,55 +114,64 @@ class DataOperation:
                 course = row[ColumnHeaders.COURSE_SEC.value] # e.g., CS103-01
                 match = re.findall(r"^[A-Z]{2,3}[0-9]{3}[-][0-9]{2}$", str(course)) # Regex to check input
                 if not match:
-                    raise ImportFormatError(f"Row {row_num} is formatted incorrectly.\n" +
+                    format_error_count += 1
+                    format_error_msg += (f"Row {row_num} in {filename} is formatted incorrectly.\n" +
                                             f"Please follow the following format for {ColumnHeaders.COURSE_SEC.value}:\n" +
-                                            "[2-3 Capital Letters][3-digit integer]-[2-digit integer]\n")
+                                            "[2-3 Capital Letters][3-digit integer]-[2-digit integer]\n\n")
                 
                                                     
                 # No real need to check faculty name, but input must be sanitized
                 faculty_assignment = row[ColumnHeaders.FAC_ASSIGN.value] # e.g., Dr. Goober
-                match = re.findall(r"^[A-Za-z.' ]{1,40}", str(faculty_assignment))
+                match = re.findall(r"^[A-Za-z.' ]{1,40}$", str(faculty_assignment))
                 if not match or len(faculty_assignment) > 40: # Caps character length for names at 40
-                    raise ImportFormatError(f"Row {row_num} is formatted incorrectly.\n" +
+                    format_error_count += 1
+                    format_error_msg += (f"Row {row_num} in {filename} is formatted incorrectly.\n" +
                                             f"Please follow the following format for {ColumnHeaders.FAC_ASSIGN.value}:\n" +
-                                            "40 characters or less using only letters, periods, and apostrophes\n")
+                                            "40 characters or less using only letters, periods, apostrophes, and spaces.\n\n")
 
                 
                 # Check building code and room number
                 room_pref = row[ColumnHeaders.ROOM_PREF.value] # e.g., OKT203, SST123, MOR
                 match = re.findall(r"^[A-Z]{3}([0-9]{3}|)$", str(room_pref))
                 if not match:
-                    raise ImportFormatError(f"Row {row_num} is formatted incorrectly.\n" +
+                    format_error_count += 1
+                    format_error_msg += (f"Row {row_num} in {filename} is formatted incorrectly.\n" +
                                             f"Please follow the following format for {ColumnHeaders.ROOM_PREF.value}:\n" +
-                                            "[3 Capital Letters][Optional: 3-digit integer]\n")
+                                            "[3 Capital Letters][Optional: 3-digit integer]\n\n")
                 
                 
                 # Check time block preferences
                 time_pref = row[ColumnHeaders.TIME_PREF.value] # e.g., ABCDEFG; designating class time blocks throughout the day
                 match = re.findall(r"^[A]{0,1}[B]{0,1}[C]{0,1}[D]{0,1}[E]{0,1}[F]{0,1}[G]{0,1}$", str(time_pref))
                 if not match:
-                    raise ImportFormatError(f"Row {row_num} is formatted incorrectly.\n" +
+                    format_error_count += 1
+                    format_error_msg += (f"Row {row_num} in {filename} is formatted incorrectly.\n" +
                                             f"Please follow the following format for {ColumnHeaders.TIME_PREF.value}:\n" +
-                                            "Capital [A-G], used at most once each, in alphabetical order\n")
+                                            "Capital [A-G], used at most once each, in alphabetical order\n\n")
                 
                 
                 # Check day preferences
                 day_pref = row[ColumnHeaders.DAY_PREF.value] # e.g., MWTR (R = Thursday)
                 match = re.findall(r"^MWTR$|^MW$|^TR$|^$", str(day_pref))
                 if not match:
-                    raise ImportFormatError(f"Row {row_num} is formatted incorrectly.\n" +
+                    format_error_count += 1
+                    format_error_msg += (f"Row {row_num} in {filename} is formatted incorrectly.\n" +
                                             f"Please follow the following format for {ColumnHeaders.DAY_PREF.value}:\n" +
-                                            "Choose one: MW, TR, MWTR\n")
+                                            "Choose one: MW, TR, MWTR\n\n")
                 
                 
                 # Check seats open
                 seats_open = row[ColumnHeaders.SEATS_OPEN.value] # Positive integer denoting max number of students for that section
                 match = re.findall(r"^\d+$|^$", str(seats_open))
                 if not match:
-                    raise ImportFormatError(f"Row {row_num} is formatted incorrectly.\n" +
+                    format_error_count += 1
+                    format_error_msg += (f"Row {row_num} in {filename} is formatted incorrectly.\n" +
                                             f"Please follow the following format for {ColumnHeaders.SEATS_OPEN.value}:\n" +
-                                            "An integer value\n")
+                                            "An integer value\n\n")
                 
+                # No need to do the rest of the row operations if a format error is found
+                if format_error_count > 0:
+                    continue
                 
                 # Creates nested dictionary with course section as the key
                 course_dict = row
@@ -169,13 +184,20 @@ class DataOperation:
 
                 
                 # Appends Course Section dictionary to cumulative dictionary of sections
-                dict_of_section_dicts[course] = course_dict
+                dict_of_course_dicts[course] = course_dict
                 
             # End for loop
         # End of file reading
         
+        # If errors are found, raise the exception
+        if format_error_count > 0:
+            raise ImportFormatError(f"{format_error_count} errors have been found:\n"
+                                    + format_error_msg)
+        
+        
+        
         # Updates the department's database tree
-        department_dict = {department_abbr : dict_of_section_dicts}
+        department_dict = {department_abbr : dict_of_course_dicts}
         ref = db.reference(f'/{DatabaseHeaders.COURSES.value}')
         ref.update(department_dict)
         
