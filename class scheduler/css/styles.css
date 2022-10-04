@@ -171,6 +171,41 @@ footer {
     /* overflow: hidden; */
   }
 
+  .aboutMembers{
+    /* display: flex; */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-align: center;
+  }
+
+  .aboutMembers h1{
+    text-align: center;
+    color: #27405a;
+    text-shadow: 2px 2px #b2bad6;
+
+  }
+
+  .aboutMembers .theMember{
+    display: inline-block;
+    padding: 50px;
+  }
+
+  .theMember h3{
+    text-align: center;
+    color: #0078c8;
+  }
+  .theMember h5{
+    color:#27405a;
+  }
+
+  .theMember img{
+    align-items: center;
+    border-radius: 50px;
+    width: 200px;
+
+  }
+
+
+
 
 /* On smaller screens, where height is less than 450px, change the style of the sidebar (less padding and a smaller font size) */
 @media screen and (max-height: 450px) {
