@@ -272,6 +272,65 @@ class DataOperation:
         
     # End of update DB
     
+    
+    def exportCSV(self, department_abbr):
+        """
+        Exports a CSV from the database. This function depends on output generated from the getDB function
+        Args:
+            department_abbr (string): Data from the firebase db for a specfic department.
+            EX. It could be the CS data or the ECE data depending on parameter that was given to getDB
+            department_abbr = CS
+            department_abbr = ECE
+        """
+        
+        # Get the dictionary from getDB function
+        department_dict = self.getDB(department_abbr)
+        
+         # Column headers for output CSV
+        fieldnames = ['Course Section', 'Classroom Assignment', 'Room Preferences', 'Day Assignment', 'Day Preferences', 'Faculty Assignment',
+                    'Seats Open', 'Time Assignment', 'Time Block Preferences']
+        
+        # Now lets open a CSV file to write to
+        with open('exportData.csv', 'w', encoding='utf-8-sig') as csvfile:
+            
+            # Create a writer that has fieldnames equal to column_information. 
+            # Line Terminator must be set to \n or it will skip lines in the export CSV
+            writer = csv.DictWriter(csvfile, fieldnames = fieldnames, lineterminator = '\n')
+            writer.writeheader()
+
+            # new_list will hold our new dictionary that is not nested.
+            # this makes it much easier to use writerow()
+            new_list = {}
+        
+            # Iterate through the first part of the dictionary department_dict and get the section
+            for section in department_dict:
+                
+                # Put the Course Section
+                new_list[ColumnHeaders.COURSE_SEC.value] = section
+                
+                # Iterate through the fields of each section
+                for section_field in department_dict[section]:
+                    # Put fields into the dictionary new_list if we are in that section_field
+                    if(section_field == ColumnHeaders.ROOM_ASS.value):
+                        new_list[section_field] = str(department_dict[section][section_field])
+                    elif(section_field == ColumnHeaders.ROOM_PREF.value):
+                        new_list[section_field] = str(department_dict[section][section_field])
+                    elif(section_field == ColumnHeaders.DAY_ASS.value):
+                        new_list[section_field] = str(department_dict[section][section_field])
+                    elif(section_field == ColumnHeaders.DAY_PREF.value):
+                        new_list[section_field] = str(department_dict[section][section_field])
+                    elif(section_field == ColumnHeaders.FAC_ASSIGN.value):
+                        new_list[section_field] = str(department_dict[section][section_field])
+                    elif(section_field == ColumnHeaders.SEATS_OPEN.value):
+                        new_list[section_field] = str(department_dict[section][section_field])
+                    elif(section_field == ColumnHeaders.TIME_ASS.value):
+                        new_list[section_field] = str(department_dict[section][section_field])
+                    elif(section_field == ColumnHeaders.TIME_PREF.value):
+                        new_list[section_field] = str(department_dict[section][section_field])
+
+                # Once we obtained an entire row for the csv, write to the file
+                writer.writerow(new_list)
+    # End of exportCSV
 
 
 ################################################################################    
