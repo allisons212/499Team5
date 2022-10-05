@@ -137,39 +137,7 @@ class DataOperation:
                 # Check time_pref to make sure it is in correct format
                 time_pref = row[ColumnHeaders.TIME_PREF.value] # e.g., A, B, C, D, E, F, G; designating class time blocks throughout the day
                 
-                # d represents a bag data structure that will store time_pref as a key and the value will be
-                # the amount of times it appears in the string
-                d = collections.defaultdict(int)
-                
-                # List is used to convert the letters in the string to ascii_values to check if its within range
-                # [65 - 71]
-                ascii_values = []
-                
-                # For loop that puts the key-value pairs into the dictionary and populates ascii_values
-                for c in str(time_pref):
-                    d[c] = d[c] + 1
-                    ascii_values.append(ord(c))
-                    
-                # For Loop that Raises an ImportFormatError if the string includes letters that are not A-G
-                for value in ascii_values:
-                    if(value < 65 or value > 71):
-                        raise ImportFormatError(f"Row {row_num} is formatted incorrectly.\n" + 
-                                            f"Please follow the following format for {ColumnHeaders.TIME_PREF.value}:\n" +
-                                            "[Any letter A-G, and NO duplicate letters] EX. AB, DFG")
-                
-                # For loop Raises an ImportFormatError if the string includes duplicate letters A-G
-                for c in d:
-                    if(d[c] > 1):
-                        raise ImportFormatError(f"Row {row_num} is formatted incorrectly.\n" + 
-                                            f"Please follow the following format for {ColumnHeaders.TIME_PREF.value}:\n" +
-                                            "[Any letter A-G, and NO duplicate letters] EX. AB, DFG")
-                        
-                # Clear the Dicionary and List for next iteration
-                d.clear()
-                ascii_values.clear()
-                
                 # Check day_pref to make sure it is in correct format
-                
                 day_pref = row[ColumnHeaders.DAY_PREF.value] # e.g., MW, TR
                 
                 # Find all matches in the string with the regular expression given below
