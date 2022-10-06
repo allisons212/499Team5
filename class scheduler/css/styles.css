@@ -181,30 +181,10 @@ footer {
     text-align: center;
     color: #27405a;
     text-shadow: 2px 2px #b2bad6;
-
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding-bottom: 75px;
+    font-size: 50px;
   }
-
-  /* .aboutMembers .theMember{
-    display: inline-block;
-    padding: 50px;
-  }
-
-  .theMember h3{
-    text-align: center;
-    color: #0078c8;
-  }
-  .theMember h5{
-    color:#27405a;
-    width: 180px;
-    text-align: left;
-  }
-
-  .theMember img{
-    align-items: center;
-    border-radius: 50px;
-    width: 200px;
-
-  } */
 
   .theMember {
     width: 100%;
@@ -230,6 +210,11 @@ footer {
     margin-right: auto;
     margin-left: auto;
     color: #0078c8;
+    margin-bottom: 0px;
+  }
+
+  .theMember h4{
+    color: #27405a;
   }
 
   .aboutMembers {
