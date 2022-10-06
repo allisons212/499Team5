@@ -171,20 +171,20 @@ footer {
     /* overflow: hidden; */
   }
 
-  .aboutMembers{
+  .aboutMembers {
     /* display: flex; */
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     text-align: center;
   }
 
-  .aboutMembers h1{
+  .aboutTitle {
     text-align: center;
     color: #27405a;
     text-shadow: 2px 2px #b2bad6;
 
   }
 
-  .aboutMembers .theMember{
+  /* .aboutMembers .theMember{
     display: inline-block;
     padding: 50px;
   }
@@ -195,6 +195,8 @@ footer {
   }
   .theMember h5{
     color:#27405a;
+    width: 180px;
+    text-align: left;
   }
 
   .theMember img{
@@ -202,10 +204,48 @@ footer {
     border-radius: 50px;
     width: 200px;
 
+  } */
+
+  .theMember {
+    width: 100%;
   }
 
+  .theMember img {
+    max-width: 50%;
+    margin-right: auto;
+    margin-left: auto;
+    margin-bottom: 20px;
+    border-radius: 15px;
+  }
 
+  .theMember h5 {
+    max-width: 50%;
+    margin-right: auto;
+    margin-left: auto;
+    color: #27405a;
+    
+  }
 
+  .theMember h3{
+    margin-right: auto;
+    margin-left: auto;
+    color: #0078c8;
+  }
+
+  .aboutMembers {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    grid-column-gap: 20px;
+    grid-row-gap: 20px;
+  }
+  
+  /* .theMembers1 { grid-area: 1 / 1 / 2 / 2; }
+  .theMembers2 { grid-area: 1 / 2 / 2 / 3; } */
+  .aboutMembers > div {
+    display: flex;
+    flex-direction: column;
+  }
 
 /* On smaller screens, where height is less than 450px, change the style of the sidebar (less padding and a smaller font size) */
 @media screen and (max-height: 450px) {
