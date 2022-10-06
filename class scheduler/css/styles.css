@@ -236,8 +236,8 @@ footer {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: repeat(2, 1fr);
-    grid-column-gap: 20px;
-    grid-row-gap: 20px;
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
   }
   
   /* .theMembers1 { grid-area: 1 / 1 / 2 / 2; }
