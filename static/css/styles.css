@@ -1,0 +1,154 @@
+
+body {
+    background-color: #ffffff;
+    margin: 0px;
+    padding: 0px;
+}
+
+h {
+    color: black;
+    font-size: 24px; 
+    margin: auto; 
+    text-align: center; 
+    font-family: "Comic Sans MS", "Comic Sans", cursive ; 
+}
+
+p {
+    color: black; 
+    font-size: 18px; 
+    font-family: "Comic Sans MS", "Comic Sans", cursive ;
+}
+
+p-slide {
+    color: black; 
+    font-size: 18px; 
+    font-family: "Comic Sans MS", "Comic Sans", cursive ;
+    animation-duration: 3s;
+    animation-name: slidein;
+}
+
+@keyframes slidein {
+    from {
+        margin-right: 0%;
+        margin-left: 100%;
+        width: 300%;
+      }
+    
+    to {
+        margin-left: 0%;
+        width: 100%;
+    }
+}
+
+footer {
+    background-color: #abcdef; 
+    margin: auto; 
+    text-align: center; 
+    padding-right: 2%; 
+    font-family: "Comic Sans MS", "Comic Sans", cursive ;
+}
+
+
+/* content from https://www.w3schools.com/ */
+.sidenav {
+    height: 100%; /* Full-height: remove this if you want "auto" height */
+    width: 200px; /* Set the width of the sidebar */
+    position: fixed; /* Fixed Sidebar (stay in place on scroll) */
+    z-index: 1; /* Stay on top */
+    top: 0; /* Stay at the top */
+    left: 0;
+    background-color: #27405a;
+    overflow-x: hidden; /* Disable horizontal scroll */
+    padding-top: 20px;
+    
+}
+
+/* The navigation menu links */
+/*Cambria, Cochin, Georgia, Times, 'Times New Roman', serif */
+.sidenav a {
+    padding: 6px 8px 25px 16px;
+    text-decoration: none;
+    font-size: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #b2bad6;
+    display: block;
+}
+
+/* When you mouse over the navigation links, change their color */
+.sidenav a:hover {
+    color: #ffffff;
+}
+
+
+
+/* Style page content */
+.main {
+
+    margin-left: 200px; /* Same as the width of the sidebar */
+}
+
+/* On smaller screens, where height is less than 450px, change the style of the sidebar (less padding and a smaller font size) */
+@media screen and (max-height: 450px) {
+    .sidenav {padding-top: 15px;}
+    .sidenav a {font-size: 18px;}
+}
+
+.topnav {
+    background-color: #0078c8;
+    height: 100px; /* Full-height: remove this if you want "auto" height */
+     z-index: 1;
+    margin-left: 192px;
+    text-align: end;
+    padding-right: 20px;
+    padding-top: 30px;
+    
+}
+
+.topnav a {
+    color: #f2f2f2;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: inline-block;
+    padding: 5px;
+
+}
+
+.topnav a:hover {
+    color: #27405a;
+}
+
+.account {
+    position: relative;
+    display: inline-block;
+
+  }
+
+/* Dropdown Content (Hidden by Default) */
+.accountDropdownContent {
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: #27405a;
+    min-width: 160px;
+    z-index: 1;
+    text-align: center;
+  }
+  
+  /* Links inside the dropdown */
+  .accountDropdownContent a {
+    color: #b2bad6;
+    text-decoration: none;
+    display: block;
+    margin: 0px;
+    padding: 10px;
+  }
+  
+  /* Change color of dropdown links on hover */
+  .accountDropdownContent a:hover {
+    background-color: #3d628a;
+    color: #ffffff;
+}
+  
+  /* Show the dropdown menu on hover */
+  .account:hover .accountDropdownContent {display: block;}
+  
+
