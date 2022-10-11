@@ -7,7 +7,7 @@ def main():
 
     data_operation = DataOperation.DataOperation() # Runs constructor to authenticate credentials
     
-    data_operation.exportCSV("CS", "ClassData/ExportCSData.csv")
+    #data_operation.exportCSV("CS", "ClassData/ExportCSData.csv")
     
     # Test try-catch block for importCSV()
     try:
