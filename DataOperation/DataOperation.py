@@ -282,6 +282,8 @@ class DataOperation:
                 EX. It could be the CS data or the ECE data depending on parameter that was given to getDB
                 department_abbr = CS
                 department_abbr = ECE
+            outfile (string): File path and name of the output csv. Default is "Export{department_abbr}Data.csv"
+                in current directory
         
         Raises:
             QueryNotFoundError: database_path doesn't return data
