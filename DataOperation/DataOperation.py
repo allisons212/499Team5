@@ -368,7 +368,7 @@ class DataOperation:
         
         # For each department, we need to make the assignments
         for department, courses_dict in all_departments_dict.items():
-            if department == "ECE": continue # DEBUG
+            if department == "ECE": continue # @DEBUG skips ECE
             
             # Grabs all available rooms
             ## First 3 letters of room preference will have building acronym,
@@ -486,10 +486,9 @@ class DataOperation:
                     if assignment_made: break
             
             # Checked if assignment was made, if not, then there was a conflict
-            # TODO: Conflict handling goes here
             if not assignment_made:
+            # @TODO rest_of_courses conflict handling goes here
                 pass
-                
         # End of course_dict for loop
         
         
@@ -549,7 +548,7 @@ class DataOperation:
                     if assignment_made: break
             
             # Checked if assignment was made, if not, then there was a conflict
-            # TODO: Conflict handling goes here
+            # @TODO day_time_pref conflict handling goes here
             if not assignment_made:
                 pass
                 
@@ -618,7 +617,7 @@ class DataOperation:
                     if assignment_made: break
                 
                 # Checked if assignment was made, if not, then there was a conflict
-                # TODO: Conflict handling goes here
+                # @TODO room_pref conflict handling goes here
                 if not assignment_made:
                     pass
             # End of if len(room_pref) > 3
@@ -632,8 +631,8 @@ class DataOperation:
     
     ######################################
     #
-    # DEBUG Methods
-    # TODO: DELETE THESE METHODS BEFORE PUSHING TO PRODUCTION
+    # @DEBUG Methods
+    # @TODO DELETE THESE METHODS BEFORE PUSHING TO PRODUCTION
     #
     ######################################
     
