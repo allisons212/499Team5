@@ -7,6 +7,7 @@ def main():
 
     data_operation = DataOperation.DataOperation() # Runs constructor to authenticate credentials
     
+    data_operation.exportCSV("CS", "ClassData/ExportCSData.csv")
     
     # Test try-catch block for importCSV()
     try:
@@ -19,7 +20,7 @@ def main():
         
     except ImportFormatError as ife:
         print(f"{ife}\n")
-
+    
 
     """
     # Test try-catch block for getDB and updateDB
@@ -61,7 +62,7 @@ def main():
     """
     
     # Testing generate_assignment
-    data_operation.generate_assignments()
+    #data_operation.generate_assignments()
 
 
 if __name__ == "__main__":
