@@ -83,14 +83,10 @@ class DataOperation:
             department_abbr (string): Abbreviation of the building (e.g., CS, ECE) classes to update
         """
         
-        from collections import defaultdict
-        
-        # Each row of the csv input will be reorganized as a nested dictionary with
-        # 'Available Classrooms' being the key to another dictionary containing the rest
-        # of the csv row fields.
-        # Each of these rows will be appended to the list 
-        
+        # Dictionary that we will hold our buildings as our keys, and lists of room numbers for value
         building_dictionary = {}
+        
+        # Keep track of row_number for error checking
         row_number = 1
         
         # Counts all format errors before raising the exception
@@ -101,11 +97,12 @@ class DataOperation:
         
         # Set f equal to filename and open the csv file as read_obj
         f = filename
+        
+        # Open our file for read
         with open(f, mode='r', encoding='utf-8-sig') as read_obj:
             csv_dict_reader = csv.DictReader(read_obj)
-        
             
-        # Pre-process the dictionary and find all unique buildings and put into list
+            # Pre-process the dictionary and find all unique buildings and put into list
             for row in csv_dict_reader:
                 # Track the row_number
                 row_number = row_number + 1
