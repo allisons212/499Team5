@@ -74,7 +74,7 @@ class DataOperation:
     # End of authenticate_credentials
 
 
-    def importCSV(self, filename, department_abbr):
+    def importCourseCSV(self, filename, department_abbr):
         """
         Reads CSV file with schedule data and checks for formatting.
         Afterwards, it creates database entries for each class section.
@@ -322,7 +322,49 @@ class DataOperation:
                 writer.writerow(new_row)
                 
     # End of exportCSV
+    
+    
+    def checkUserPass(self, username, password):
+        """
+        Checks username and plaintext password against database to confirm proper login.
+        Password hashing will be done within this method, so only a plaintext password
+        is necessary.
+        Returns true only if a username and password is found.
 
+        Args:
+            username (string): Username of the account
+            password (string): Plaintext password of the account
+
+        Returns:
+            Boolean: Returns True if login credentials are found, False if not
+        """
+        
+        fetched_account = {}
+        
+        # Check username
+        try: # Fetches account of the specified username as a dict
+            fetched_account = self.getDB(f"/{DatabaseHeaders.ACCOUNTS.value}/{username}")
+            
+        except QueryNotFoundError: # Username not defined, return false
+            return False
+        
+        # Username check passed
+        # Split account info
+        fetched_salt = fetched_account['Salt']
+        fetched_password = fetched_account['Password']
+        
+        # Hash the plaintext password using hashlib SHA256
+        import hashlib
+        hashed_password = hashlib.sha256((password+fetched_salt).encode('utf-8')).hexdigest()
+        
+        # Check if password hash matches the one in the database
+        if hashed_password != fetched_password:
+            return False
+        
+        # All checks passed, return True
+        return True
+    
+    # End of checkUserPass
 
 ################################################################################    
     
