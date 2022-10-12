@@ -1,3 +1,5 @@
 credentials/*
+__pycache__/*
+DataOperation/__pycache__/*
 test.txt
 test.py
