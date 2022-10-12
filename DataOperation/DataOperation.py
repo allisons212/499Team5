@@ -73,7 +73,7 @@ class DataOperation:
         })
     # End of authenticate_credentials
     
-    def importRoomsCSV(self, filename):
+    def importRoomCSV(self, filename):
         """
         Reads CSV file AvailableRooms.csv with data and checks it for formatting.
         After it is error checked, it creates database entries for the given Department
@@ -112,7 +112,7 @@ class DataOperation:
                 match = re.findall("^[A-Z]{3}$", str(building))
                 if not match:
                     format_error_count += 1
-                    format_error_msg = (f"Row {row_number} in {filename} is formatted incorrectly.\n" +
+                    format_error_msg += (f"Row {row_number} in {filename} is formatted incorrectly.\n" +
                                             f"Please follow the following format for {ColumnHeaders.BUILD.value}:\n" +
                                             "[3 Capital Letters]\n\n")
                 
@@ -121,7 +121,7 @@ class DataOperation:
                 match = re.findall("^[0-9]{3}$", str(room_number))
                 if not match:
                     format_error_count += 1
-                    format_error_msg = (f"Row {row_number} in {filename} is formatted incorrectly.\n" +
+                    format_error_msg += (f"Row {row_number} in {filename} is formatted incorrectly.\n" +
                                             f"Please follow the following format for {ColumnHeaders.ROOM_NUM.value}:\n" +
                                             "[3-digit integer]\n\n")
                 
@@ -148,12 +148,9 @@ class DataOperation:
         # has the values as a list of the room numbers we need to put into database
         ref = db.reference(f'/{DatabaseHeaders.ROOMS.value}')
         ref.update(building_dictionary)
-            
-            
-            
-            
-            
         
+    # End of importRoomCSV
+            
             
 
     def importCourseCSV(self, filename, department_abbr):
@@ -493,9 +490,7 @@ class DataOperation:
         all_departments_dict = self.getDB(f"/{DatabaseHeaders.COURSES.value}")
         
         # For each department, we need to make the assignments
-        for department, courses_dict in all_departments_dict.items():
-            if department == "ECE": continue # @DEBUG skips ECE
-            
+        for department, courses_dict in all_departments_dict.items():            
             # Grabs all available rooms
             ## First 3 letters of room preference will have building acronym,
             ## so we use that to determine which list of available rooms to pull.

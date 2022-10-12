@@ -15,15 +15,13 @@ def main():
     print(data_operation.checkUserPass(username="CSChair", password="ComputerScienceDepartmentChair")) # Correct pass: ComputerScienceDepartmentChair
     print(data_operation.checkUserPass(username="ECEChair", password="ElectricalComputerEngineeringDepartmentChair")) # Correct pass: ElectricalComputerEngineeringDepartmentChair
     
-    data_operation.importRoomsCSV("ClassData/AvailableRooms.csv")
     
-    """
-    
-    # Test try-catch block for importCSV()
+    # Test try-catch block for import CSV methods
     try:
-        csv_file = "ClassData/Dept2ClassData.csv" # This is provided from GUI
-        department_abbr = "ECE"                   # This is provided from GUI
-        data_operation.importCSV(csv_file, department_abbr) # Test a csv file
+        course_csv_file = "ClassData/Dept1ClassData.csv" # This is provided from GUI
+        department_abbr = "CS"                          # This is provided from GUI
+        data_operation.importCourseCSV(course_csv_file, department_abbr) # Test a course csv file
+        data_operation.importRoomCSV("ClassData/AvailableRooms.csv") # Test a room csv file
     
     except FileNotFoundError as fnfe:
         print(f"{fnfe}\n")
@@ -31,7 +29,6 @@ def main():
     except ImportFormatError as ife:
         print(f"{ife}\n")
     
-    """
     
 
     """
@@ -74,7 +71,7 @@ def main():
     """
     
     # Testing generate_assignment
-    #data_operation.generate_assignments()
+    data_operation.generate_assignments()
 
 
 if __name__ == "__main__":
