@@ -37,6 +37,8 @@ class ColumnHeaders(Enum):
     ROOM_ASS = 'Classroom Assignment'
     TIME_ASS = 'Time Assignment'
     DAY_ASS = 'Day Assignment'
+    BUILD = 'Building'
+    ROOM_NUM = 'Room Number'
     
     
 class DatabaseHeaders(Enum):
