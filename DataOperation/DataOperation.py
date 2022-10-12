@@ -132,10 +132,10 @@ class DataOperation:
                 
                 # IF the building is in the dictionary then just append to exising dictionary
                 # ELSE create a new key pair with that room number
-                if row['Building'] in building_dictionary.keys():
-                    building_dictionary[row['Building']].append(row['Room Number'])
+                if row[ColumnHeaders.BUILD.value] in building_dictionary.keys():
+                    building_dictionary[row[ColumnHeaders.BUILD.value]].append(row[ColumnHeaders.ROOM_NUM.value])
                 else:
-                    building_dictionary[row['Building']] = [row['Room Number']]
+                    building_dictionary[row[ColumnHeaders.BUILD.value]] = [row[ColumnHeaders.ROOM_NUM.value]]
             
            
         # If errors are found, raise the exception
