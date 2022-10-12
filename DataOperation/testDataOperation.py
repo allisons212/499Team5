@@ -9,6 +9,11 @@ def main():
     
     #data_operation.exportCSV("CS", "ClassData/ExportCSData.csv")
     
+    print(data_operation.checkUserPass(username="CSChair", password="ComputerScienceDepartmentChair"))
+    print(data_operation.checkUserPass(username="ECEChair", password="ElectricalComputerEngineeringDepartmentChair"))
+    
+    """
+    
     # Test try-catch block for importCSV()
     try:
         csv_file = "ClassData/Dept2ClassData.csv" # This is provided from GUI
@@ -20,6 +25,8 @@ def main():
         
     except ImportFormatError as ife:
         print(f"{ife}\n")
+    
+    """
     
 
     """
