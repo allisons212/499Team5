@@ -7,10 +7,13 @@ def main():
 
     data_operation = DataOperation.DataOperation() # Runs constructor to authenticate credentials
     
+    # Test exportCSV
     #data_operation.exportCSV("CS", "ClassData/ExportCSData.csv")
     
-    print(data_operation.checkUserPass(username="CSChair", password="ComputerScienceDepartmentChair"))
-    print(data_operation.checkUserPass(username="ECEChair", password="ElectricalComputerEngineeringDepartmentChair"))
+    
+    # Test checkUserPass
+    print(data_operation.checkUserPass(username="CSChair", password="ComputerScienceDepartmentChair")) # Correct pass: ComputerScienceDepartmentChair
+    print(data_operation.checkUserPass(username="ECEChair", password="ElectricalComputerEngineeringDepartmentChair")) # Correct pass: ElectricalComputerEngineeringDepartmentChair
     
     """
     
