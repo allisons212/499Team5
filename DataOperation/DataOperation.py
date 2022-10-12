@@ -72,7 +72,89 @@ class DataOperation:
             'databaseURL' : database_url
         })
     # End of authenticate_credentials
+    
+    def importRoomsCSV(self, filename):
+        """
+        Reads CSV file AvailableRooms.csv with data and checks it for formatting.
+        After it is error checked, it creates database entries for the given Department
 
+        Args:
+            filename (string): Path directed to csv file to import
+            department_abbr (string): Abbreviation of the building (e.g., CS, ECE) classes to update
+        """
+        
+        # Dictionary that we will hold our buildings as our keys, and lists of room numbers for value
+        building_dictionary = {}
+        
+        # Keep track of row_number for error checking
+        row_number = 1
+        
+        # Counts all format errors before raising the exception
+        format_error_count = 0 
+        
+        # Cumulative string to store all exception/error messages for each wrongly formatted entry
+        format_error_msg = "" 
+        
+        # Set f equal to filename and open the csv file as read_obj
+        f = filename
+        
+        # Open our file for read
+        with open(f, mode='r', encoding='utf-8-sig') as read_obj:
+            csv_dict_reader = csv.DictReader(read_obj)
+            
+            # Pre-process the dictionary and find all unique buildings and put into list
+            for row in csv_dict_reader:
+                # Track the row_number
+                row_number = row_number + 1
+                
+                # ERROR CHECKING (BUILDING)
+                building = row[ColumnHeaders.BUILD.value]
+                match = re.findall("^[A-Z]{3}$", str(building))
+                if not match:
+                    format_error_count += 1
+                    format_error_msg = (f"Row {row_number} in {filename} is formatted incorrectly.\n" +
+                                            f"Please follow the following format for {ColumnHeaders.BUILD.value}:\n" +
+                                            "[3 Capital Letters]\n\n")
+                
+                # ERROR CHECKING (ROOM NUMBER)
+                room_number = row[ColumnHeaders.ROOM_NUM.value]
+                match = re.findall("^[0-9]{3}$", str(room_number))
+                if not match:
+                    format_error_count += 1
+                    format_error_msg = (f"Row {row_number} in {filename} is formatted incorrectly.\n" +
+                                            f"Please follow the following format for {ColumnHeaders.ROOM_NUM.value}:\n" +
+                                            "[3-digit integer]\n\n")
+                
+                # No need to do the rest of the row operations if a format error is found
+                if format_error_count > 0:
+                    continue
+                
+                
+                # IF the building is in the dictionary then just append to exising dictionary
+                # ELSE create a new key pair with that room number
+                if row[ColumnHeaders.BUILD.value] in building_dictionary.keys():
+                    building_dictionary[row[ColumnHeaders.BUILD.value]].append(row[ColumnHeaders.ROOM_NUM.value])
+                else:
+                    building_dictionary[row[ColumnHeaders.BUILD.value]] = [row[ColumnHeaders.ROOM_NUM.value]]
+            
+           
+        # If errors are found, raise the exception
+        if format_error_count > 0:
+            raise ImportFormatError(f"{format_error_count} errors have been found:\n"
+                                    + format_error_msg)
+        
+        
+        # Now that we have the dictionary that has each building as a key, and 
+        # has the values as a list of the room numbers we need to put into database
+        ref = db.reference(f'/{DatabaseHeaders.ROOMS.value}')
+        ref.update(building_dictionary)
+            
+            
+            
+            
+            
+        
+            
 
     def importCourseCSV(self, filename, department_abbr):
         """
@@ -429,8 +511,6 @@ class DataOperation:
                 new_table = RoomTable()
                 new_table.importTable(table)
                 room_tables[room_num] = new_table
-                
-                
             
             #^ At this point, we have a dictionary of all the course sections as well
             #^ as a dictionary of all the available rooms tables for that department's building.

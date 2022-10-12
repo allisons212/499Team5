@@ -15,6 +15,8 @@ def main():
     print(data_operation.checkUserPass(username="CSChair", password="ComputerScienceDepartmentChair")) # Correct pass: ComputerScienceDepartmentChair
     print(data_operation.checkUserPass(username="ECEChair", password="ElectricalComputerEngineeringDepartmentChair")) # Correct pass: ElectricalComputerEngineeringDepartmentChair
     
+    data_operation.importRoomsCSV("ClassData/AvailableRooms.csv")
+    
     """
     
     # Test try-catch block for importCSV()
