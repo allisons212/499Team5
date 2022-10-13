@@ -5,66 +5,348 @@
     <link rel="stylesheet" href="../static/css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src=
+    "https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js">
+        </script>
 
 
 </head>
 
 <body>
-        <div class="topnav">
-            <a href="#html1" style="margin-top: 0px;">
-                <i class="fa fa-bell-o" style="font-size: 25px;"></i>
+    <div class="topnav">
+        <a href="#html1" style="margin-top: 0px;">
+            <i class="fa fa-bell-o" style="font-size: 25px;"></i>
+        </a>
+        <div class="account">
+            <a href="{{ url_for('account') }}" class="accountIcon">
+                <i class="fa fa-user" style="font-size: 50px;"></i>
             </a>
-            <div class="account">
-                <a href="{{ url_for('account') }}" class="accountIcon">
-                    <i class="fa fa-user" style="font-size: 50px;"></i>
+            <div class="accountDropdownContent">
+                <a href="{{ url_for('account') }}">
+                    <i class="fa fa-user"></i>
+                    View Account
                 </a>
-                <div class="accountDropdownContent">
-                    <a href="{{ url_for('account') }}">
-                        <i class="fa fa-user"></i>
-                        View Account
-                    </a>
-                    <a href="#">Link 2</a>
-                    <a href="{{ url_for('login') }}">
-                        <i class="fa fa-sign-out"></i>
-                        Log Out
-                    </a>
-                </div>
+                <a href="#">Link 2</a>
+                <a href="{{ url_for('login') }}">
+                    <i class="fa fa-sign-out"></i>
+                    Log Out
+                </a>
             </div>
-
-
         </div>
 
 
-        <div class="sidenav">
-            <a href="{{ url_for('home') }}">
-                <img src="../static/logo.png" alt="logo">
-            </a>
-            <a href="{{ url_for('generate_schedule') }}">
-                <i class="fa fa-table"></i>
-                Create Schedule
-            </a>
-            <a href="{{ url_for('upload_csv') }}">
-                <i class="fa fa-upload"></i>
-                Upload CSV
-            </a>
-            <a href="{{ url_for('settings') }}">
-                <i class="fa fa-gear"></i>
-                Settings
-            </a>
-            <a href="{{ url_for('faq') }}">
-                <i class="fa fa-question-circle"></i>
-                FAQs
-            </a>
-            <a href="{{ url_for('about_us') }}">
-                <i class="fa fa-group"></i>
-                About Us
-            </a>
+    </div>
+
+
+    <div class="sidenav">
+        <a href="{{ url_for('home') }}">
+            <img src="../static/Pictures/logo.png" alt="logo">
+        </a>
+        <a href="{{ url_for('generate_schedule') }}" class="currentPage">
+            <i class="fa fa-table"></i>
+            Create Schedule
+        </a>
+        <a href="{{ url_for('upload_csv') }}">
+            <i class="fa fa-upload"></i>
+            Upload CSV
+        </a>
+        <a href="{{ url_for('settings') }}">
+            <i class="fa fa-gear"></i>
+            Settings
+        </a>
+        <a href="{{ url_for('faq') }}">
+            <i class="fa fa-question-circle"></i>
+            FAQs
+        </a>
+        <a href="{{ url_for('about_us') }}">
+            <i class="fa fa-group"></i>
+            About Us
+        </a>
+    </div>
+
+
+    <div class="main">
+        <div class="generateScheduleHeader">
+            <button class="generateButton" type="submit" id="getData">Generate</button>
+            <div class="generateEditors">
+                <i class="fa fa-download "></i>
+            </div>
         </div>
 
+        <div class="scheduleTable">
+            <table id="generateScheduleTable">
+                <tr class="scheduleHeader">
+                    <td style="background-color: #0078c8; border: 0px;"></td>
+                    <th>Monday</th>
+                    <th>Tuesday</th>
+                    <th>Wednesday</th>
+                    <th>Thursday</th>
+                    <th>Friday</th>
+                </tr>
+                <tr>
+                    <th class="scheduleTime" id="A">
+                        A <br>
+                        8:00 - 9:20
+                    </th>
+                    <td id="MWA0">
+                        <div class="class">
+                            CS 101-01 <br>
+                            Dr. Mike <br>
+                            OKT 324
+                        </div>
+                    </td>
+                    <td id="TRA0"></td>
+                    <td id="MWA1"></td>
+                    <td id="TRA1"></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th class="scheduleTime" id="B">
+                        B <br>
+                        9:40 - 11:00
+                    </th>
+                    <td id="MWB0"></td>
+                    <td id="TRB0"></td>
+                    <td id="MWB1"></td>
+                    <td id="TRB1"></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th class="scheduleTime" id="C">
+                        C <br>
+                        11:20 - 12:40
+                    </th>
+                    <td id="MWC0"></td>
+                    <td id="TRC0"></td>
+                    <td id="MWC1"></td>
+                    <td id="TRC1"></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th class="scheduleTime" id="D">
+                        D <br>
+                        1:00 - 2:20
+                    </th>
+                    <td id="MWD0"></td>
+                    <td id="TRD0"></td>
+                    <td id="MWD1"></td>
+                    <td id="TRD1"></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th class="scheduleTime" id="E">
+                        E <br>
+                        2:40 - 4:00
+                    </th>
+                    <td id="MWE0"></td>
+                    <td id="TRE0"></td>
+                    <td id="MWE1"></td>
+                    <td id="TRE1"></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th class="scheduleTime" id="F">
+                        F <br>
+                        4:20 - 5:40
+                    </th>
+                    <td id="MWF0"></td>
+                    <td id="TRF0"></td>
+                    <td id="MWF1"></td>
+                    <td id="TRF1"></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th class="scheduleTime" id="G">
+                        G <br>
+                        6:00 - 7:20
+                    </th>
+                    <td id="MWG0"></td>
+                    <td id="TRG0"></td>
+                    <td id="MWG1"></td>
+                    <td id="TRG1"></td>
+                    <td></td>
+                </tr>
+            </table>
+        </div>
 
-<div class="main">
-    <p>Here is where you would generate a schedule</p>
-</div>
+    </div>
+
 </body>
 
 </html>
+<script type="module">
+    
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-app.js";
+    import { getDatabase, ref, onValue, child } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-database.js";
+
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-analytics.js";
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
+
+    // Your web app's Firebase configuration
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    const firebaseConfig = {
+        apiKey: "AIzaSyDpRnVPxpDY8qXPbe9GPZGOgfPwlSGiTAk",
+        authDomain: "coursescheduler499.firebaseapp.com",
+        databaseURL: "https://coursescheduler499-default-rtdb.firebaseio.com",
+        projectId: "coursescheduler499",
+        storageBucket: "coursescheduler499.appspot.com",
+        messagingSenderId: "499198271274",
+        appId: "1:499198271274:web:3aa01385d66f9759060853",
+        measurementId: "G-8GZ9VBXDJ1"
+    };
+
+
+
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    const database = getDatabase(app);
+
+    getData.addEventListener('click', (e) => {
+
+        $(".class").remove();
+        const dbRef = ref(database, 'Department Courses/CS');
+        var courseData = {};
+        var dayTimeAmount = [[0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0]]
+        var dayAssignments = {
+            "MW": {
+                "A": [],
+                "B": [],
+                "C": [],
+                "D": [],
+                "E": [],
+                "F": [],
+                "G": [],
+            },
+            "TR": {
+                "A": [],
+                "B": [],
+                "C": [],
+                "D": [],
+                "E": [],
+                "F": [],
+                "G": [],
+            }
+
+        };
+
+
+
+        onValue(dbRef, (snapshot) => {
+            snapshot.forEach((childSnapshot) => {
+                const childKey = childSnapshot.key;
+                const childData = childSnapshot.val();
+                // ...
+                courseData[childKey] = childData;
+                // console.log(childData["Day Assignment"]);
+                // console.log("Child Key:", childKey, "Child Data:", childData);
+
+            });
+
+
+            // console.log("Hello", JSON.stringify(courseData, null, 2));
+            // console.log("There", JSON.stringify(courseData["CS100-01"]["Day Assignment"]));
+            for (const [key, value] of Object.entries(courseData)) {
+                console.log(key, value);
+                console.log(JSON.stringify(courseData[key]["Day Assignment"]), ((courseData[key]["Day Assignment"]) === "MW"));
+                if (courseData[key]["Day Assignment"] === "MW") {
+                    switch (courseData[key]["Time Assignment"]) {
+                        case "A":
+                            dayAssignments["MW"]["A"][dayTimeAmount[0][0]++] = key;
+                            break;
+                        case "B":
+                            dayAssignments["MW"]["B"][dayTimeAmount[0][1]++] = key;
+                            break;
+                        case "C":
+                            dayAssignments["MW"]["C"][dayTimeAmount[0][2]++] = key;
+                            break;
+                        case "D":
+                            dayAssignments["MW"]["D"][dayTimeAmount[0][3]++] = key;
+                            break;
+                        case "E":
+                            dayAssignments["MW"]["E"][dayTimeAmount[0][4]++] = key;
+                            break;
+                        case "F":
+                            dayAssignments["MW"]["F"][dayTimeAmount[0][5]++] = key;
+                            break;
+                        case "G":
+                            dayAssignments["MW"]["G"][dayTimeAmount[0][6]++] = key;
+                            break;
+                        default:
+                            console.log("An error occured incorrect time");
+                    }
+                }
+                else if (courseData[key]["Day Assignment"] === "TR") {
+                    switch (courseData[key]["Time Assignment"]) {
+                        case "A":
+                            dayAssignments["TR"]["A"].push(key);
+                            break;
+                        case "B":
+                            dayAssignments["TR"]["B"].push(key);
+                            break;
+                        case "C":
+                            dayAssignments["TR"]["C"].push(key);
+                            break;
+                        case "D":
+                            dayAssignments["TR"]["D"].push(key);
+                            break;
+                        case "E":
+                            dayAssignments["TR"]["E"].push(key);
+                            break;
+                        case "F":
+                            dayAssignments["TR"]["F"].push(key);
+                            break;
+                        case "G":
+                            dayAssignments["TR"]["G"].push(key);
+                            break;
+                        default:
+                            console.log("An error occured. Incorrect time.");
+                    }
+                }
+                else{
+                    console.log("An error occured. Incorrect day.");
+                }
+            }
+
+            // for(const [key, value] of Object.entries(dayAssignments)){
+            //     console.log(value, key);
+            //     for(const [index, val] of Object.entries(value)){
+            //         console.log("INDEX:", index, "VAL:", val);
+            //         for(const [id, c] of Object.entries(val)){
+            //             console.log("ID:", id, "C:", c);
+            //             console.log(courseData[c]);
+            //         }
+            //     }
+            // }
+
+            for(const[day, times] of Object.entries(dayAssignments)){
+                for(const[time, classes] of Object.entries(times)){
+                    var data = "";
+                    for(const[c, key] of Object.entries(classes)){
+                        data += "<div class=\"class\">" +
+                            key + "<br>" +
+                            courseData[key]["Faculty Assignment"] + "<br>" +
+                            courseData[key]["Classroom Assignment"] + "</div>";
+                    }
+                    var i = 0;
+                    var id = day + time + i;
+                    var row = document.getElementById(id).innerHTML = data;
+                    i++;
+                    var id = day + time + i;
+                    var row = document.getElementById(id).innerHTML = data;
+
+                
+                }
+            }
+
+
+        }, {
+            onlyOnce: true
+        });
+    });
+
+
+</script>

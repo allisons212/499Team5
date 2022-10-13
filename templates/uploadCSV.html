@@ -37,13 +37,13 @@
 
         <div class="sidenav">
             <a href="{{ url_for('home') }}">
-                <img src="../static/logo.png" alt="logo">
+                <img src="../static/Pictures/logo.png" alt="logo">
             </a>
             <a href="{{ url_for('generate_schedule') }}">
                 <i class="fa fa-table"></i>
                 Create Schedule
             </a>
-            <a href="{{ url_for('upload_csv') }}">
+            <a href="{{ url_for('upload_csv') }}" class="currentPage">
                 <i class="fa fa-upload"></i>
                 Upload CSV
             </a>

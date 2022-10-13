@@ -1,4 +1,6 @@
 
+
+/* Style sheet for the entire project */
 body {
     background-color: #ffffff;
     margin: 0px;
@@ -78,6 +80,15 @@ footer {
 .sidenav a:hover {
     color: #ffffff;
 }
+.sidenav a.currentPage {
+    color: #fcda23;
+    background-color: #1e3044;
+}
+
+.sidenav a.currentPage:hover {
+    color: #ffe341;
+    background-color: #21364d;
+}
 
 
 
@@ -85,7 +96,155 @@ footer {
 .main {
 
     margin-left: 200px; /* Same as the width of the sidebar */
+    padding: 25px;
+    margin-top: 15px;
 }
+
+.generateScheduleHeader{
+    display: flex;
+    justify-content: space-between;
+}
+
+/* Style for the generate button on generateSchedule page */
+.generateButton{
+    background-color: #0078c8; 
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    padding: 15px 32px;
+    text-align: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 20px;
+    cursor: pointer;
+    display: inline-block;
+}
+/* The style of the generate button when it hovered over */
+.generateButton:hover{
+    background-color: #016bb3;
+    color: #e4e4e4; 
+}
+
+.generateEditors{
+    font-size: 40px;
+    cursor: pointer;
+    color: #1f3347;
+    padding-right: 8px;
+    padding-top: 25px;
+}
+.generateEditors:hover{
+    color: #283c52;
+}
+
+.scheduleTable table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 15px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    table-layout: fixed;
+
+
+  }
+  
+  .scheduleTable td {
+    text-align: center;
+    align-items: center;
+    padding: 8px;
+    border: 2px solid #b2bad6;
+    background-color: #e4e4e4;
+  }
+
+  .scheduleTable th{
+    background-color: #0078c8;
+    color: #ffffff;
+    text-align: center;
+    padding: 20px;
+
+  }
+
+  .scheduleTime{
+    width:200px;
+    overflow: hidden;
+
+  }
+
+  .aboutMembers {
+    /* display: flex; */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-align: center;
+  }
+
+  .aboutTitle {
+    text-align: center;
+    color: #27405a;
+    text-shadow: 2px 2px #b2bad6;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding-bottom: 75px;
+    font-size: 50px;
+  }
+
+  .theMember {
+    width: 100%;
+  }
+
+  .theMember img {
+    max-width: 200px;
+    max-height: 200px;
+    margin-right: auto;
+    margin-left: auto;
+    margin-bottom: 20px;
+    border-radius: 15px;
+  }
+
+  .theMember h5 {
+    max-width: 50%;
+    margin-right: auto;
+    margin-left: auto;
+    color: #27405a;
+    
+  }
+
+  .theMember h3{
+    margin-right: auto;
+    margin-left: auto;
+    color: #0078c8;
+    margin-bottom: 0px;
+  }
+
+  .theMember h4{
+    color: #27405a;
+  }
+
+  .aboutMembers {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+  }
+  
+  /* .theMembers1 { grid-area: 1 / 1 / 2 / 2; }
+  .theMembers2 { grid-area: 1 / 2 / 2 / 3; } */
+  .aboutMembers > div {
+    display: flex;
+    flex-direction: column;
+  }
+
+  
+  .class{
+    
+    border: 1px solid #0078c8;
+    background-color: #0078c8;
+    color: #ffffff;
+    border-radius: 10px;
+    padding: 5px;
+    text-align:center;
+    height: 100px;
+    margin: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+  }
 
 /* On smaller screens, where height is less than 450px, change the style of the sidebar (less padding and a smaller font size) */
 @media screen and (max-height: 450px) {
