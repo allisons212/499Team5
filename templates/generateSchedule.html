@@ -39,7 +39,7 @@
 
 
     <div class="sidenav">
-        <a href="{{ url_for('home') }}">
+        <a href="{{ url_for('generate_schedule') }}">
             <img src="../static/Pictures/logo.png" alt="logo">
         </a>
         <a href="{{ url_for('generate_schedule') }}" class="currentPage">
@@ -321,7 +321,6 @@
             //         }
             //     }
             // }
-
             for(const[day, times] of Object.entries(dayAssignments)){
                 for(const[time, classes] of Object.entries(times)){
                     var data = "";
@@ -343,10 +342,13 @@
             }
 
 
+
+
         }, {
             onlyOnce: true
         });
     });
+
 
 
 </script>
