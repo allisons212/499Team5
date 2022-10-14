@@ -4,12 +4,6 @@
 <head>
     <link rel="stylesheet" href="../static/css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <script src=
-    "https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js">
-        </script>
-
-
 </head>
 
 <body>
@@ -171,156 +165,30 @@
 
     </div>
 
-</body>
-
-</html>
-<script type="module">
+    <script defer type="module">
     
-    // Import the functions you need from the SDKs you need
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-app.js";
-    import { getDatabase, ref, onValue, child } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-database.js";
-
-    import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-analytics.js";
-    // TODO: Add SDKs for Firebase products that you want to use
-    // https://firebase.google.com/docs/web/setup#available-libraries
-
-    // Your web app's Firebase configuration
-    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-    const firebaseConfig = {
-        apiKey: "AIzaSyDpRnVPxpDY8qXPbe9GPZGOgfPwlSGiTAk",
-        authDomain: "coursescheduler499.firebaseapp.com",
-        databaseURL: "https://coursescheduler499-default-rtdb.firebaseio.com",
-        projectId: "coursescheduler499",
-        storageBucket: "coursescheduler499.appspot.com",
-        messagingSenderId: "499198271274",
-        appId: "1:499198271274:web:3aa01385d66f9759060853",
-        measurementId: "G-8GZ9VBXDJ1"
-    };
-
-
-
-
-    // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-    const analytics = getAnalytics(app);
-    const database = getDatabase(app);
-
-    getData.addEventListener('click', (e) => {
-
-        $(".class").remove();
-        const dbRef = ref(database, 'Department Courses/CS');
-        var courseData = {};
-        var dayTimeAmount = [[0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0]]
-        var dayAssignments = {
-            "MW": {
-                "A": [],
-                "B": [],
-                "C": [],
-                "D": [],
-                "E": [],
-                "F": [],
-                "G": [],
-            },
-            "TR": {
-                "A": [],
-                "B": [],
-                "C": [],
-                "D": [],
-                "E": [],
-                "F": [],
-                "G": [],
-            }
-
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-app.js";
+        import { getDatabase, ref, onValue, child } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-database.js";
+    
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-analytics.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+    
+        // Your web app's Firebase configuration
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        const firebaseConfig = {
+            apiKey: "AIzaSyDpRnVPxpDY8qXPbe9GPZGOgfPwlSGiTAk",
+            authDomain: "coursescheduler499.firebaseapp.com",
+            databaseURL: "https://coursescheduler499-default-rtdb.firebaseio.com",
+            projectId: "coursescheduler499",
+            storageBucket: "coursescheduler499.appspot.com",
+            messagingSenderId: "499198271274",
+            appId: "1:499198271274:web:3aa01385d66f9759060853",
+            measurementId: "G-8GZ9VBXDJ1"
         };
 
-
-
-        onValue(dbRef, (snapshot) => {
-            snapshot.forEach((childSnapshot) => {
-                const childKey = childSnapshot.key;
-                const childData = childSnapshot.val();
-                // ...
-                courseData[childKey] = childData;
-                // console.log(childData["Day Assignment"]);
-                // console.log("Child Key:", childKey, "Child Data:", childData);
-
-            });
-
-
-            // console.log("Hello", JSON.stringify(courseData, null, 2));
-            // console.log("There", JSON.stringify(courseData["CS100-01"]["Day Assignment"]));
-            for (const [key, value] of Object.entries(courseData)) {
-                console.log(key, value);
-                console.log(JSON.stringify(courseData[key]["Day Assignment"]), ((courseData[key]["Day Assignment"]) === "MW"));
-                if (courseData[key]["Day Assignment"] === "MW") {
-                    switch (courseData[key]["Time Assignment"]) {
-                        case "A":
-                            dayAssignments["MW"]["A"][dayTimeAmount[0][0]++] = key;
-                            break;
-                        case "B":
-                            dayAssignments["MW"]["B"][dayTimeAmount[0][1]++] = key;
-                            break;
-                        case "C":
-                            dayAssignments["MW"]["C"][dayTimeAmount[0][2]++] = key;
-                            break;
-                        case "D":
-                            dayAssignments["MW"]["D"][dayTimeAmount[0][3]++] = key;
-                            break;
-                        case "E":
-                            dayAssignments["MW"]["E"][dayTimeAmount[0][4]++] = key;
-                            break;
-                        case "F":
-                            dayAssignments["MW"]["F"][dayTimeAmount[0][5]++] = key;
-                            break;
-                        case "G":
-                            dayAssignments["MW"]["G"][dayTimeAmount[0][6]++] = key;
-                            break;
-                        default:
-                            console.log("An error occured incorrect time");
-                    }
-                }
-                else if (courseData[key]["Day Assignment"] === "TR") {
-                    switch (courseData[key]["Time Assignment"]) {
-                        case "A":
-                            dayAssignments["TR"]["A"].push(key);
-                            break;
-                        case "B":
-                            dayAssignments["TR"]["B"].push(key);
-                            break;
-                        case "C":
-                            dayAssignments["TR"]["C"].push(key);
-                            break;
-                        case "D":
-                            dayAssignments["TR"]["D"].push(key);
-                            break;
-                        case "E":
-                            dayAssignments["TR"]["E"].push(key);
-                            break;
-                        case "F":
-                            dayAssignments["TR"]["F"].push(key);
-                            break;
-                        case "G":
-                            dayAssignments["TR"]["G"].push(key);
-                            break;
-                        default:
-                            console.log("An error occured. Incorrect time.");
-                    }
-                }
-                else{
-                    console.log("An error occured. Incorrect day.");
-                }
-            }
-
-            // for(const [key, value] of Object.entries(dayAssignments)){
-            //     console.log(value, key);
-            //     for(const [index, val] of Object.entries(value)){
-            //         console.log("INDEX:", index, "VAL:", val);
-            //         for(const [id, c] of Object.entries(val)){
-            //             console.log("ID:", id, "C:", c);
-            //             console.log(courseData[c]);
-            //         }
-            //     }
-            // }
+        function renderDayAssignment(dayAssignments, courseData) {
             for(const[day, times] of Object.entries(dayAssignments)){
                 for(const[time, classes] of Object.entries(times)){
                     var data = "";
@@ -340,15 +208,153 @@
                 
                 }
             }
+        }
 
+        if (localStorage.hasOwnProperty("dayAssignments") && localStorage.hasOwnProperty("courseData")) {
+            document.querySelectorAll(".class").forEach(c => c.remove());
+            const dayAssignments = JSON.parse(localStorage.getItem("dayAssignments"))
+            const courseData = JSON.parse(localStorage.getItem("courseData"))
+            renderDayAssignment(dayAssignments, courseData)
+        }   
+    
+    
+    
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const database = getDatabase(app);
+    
+        getData.addEventListener('click', (e) => {
+    
+            document.querySelectorAll(".class").forEach(c => c.remove());
+            const dbRef = ref(database, 'Department Courses/CS');
+            var courseData = {};
+            var dayTimeAmount = [[0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0]]
+            var dayAssignments = {
+                "MW": {
+                    "A": [],
+                    "B": [],
+                    "C": [],
+                    "D": [],
+                    "E": [],
+                    "F": [],
+                    "G": [],
+                },
+                "TR": {
+                    "A": [],
+                    "B": [],
+                    "C": [],
+                    "D": [],
+                    "E": [],
+                    "F": [],
+                    "G": [],
+                }
+    
+            };
+    
+    
+    
+            onValue(dbRef, (snapshot) => {
+                snapshot.forEach((childSnapshot) => {
+                    const childKey = childSnapshot.key;
+                    const childData = childSnapshot.val();
+                    // ...
+                    courseData[childKey] = childData;
+                    // console.log(childData["Day Assignment"]);
+                    // console.log("Child Key:", childKey, "Child Data:", childData);
+    
+                });
 
+                console.log("BLAHBLAHBLAH", JSON.stringify(courseData))
+                localStorage.setItem("courseData", JSON.stringify(courseData))    
+    
+                // console.log("Hello", JSON.stringify(courseData, null, 2));
+                // console.log("There", JSON.stringify(courseData["CS100-01"]["Day Assignment"]));
+                for (const [key, value] of Object.entries(courseData)) {
+                    console.log(key, value);
+                    console.log(JSON.stringify(courseData[key]["Day Assignment"]), ((courseData[key]["Day Assignment"]) === "MW"));
+                    if (courseData[key]["Day Assignment"] === "MW") {
+                        switch (courseData[key]["Time Assignment"]) {
+                            case "A":
+                                dayAssignments["MW"]["A"][dayTimeAmount[0][0]++] = key;
+                                break;
+                            case "B":
+                                dayAssignments["MW"]["B"][dayTimeAmount[0][1]++] = key;
+                                break;
+                            case "C":
+                                dayAssignments["MW"]["C"][dayTimeAmount[0][2]++] = key;
+                                break;
+                            case "D":
+                                dayAssignments["MW"]["D"][dayTimeAmount[0][3]++] = key;
+                                break;
+                            case "E":
+                                dayAssignments["MW"]["E"][dayTimeAmount[0][4]++] = key;
+                                break;
+                            case "F":
+                                dayAssignments["MW"]["F"][dayTimeAmount[0][5]++] = key;
+                                break;
+                            case "G":
+                                dayAssignments["MW"]["G"][dayTimeAmount[0][6]++] = key;
+                                break;
+                            default:
+                                console.log("An error occured incorrect time");
+                        }
+                    }
+                    else if (courseData[key]["Day Assignment"] === "TR") {
+                        switch (courseData[key]["Time Assignment"]) {
+                            case "A":
+                                dayAssignments["TR"]["A"].push(key);
+                                break;
+                            case "B":
+                                dayAssignments["TR"]["B"].push(key);
+                                break;
+                            case "C":
+                                dayAssignments["TR"]["C"].push(key);
+                                break;
+                            case "D":
+                                dayAssignments["TR"]["D"].push(key);
+                                break;
+                            case "E":
+                                dayAssignments["TR"]["E"].push(key);
+                                break;
+                            case "F":
+                                dayAssignments["TR"]["F"].push(key);
+                                break;
+                            case "G":
+                                dayAssignments["TR"]["G"].push(key);
+                                break;
+                            default:
+                                console.log("An error occured. Incorrect time.");
+                        }
+                    }
+                    else{
+                        console.log("An error occured. Incorrect day.");
+                    }
+                }
 
-
-        }, {
-            onlyOnce: true
+                localStorage.setItem("dayAssignments", JSON.stringify(dayAssignments))
+    
+                // for(const [key, value] of Object.entries(dayAssignments)){
+                //     console.log(value, key);
+                //     for(const [index, val] of Object.entries(value)){
+                //         console.log("INDEX:", index, "VAL:", val);
+                //         for(const [id, c] of Object.entries(val)){
+                //             console.log("ID:", id, "C:", c);
+                //             console.log(courseData[c]);
+                //         }
+                //     }
+                // }
+                
+    
+                renderDayAssignment(dayAssignments, courseData)    
+            }, {
+                onlyOnce: true
+            });
         });
-    });
+    
+    
+    
+    </script>
+</body>
 
-
-
-</script>
+</html>
