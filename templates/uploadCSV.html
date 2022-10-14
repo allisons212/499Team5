@@ -36,7 +36,7 @@
 
 
         <div class="sidenav">
-            <a href="{{ url_for('generate_schedule') }}">
+            <a href="{{ url_for('home') }}">
                 <img src="../static/Pictures/logo.png" alt="logo">
             </a>
             <a href="{{ url_for('generate_schedule') }}">
@@ -64,58 +64,39 @@
 
 <div class="main" align="center">
     <div>
-        <form action="" method="post">
-
+        <form>
+            <label for ="class">Choose a class:</label>
+            <select id = "class" name ="class" required>
+                <option value="100">100</option>
+                <option value="105">105</option>
+            </select>
+            <label for="day">Choose a day:</label>
+            <select id = "day" name="day" required>
+                <option value="M">Monday</option>
+                <option value="T">Tuesday</option>
+                <option value="W">Wednesday</option>
+                <option value="R">Thursday</option>
+                <option value="F">Friday</option>
+            </select>
+            <input type="submit" value="Submit Manual Input"/>
+        </form>
+    </div>
+    <div>
+        <p>OR</p>
+    </div>
+    <div>
+        <form action="">
             <label for="department">Choose a department:</label>
             <select id="department" name="dept" required>
                 <option value="CS">CS</option>
                 <option value="ECE">ECE</option>
                 <option value="CPE">CPE</option>
             </select>
-
-            <label for ="class">Choose a class:</label>
-            <input type="text" placeholder="Class" name="class" value="{{ request.form.classNum }}">
-            <label for="day">Choose a day:</label>
-            <select id = "day" name="day" required>
-                <option value="MW">Monday/Wednesday</option>
-                <option value="TR">Tuesday/Thursday</option>
-            </select>
-
-
-            <label for="time">Choose a time:</label>
-            <select id = "time" name="time" required>
-                <option value="A">A: 8:00 - 9:20 AM</option>
-                <option value="B">B: 9:40 - 11:00 AM</option>
-                <option value="C">C: 11:20 AM - 12:40 PM</option>
-                <option value="D">D: 1:00 - 2:20 PM</option>
-                <option value="E">E: 2:40 - 4:00 PM</option>
-                <option value="F">F: 4:20 - 5:40 PM</option>
-                <option value="G">G: 6:00 - 7:20 PM</option>
-            </select>
-            <label for="room">Choose a room:</label>
-            <select id="room" name="room" required>
-
-            </select>
-            <label for="prof">Choose a faculty member:</label>
-            <select id="prof" name="faculty" required>
-            </select>
-            <input type="submit" value="Submit Manual Input"/>
-        </form>
-        {% if error == 1 %}
-                <p class="error"><strong>Error:</strong> Invalid class number. </p>
-        {% endif %}
-    </div>
-    <div>
-        <p>OR</p>
-    </div>
-    <div>
-        <form action="" method="post">
             <input type="file" id="uploadCSV" accept="text/csv" required/>
             <input type="submit" value="Submit CSV"/>
         </form>
     </div>
 </div>
-<script defer type="module" src="../static/js/uploadCSVjs.js"></script>
 </body>
 
 </html>
