@@ -1,11 +1,11 @@
-import DataOperation
+from DataOperation import DataOperation
 from DataOperationEnums import *
 from DataOperationException import * # Custom exceptions
 
 
 def main():
 
-    data_operation = DataOperation.DataOperation() # Runs constructor to authenticate credentials
+    data_operation = DataOperation() # Runs constructor to authenticate credentials
     
     # Test exportCSV
     #data_operation.exportCSV("CS", "ClassData/ExportCSData.csv")
