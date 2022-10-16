@@ -18,7 +18,7 @@ def main():
     
     # Test try-catch block for import CSV methods
     try:
-        course_csv_file = "ClassData/Dept1ClassData.csv" # This is provided from GUI
+        course_csv_file = "ClassData/Dept1ClassDataConflicts.csv" # This is provided from GUI
         department_abbr = "CS"                          # This is provided from GUI
         data_operation.importCourseCSV(course_csv_file, department_abbr) # Test a course csv file
         data_operation.importRoomCSV("ClassData/AvailableRooms.csv") # Test a room csv file
