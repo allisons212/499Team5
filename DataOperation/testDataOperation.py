@@ -5,15 +5,15 @@ from DataOperationException import * # Custom exceptions
 
 def main():
 
-    data_operation = DataOperation.DataOperation() # Runs constructor to authenticate credentials
+    data_operation = DataOperation() # Runs constructor to authenticate credentials
     
     # Test exportCSV
     #data_operation.exportCSV("CS", "ClassData/ExportCSData.csv")
     
     
     # Test checkUserPass
-    print(data_operation.checkUserPass(username="CSChair", password="ComputerScienceDepartmentChair")) # Correct pass: ComputerScienceDepartmentChair
-    print(data_operation.checkUserPass(username="ECEChair", password="ElectricalComputerEngineeringDepartmentChair")) # Correct pass: ElectricalComputerEngineeringDepartmentChair
+    #print(data_operation.checkUserPass(username="CSChair", password="ComputerScienceDepartmentChair")) # Correct pass: ComputerScienceDepartmentChair
+    #print(data_operation.checkUserPass(username="ECEChair", password="ElectricalComputerEngineeringDepartmentChair")) # Correct pass: ElectricalComputerEngineeringDepartmentChair
     
     
     # Test try-catch block for import CSV methods
