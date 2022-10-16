@@ -467,12 +467,10 @@ class DataOperation:
             # Creates new dictionary of rooms, each room keying a dictionary to a RoomTable 2D List
             new_building_dict = {}
             for room in list_of_rooms:
-                empty_table = RoomTable()
-                new_building_dict[room] = empty_table.getTable()
+                new_building_dict[room] = RoomTable()
             tables_dict[building] = new_building_dict
-        
-        # Stores dictionary to database
-        self.updateDB(tables_dict, f"/{DatabaseHeaders.TABLES.value}")
+    
+        return tables_dict
             
     # End of init_tables
     
@@ -484,43 +482,37 @@ class DataOperation:
         """
         
         # Generates schedule tables
-        self._init_tables()
+        building_room_tables = self._init_tables()
         
         # Gets all the departments
         all_departments_dict = self.getDB(f"/{DatabaseHeaders.COURSES.value}")
         
         # For each department, we need to make the assignments
-        for department, courses_dict in all_departments_dict.items():            
+        for department, courses_dict in all_departments_dict.items():    
             # Grabs all available rooms
             ## First 3 letters of room preference will have building acronym,
             ## so we use that to determine which list of available rooms to pull.
             sample_room = courses_dict[list(courses_dict.keys())[0]][ColumnHeaders.ROOM_PREF.value] # Returns room preference of first section
             building_name = sample_room[:3] # Grabs first 3 letters
             
-            # Gets room tables
-            r_room_tables_dict = self.getDB(f"/{DatabaseHeaders.TABLES.value}/{building_name}")
-            room_tables = {}
+            # Grabs room tables for current building
+            room_tables = building_room_tables[building_name]
             
-            # Creates room table objects
-            for room_num, table in r_room_tables_dict.items():
-                new_table = RoomTable()
-                new_table.importTable(table)
-                room_tables[room_num] = new_table
             
             #^ At this point, we have a dictionary of all the course sections as well
             #^ as a dictionary of all the available rooms tables for that department's building.
             
             #^ Time to make assignments.
+            conflicts_dict = {}
             
             #^ 1st - Assign courses with Room Preferences
-            room_tables = self._assign_with_room_pref(courses_dict, room_tables)
+            room_tables, conflicts_dict = self._assign_with_room_pref(courses_dict, room_tables, conflicts_dict)
             
             #^ 2nd - Assign courses with Day/Time Preferences
-            room_tables = self._assign_with_day_time_pref(courses_dict, room_tables)
+            room_tables, conflicts_dict = self._assign_with_day_time_pref(courses_dict, room_tables, conflicts_dict)
 
             #^ 3rd - Assign the rest of the courses
-            room_tables = self._assign_rest_of_courses(courses_dict, room_tables)
-            
+            room_tables, conflicts_dict = self._assign_rest_of_courses(courses_dict, room_tables, conflicts_dict)
             
             # Now that room_tables is done, loop through tables and update the database with the new assignments
             for room_num, room_table in room_tables.items():
@@ -558,12 +550,12 @@ class DataOperation:
     #
     ######################################
     
-    def _assign_rest_of_courses(self, courses_dict, room_tables):
+    def _assign_rest_of_courses(self, courses_dict, room_tables, conflicts_dict):
         """
         Private method to help generate_assignments in handling
         assignments for professors without preferences.
         """
-        
+                
         for course_name, course_info in courses_dict.items():
             
             # Gets time/day fields
@@ -601,26 +593,32 @@ class DataOperation:
                             break
                         # If the cell is not empty, move on to the next preferred one
                     
+                    # End of time for loop
+                    
                     # Checks if assignment has been made
                     if assignment_made: break
+                    
+                # End of day for loop
+                if assignment_made: break
+            # End of room_tables loop
             
             # Checked if assignment was made, if not, then there was a conflict
+            # Append conflicting course to dictionary
             if not assignment_made:
-            # @TODO rest_of_courses conflict handling goes here
-                pass
+                conflicts_dict[course_name] = course_info
         # End of course_dict for loop
         
         
-        return room_tables
+        return room_tables, conflicts_dict
     # End of _assign_rest_of_courses
     
     
-    def _assign_with_day_time_pref(self, courses_dict, room_tables):
+    def _assign_with_day_time_pref(self, courses_dict, room_tables, conflicts_dict):
         """
         Private method to help generate_assignments in handling
         assignments for professors with specific day/time preferences.
         """
-        
+                
         for course_name, course_info in courses_dict.items():
             
             # Gets time/day fields
@@ -646,12 +644,10 @@ class DataOperation:
             # Breaks up days into 2-character list to loop better (e.g., ['MW', 'TR'])
             c_day_pref = list(c_day_pref[i:i+2] for i in range(0, len(c_day_pref), 2))
 
-            
-            
             # Now, we need to loop through every room table to find the next available cell
             assignment_made = False    # Gets changed to True when assignment made, breaks out of loop(s)
             for room_num, table in room_tables.items():
-                
+
                 for day in c_day_pref: # Will be either 'MW' or 'TR'
                     
                     for time in c_time_pref: # Will be a letter A-G
@@ -662,28 +658,33 @@ class DataOperation:
                             assignment_made = True
                             break
                         # If the cell is not empty, move on to the next preferred one
+                    # End of time for loop
                     
                     # Checks if assignment has been made
                     if assignment_made: break
-            
-            # Checked if assignment was made, if not, then there was a conflict
-            # @TODO day_time_pref conflict handling goes here
-            if not assignment_made:
-                pass
+                    
+                # End of day for loop
+                if assignment_made: break
+            # End of room_tables loop
                 
+            # Checked if assignment was made, if not, then there was a conflict
+            # Append conflicting course to dictionary
+            if not assignment_made:
+                conflicts_dict[course_name] = course_info
+        
         # End of course_dict for loop
         
         
-        return room_tables
+        return room_tables, conflicts_dict
     # End of _assign_with_day_time_pref
     
     
-    def _assign_with_room_pref(self, courses_dict, room_tables):
+    def _assign_with_room_pref(self, courses_dict, room_tables, conflicts_dict):
         """
         Private method to help generate_assignments in handling
         assignments for courses in specific rooms.
         """
-        
+                
         for course_name, course_info in courses_dict.items():
             # Checks if it has a room preference
             room_pref = course_info[ColumnHeaders.ROOM_PREF.value]
@@ -731,20 +732,25 @@ class DataOperation:
                             assignment_made = True
                             break
                         # If the cell is not empty, move on to the next preferred one
+                    # End of time for loop
                     
                     # Checks if assignment has been made
-                    if assignment_made: break
+                    if assignment_made: break 
+                # End of day for loop
                 
+                if assignment_made: break
+        
                 # Checked if assignment was made, if not, then there was a conflict
-                # @TODO room_pref conflict handling goes here
+                # Append conflicting course to dictionary
                 if not assignment_made:
-                    pass
+                    conflicts_dict[course_name] = course_info
+                    
             # End of if len(room_pref) > 3
             
             else: # We have no interest in this course at the moment
                 continue
             
-        return room_tables
+        return room_tables, conflicts_dict
     # End of _assign_with_room_pref
     
     
@@ -756,9 +762,13 @@ class DataOperation:
     ######################################
     
     def print_room_tables(self, room_tables, building):
-        with open("test.txt",'a') as w:
+        with open("test.txt",'w') as w:
             for room, table in room_tables.items():
                 string = f"{building}{room}:{table}"
-                w.write(string+"\n")
+                w.write(string+"\n\n")
+
+    def print_one_table(self, room_table, room, building):
+        print(f"{building}{room}:{room_table}")
+            
     
 # End of DataOperation
