@@ -1,6 +1,3 @@
-
-const colors = ["#277da1", "#577590", "#4d908e", "#43aa8b", "#90be6d", "#f9c74f", "#f9844a", "#f8961e", "#f3722c", "#f94144"];
-
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-app.js";
 import {
@@ -43,11 +40,10 @@ function renderDayAssignment(dayAssignments, courseData) {
     for (const [day, times] of Object.entries(dayAssignments)) {
         for (const [time, classes] of Object.entries(times)) {
             var data = "";
-
             for (const key of Object.values(classes)) {
                 // The string that contains the html code for the table
                 data +=
-                    '<div class="class" style="border-color: rgba(0, 0, 0, 0.2);">' +
+                    '<div class="class">' +
                     key +
                     "<br>" +
                     courseData[key]["Faculty Assignment"] +
@@ -60,7 +56,6 @@ function renderDayAssignment(dayAssignments, courseData) {
             document.getElementById(id).innerHTML = data;
             id = day + time + "1";
             document.getElementById(id).innerHTML = data;
-
         }
     }
 }
@@ -81,7 +76,7 @@ const database = getDatabase(app);
 // Event that occurs when generate button is pressed
 getData.addEventListener("click", async (e) => {
     document.querySelectorAll(".class").forEach((c) => c.remove());
-    const dbRef = ref(database, "Department Courses/CS"); // TODO: This is hardcoded right now to only do CS. Need to make it variable depending on which department user is over.
+    const dbRef = ref(database, "Department Courses/CS");
     var courseData = {}; // All the data stored
     // The day and time assignments for the class. The course name is stored in the arrays.
     var dayAssignments = {
@@ -109,7 +104,6 @@ getData.addEventListener("click", async (e) => {
     //
     const snapshot = await onValue(dbRef);
     // Get all the data from the database
-    // let index = 0
     snapshot.forEach((childSnapshot) => {
         const childKey = childSnapshot.key;
         const childData = childSnapshot.val();
@@ -123,6 +117,7 @@ getData.addEventListener("click", async (e) => {
     // Store the given classes in their corresponding days and times
     for (const [courseName, course] of Object.entries(courseData)) {
         console.log(courseName, course);
+        console.log(JSON.stringify(course["Day Assignment"]), course["Day Assignment"] === "MW");
 
         const currentDay = course["Day Assignment"];
 
