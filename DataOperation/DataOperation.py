@@ -514,6 +514,15 @@ class DataOperation:
             #^ 3rd - Assign the rest of the courses
             room_tables, conflicts_dict = self._assign_rest_of_courses(courses_dict, room_tables, conflicts_dict)
             
+            
+            # Converts room tables to serializable 2D lists
+            serialize_dict = {}
+            for room_num, table in room_tables.items():
+                serialize_dict[room_num] = table.getTable()
+            
+            # Updates Room Tables to Database
+            self.updateDB(serialize_dict, f"/{DatabaseHeaders.TABLES.value}/{building_name}")
+            
             # Now that room_tables is done, loop through tables and update the database with the new assignments
             for room_num, room_table in room_tables.items():
                 
