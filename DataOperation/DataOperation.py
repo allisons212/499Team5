@@ -509,10 +509,10 @@ class DataOperation:
             room_tables, conflicts_dict = self._assign_with_room_pref(courses_dict, room_tables, conflicts_dict)
             
             #^ 2nd - Assign courses with Day/Time Preferences
-            #room_tables, conflicts_dict = self._assign_with_day_time_pref(courses_dict, room_tables, conflicts_dict)
+            room_tables, conflicts_dict = self._assign_with_day_time_pref(courses_dict, room_tables, conflicts_dict)
 
             #^ 3rd - Assign the rest of the courses
-            #room_tables, conflicts_dict = self._assign_rest_of_courses(courses_dict, room_tables, conflicts_dict)
+            room_tables, conflicts_dict = self._assign_rest_of_courses(courses_dict, room_tables, conflicts_dict)
             
             # Now that room_tables is done, loop through tables and update the database with the new assignments
             for room_num, room_table in room_tables.items():
