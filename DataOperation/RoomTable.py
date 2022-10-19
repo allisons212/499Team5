@@ -50,6 +50,7 @@ class RoomTable:
     ##########################################
     
     table = [] # list of lists
+    isTableFull = False
     
     
     ##########################################
@@ -65,7 +66,38 @@ class RoomTable:
         self.table = [ ["", "", "", "", "", "", ""], # MW, each "" is a course at time A-G
                        ["", "", "", "", "", "", ""]  # TR, each "" is a course at time A-G
                     ]
+        self.isTableFull = False
     
+    def _checkTableCapacity(self):
+        """
+        Checks if the table is full and updates the field accordingly
+        """
+        for day, day_index in TableIndex.DAY_REF.items():
+            for time, time_index in TableIndex.TIME_REF.items():
+                if self.isEmptyCell(day, time):
+                    self.isTableFull = False
+                    return
+        self.isTableFull = True
+        
+    def isFull(self):
+        """
+        Checks if the table cells are all full.
+
+        Returns:
+            Boolean: Returns True if no cells are empty, returns False if at least one cell is empty
+        """
+        return self.isTableFull
+    
+    def clearCell(self, day, time):
+        """
+        Clears the contents of a cell.
+
+        Args:
+            day (int): Integer 0 or 1
+            time (int): Integer 0-6
+        """
+        self.setCell(day, time, "")
+        
     
     def isEmptyCell(self, day, time):
         """
@@ -159,6 +191,7 @@ class RoomTable:
             str (string): Course to set the cell to
         """
         self.table[day][time] = str
+        self._checkTableCapacity()
     
     
     def importTable(self, table):
