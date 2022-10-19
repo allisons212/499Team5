@@ -53,3 +53,13 @@ class DatabaseHeaders(Enum):
     COURSES = 'Department Courses'
     ROOMS = 'Available Classrooms'
     TABLES = 'Room Tables'
+    
+class AccountHeaders(Enum):
+    """
+    Accesses Database tree branches containing account information
+    """
+    BUILDING = 'Building'
+    DEPARTMENT = 'Department'
+    PASSWORD = 'Password'
+    SALT = 'Salt'
+    SALT_LEN = 10
