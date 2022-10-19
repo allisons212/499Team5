@@ -72,8 +72,8 @@ class RoomTable:
         """
         Checks if the table is full and updates the field accordingly
         """
-        for day, day_index in TableIndex.DAY_REF.items():
-            for time, time_index in TableIndex.TIME_REF.items():
+        for day in TableIndex.DAY_REF.keys():
+            for time in TableIndex.TIME_REF.keys():
                 if self.isEmptyCell(day, time):
                     self.isTableFull = False
                     return
@@ -202,6 +202,7 @@ class RoomTable:
             table (list): 2D list
         """
         self.table = table
+        self._checkTableCapacity()
     
     def __str__(self):
         """

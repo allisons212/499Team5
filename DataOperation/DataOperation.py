@@ -444,6 +444,81 @@ class DataOperation:
         return True
     
     # End of checkUserPass
+    
+    def addUserPass(self, username, password, department, building, salt):
+        
+        import hashlib, random, string
+        
+        # Create a hashed password with a randomly generated salt
+        salt = "".join(random.choices(string.ascii_lowercase, k=AccountHeaders.SALT_LEN.value))
+        hashed_password = hashlib.sha256((password+salt).encode('utf-8')).hexdigest()
+        
+        account_dict = { AccountHeaders.BUILDING.value : building,
+                         AccountHeaders.DEPARTMENT.value : department,
+                         AccountHeaders.PASSWORD.value : hashed_password,
+                         AccountHeaders.SALT.value : salt }
+        
+        self.updateDB(account_dict, f"{DatabaseHeaders.ACCOUNTS.value}/{username}")
+    # End of addUserPass
+    
+    
+    def getEmptyRooms(self, building):
+        """
+        Compiles a dictionary of all the empty periods in the specified building.
+        Keys are the room numbers.
+        Values are lists of empty periods i.e., [ 'MW - A', 'MW - B', etc. ]
+
+        Args:
+            building (string): Building acronym (e.g., "OKT", "ENG")
+
+        Returns:
+            dict: Keys are the room numbers, Values are lists of empty periods
+        """
+        
+        # Fetches room tables from database
+        room_tables = self._fetch_room_tables(building)
+        
+        empty_periods = {} # Will hold each empty spot. Keys = room number, Value = String of spot
+        
+        # Compiles all empty spots and places them into a dictionary
+        for room_num, table in room_tables.items():
+            if table.isFull(): # Skips room if it is full
+                continue
+            
+            empty_cells = [] # List of empty cells with format: [ 'MW - A', 'MW - B', etc. ]
+            
+            for day in TableIndex.DAY_REF.keys():
+                for time in TableIndex.TIME_REF.keys():
+                    if table.isEmptyCell(day, time): # If empty cell, then add to empty_cells
+                        empty_cells.append(f"{day} - {time}")
+            
+            # Appends empty cells to cumulative dictionary
+            empty_periods[f"{building}{room_num}" ] = empty_cells
+        # End of room_tables for-loop
+        
+        return empty_periods
+    # End of getEmptyRooms
+    
+    def _fetch_room_tables(self, building):
+        """
+        Fetches room tables from database and converts them to RoomTable objects
+
+        Args:
+            building (string): Building acronym (e.g., "OKT", "ENG")
+
+        Returns:
+            dict: Dictionary of RoomTable objects keyed by room number
+        """
+        room_tables = self.getDB(f"/{DatabaseHeaders.TABLES.value}/{building}")
+        new_room_tables = {}
+        
+        for room_num, table in room_tables.items():
+            new_table = RoomTable()
+            new_room_tables[room_num] = new_table.importTable(table)
+        
+        return new_room_tables
+        
+        
 
 ################################################################################    
     
