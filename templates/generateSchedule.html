@@ -61,7 +61,45 @@
             <div class="generateScheduleHeader">
                 <button class="generateButton" type="submit" id="getData">Generate</button>
                 <div class="generateEditors">
-                    <i class="fa fa-download"></i>
+                    <div class="generateConflicts">
+                        <i class="fa fa-warning" id="conflictsIcon"></i>
+                        <span class="generateConflictsText">Conflicts</span>
+                        <span class="conflictNums">3</span>
+                        <!-- The Modal -->
+                        <div id="myModal" class="generateModal">
+                            <!-- Modal content -->
+                            <div class="modal-content">
+                                <span class="close">&times;</span>
+                                <h1>Conflicts</h1>
+                                <h6 class="conflictClassName">CS100-01</h6>
+                                <h6 class="conflictTeacherName">Dr. Mike</h6>
+                                <div class="conflictDropDown">
+                                    <label for="rooms" class="conflictDropDownLabel">Classroom selection</label>
+                                    <select name="rooms" class="conflictRooms">
+                                        <option class="conflictRoom" value="">--Select--</option>
+                                        <option class="conflictRoom" value="OKT 324">OKT 324</option>
+                                        <option class="conflictRoom" value="OKT 151">OKT 151</option>
+                                        <option class="conflictRoom" value="OKT 105">OKT 105</option>
+                                        <option class="conflictRoom" value="OKT 327">OKT 327</option>
+                                    </select>
+                                    <label for="dayAndTime" class="conflictDropDownLabel">Day and Time</label>
+                                    <select name = "dayAndTime" class="conflictDaysTimes">
+                                        <option class="conflictDayTime" value="">--Select--</option>
+                                        <option class="conflictDayTime" value="MWA">MW - A</option>
+                                        <option class="conflictDayTime" value="MWB">MW - B</option>
+                                        <option class="conflictDayTime" value="TRC">TR - C</option>
+                                        <option class="conflictDayTime" value="TRD">TR - D</option>
+                                    </select>
+                                    <i class="fa fa-pencil"></i>
+                                    <button type="submit">Save</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="generateDownload">
+                        <i class="fa fa-download"></i>
+                        <span>Download</span>
+                    </div>
                 </div>
             </div>
 
@@ -162,6 +200,7 @@
             </div>
         </div>
 
-        <script defer type="module" src = "../static/js/getScheduleInfo.js"></script>
+        <script defer type="module" src="../static/js/getScheduleInfo.js"></script>
+        <script src="../static/js/conflicts.js"></script>
     </body>
 </html>

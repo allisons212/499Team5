@@ -1,3 +1,4 @@
+
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-app.js";
 import {
@@ -76,7 +77,7 @@ const database = getDatabase(app);
 // Event that occurs when generate button is pressed
 getData.addEventListener("click", async (e) => {
     document.querySelectorAll(".class").forEach((c) => c.remove());
-    const dbRef = ref(database, "Department Courses/CS");
+    const dbRef = ref(database, "Department Courses/CS"); // TODO: This is hardcoded right now to only do CS. Need to make it variable depending on which department user is over.
     var courseData = {}; // All the data stored
     // The day and time assignments for the class. The course name is stored in the arrays.
     var dayAssignments = {
@@ -117,7 +118,6 @@ getData.addEventListener("click", async (e) => {
     // Store the given classes in their corresponding days and times
     for (const [courseName, course] of Object.entries(courseData)) {
         console.log(courseName, course);
-        console.log(JSON.stringify(course["Day Assignment"]), course["Day Assignment"] === "MW");
 
         const currentDay = course["Day Assignment"];
 
