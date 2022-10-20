@@ -15,11 +15,11 @@ h {
     font-family: "Comic Sans MS", "Comic Sans", cursive ; 
 }
 
-/* p {
+p {
     color: black; 
     font-size: 18px; 
     font-family: "Comic Sans MS", "Comic Sans", cursive ;
-} */
+}
 
 p-slide {
     color: black; 
@@ -95,12 +95,9 @@ footer {
 /* Style page content */
 .main {
 
-
-    padding: 25px;
-    margin: 0 auto;
     margin-left: 200px; /* Same as the width of the sidebar */
-    width: 80%;
-    height: 50%;
+    padding: 25px;
+    margin-top: 15px;
 }
 
 .generateScheduleHeader{
@@ -225,7 +222,6 @@ visibility: visible;
   overflow: auto; /* Enable scroll if needed */
   background-color: rgb(0,0,0); /* Fallback color */
   background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-  cursor: context-menu;
 }
 
 /* Modal Content */
@@ -263,57 +259,13 @@ visibility: visible;
   padding:0px;
   margin:0px;
 }
-
-.modal-content .roomDayTimeWarning{
-  margin-bottom: 0px;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  color: red;
-  font-size: 15px;
-  padding-bottom: 0px;
-}
 .modal-content .conflictTeacherName{
   font-size: 20px;
 }
 
-
-.modal-content .conflictDropDown{
-  margin-top:0px;
-  padding-top: 0px;
-}
 .modal-content .conflictDropDownLabel{
-  padding-top:0px;
   font-size: 20px;
 }
-
-.modal-content .conflictDropDown select{
-  background-color: #fff;
-  color: #27405a;
-  border-color: #b2bad6;
-  border-radius: 5px;
-  padding: 8px;
-  font-size: 15px;
-  cursor:pointer;
-}
-
-.modal-content .conflictSave{
-  background-color: #0078c8;
-  color:#fff;
-  border-radius: 5px;
-  border:none;
-  padding:8px;
-  font-size: 15px;
-  cursor:pointer;
-}
-
-.modal-content .conflictSave:disabled{
-  background-color: #5894bb;
-  cursor: context-menu;
-}
-
-.modal-content #conflictEdit{
-  cursor: pointer;
-}
-
 
 .scheduleTable table {
     border-collapse: collapse;
@@ -346,70 +298,6 @@ visibility: visible;
     overflow: hidden;
 
   }
-  #faqs{
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    display: inline-block;
-  }
-
-  #faqs h1{
-    font-size: 50px;
-    text-align: center;
-    color: #27405a;
-    margin-top: 0px;
-  }
-
-  #faqs .listOfFAQs{
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    align-items: center;
-  }
-  #faqs li a{
-    text-decoration: none;
-    color:#0078c8;
-    font-size: 20px;
-    padding: 10px;
-    margin-top: 10px;
-  }
-
-  #faqs li a:hover{
-    color:#3799da
-  }
-  #faqs li{
-    padding-top: 5px;
-    padding-bottom: 5px;
-    /* margin-top: 10px; */
-  }
-
-
-  #faqs h2, h3, h4{
-    color:#27405a;
-    padding-top: 20px;
-    /* padding-bottom: 20px; */
-  }
-
-  #faqs h2{
-    font-size: 30px;
-    padding-top: 0px;
-  }
-
-  #faqs .faqExampleImage{
-    text-align: center;
-    padding: 10px;
-    display: block;
-  }
-  .faqExampleImage  button{
-    background-color: #0078c8;
-    border-radius: 5px;
-    border-color: #0078c8;
-    /* max-width: 300px; */
-    padding: 10px;
-    color:#fff;
-    cursor: pointer;
-    font-size: 20px;
-    display: inline-block;
-    margin: 30px;
-  }
-
-
 
   .aboutMembers {
     /* display: flex; */
@@ -422,7 +310,7 @@ visibility: visible;
     color: #27405a;
     text-shadow: 2px 2px #b2bad6;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    padding-bottom: 20px;
+    padding-bottom: 75px;
     font-size: 50px;
   }
 
@@ -476,7 +364,7 @@ visibility: visible;
   
   .class{
     
-    border: 1px solid;
+    border: 1px solid #0078c8;
     background-color: #0078c8;
     color: #ffffff;
     border-radius: 10px;
