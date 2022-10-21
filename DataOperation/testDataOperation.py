@@ -16,7 +16,8 @@ def main():
     #print(data_operation.checkUserPass(username="ECEChair", password="ElectricalComputerEngineeringDepartmentChair")) # Correct pass: ElectricalComputerEngineeringDepartmentChair
     
     
-    # Test try-catch block for import CSV methods
+    # Test try-catch block for import CSV methods\
+    
     try:
         course_csv_file = "ClassData/Dept1ClassDataConflicts.csv" # This is provided from GUI
         department_abbr = "CS"                          # This is provided from GUI
@@ -72,6 +73,8 @@ def main():
     
     # Testing generate_assignment
     data_operation.generate_assignments()
+    
+    #data_operation.updateSolutionAssignments("CS574-01", "MW", "A", "OKT204")
 
 
 if __name__ == "__main__":
