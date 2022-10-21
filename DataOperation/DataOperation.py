@@ -462,6 +462,32 @@ class DataOperation:
     # End of addUserPass
     
     
+    def getAccount(self, username):
+        """
+        Returns account department and building as a tuple.
+
+        Args:
+            username (string): Account username
+
+        Returns:
+            Tuple: (Department Acronym, Building Acronym)
+            
+        Raises:
+            QueryNotFoundError: Account username is not found in database.
+            KeyError: Account information cannot be found.
+        """
+        try:
+            account = self.getDB(f"/{DatabaseHeaders.ACCOUNTS.value}/{username}")
+            return (account[AccountHeaders.DEPARTMENT.value], account[AccountHeaders.BUILDING.value])
+            
+        except QueryNotFoundError: # getDB can't find account
+            raise QueryNotFoundError("Account not found.")
+        
+        except KeyError: # account's 'department' or 'building' fields are nonexistent
+            raise KeyError("Account information not found.")
+    # End of getAccount
+    
+    
     def getEmptyRooms(self, building):
         """
         Compiles a dictionary of all the empty periods in the specified building.
