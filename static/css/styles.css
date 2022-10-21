@@ -222,6 +222,7 @@ visibility: visible;
   overflow: auto; /* Enable scroll if needed */
   background-color: rgb(0,0,0); /* Fallback color */
   background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  cursor: context-menu;
 }
 
 /* Modal Content */
@@ -259,13 +260,57 @@ visibility: visible;
   padding:0px;
   margin:0px;
 }
+
+.modal-content .roomDayTimeWarning{
+  margin-bottom: 0px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: red;
+  font-size: 15px;
+  padding-bottom: 0px;
+}
 .modal-content .conflictTeacherName{
   font-size: 20px;
 }
 
+
+.modal-content .conflictDropDown{
+  margin-top:0px;
+  padding-top: 0px;
+}
 .modal-content .conflictDropDownLabel{
+  padding-top:0px;
   font-size: 20px;
 }
+
+.modal-content .conflictDropDown select{
+  background-color: #fff;
+  color: #27405a;
+  border-color: #b2bad6;
+  border-radius: 5px;
+  padding: 8px;
+  font-size: 15px;
+  cursor:pointer;
+}
+
+.modal-content .conflictSave{
+  background-color: #0078c8;
+  color:#fff;
+  border-radius: 5px;
+  border:none;
+  padding:8px;
+  font-size: 15px;
+  cursor:pointer;
+}
+
+.modal-content .conflictSave:disabled{
+  background-color: #5894bb;
+  cursor: context-menu;
+}
+
+.modal-content #conflictEdit{
+  cursor: pointer;
+}
+
 
 .scheduleTable table {
     border-collapse: collapse;
