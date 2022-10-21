@@ -75,7 +75,7 @@
                                 <h6 class="conflictTeacherName">Dr. Mike</h6>
                                 <div class="conflictDropDown">
                                     <label for="rooms" class="conflictDropDownLabel">Classroom selection</label>
-                                    <select name="rooms" class="conflictRooms">
+                                    <select name="rooms" class="conflictRooms" id="conflictRoomsDropDown">
                                         <option class="conflictRoom" value="">--Select--</option>
                                         <option class="conflictRoom" value="OKT 324">OKT 324</option>
                                         <option class="conflictRoom" value="OKT 151">OKT 151</option>
@@ -83,15 +83,20 @@
                                         <option class="conflictRoom" value="OKT 327">OKT 327</option>
                                     </select>
                                     <label for="dayAndTime" class="conflictDropDownLabel">Day and Time</label>
-                                    <select name = "dayAndTime" class="conflictDaysTimes">
+                                    <select name="dayAndTime" class="conflictDaysTimes" id="conflictDaysTimesDropDown">
                                         <option class="conflictDayTime" value="">--Select--</option>
                                         <option class="conflictDayTime" value="MWA">MW - A</option>
                                         <option class="conflictDayTime" value="MWB">MW - B</option>
                                         <option class="conflictDayTime" value="TRC">TR - C</option>
                                         <option class="conflictDayTime" value="TRD">TR - D</option>
                                     </select>
-                                    <i class="fa fa-pencil" style="font-size: 20px;"></i>
-                                    <button type="submit">Save</button>
+
+                                    <button type="submit" class="conflictSave" id="conflictSave">Save</button>
+                                    <i class="fa fa-pencil" id="conflictEdit" style="font-size: 20px"></i>
+                                    <span class="roomDayTimeWarning" id="roomDayTimeWarning">
+                                        <i class="fa fa-exclamation-circle"></i>
+                                        Must have both room and day and time selected.
+                                    </span>
                                 </div>
                             </div>
                         </div>
