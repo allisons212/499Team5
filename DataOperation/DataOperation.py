@@ -73,7 +73,21 @@ class DataOperation:
         })
     # End of authenticate_credentials
     
-    def importRoomCSV(self, filename, department):
+    def importCSV(self, course_csv, room_csv, department):
+        """
+        Imports CSV files into the database.
+        This method imports the room_csv first, then checks each room in course_csv to ensure that it exists.
+
+        Args:
+            course_csv (string): Path to course csv file
+            room_csv (string): Path to room csv file
+            department (string): Department abbreviation (e.g., "CS", "ECE")
+        """
+        self._importRoomCSV(room_csv, department)
+        self._importCourseCSV(course_csv, department)
+    # End of importCSV
+    
+    def _importRoomCSV(self, filename, department):
         """
         Reads CSV file AvailableRooms.csv with data and checks it for formatting.
         After it is error checked, it creates database entries for the given Department
@@ -153,7 +167,7 @@ class DataOperation:
             
             
 
-    def importCourseCSV(self, filename, department_abbr):
+    def _importCourseCSV(self, filename, department_abbr):
         """
         Reads CSV file with schedule data and checks for formatting.
         Afterwards, it creates database entries for each class section.
@@ -217,6 +231,46 @@ class DataOperation:
                     format_error_msg += (f"Row {row_num} in {filename} is formatted incorrectly.\n" +
                                             f"Please follow the following format for {ColumnHeaders.ROOM_PREF.value}:\n" +
                                             "[3 Capital Letters][Optional: 3-digit integer]\n\n")
+                    
+                else:  # Checks to ensure room preference exists in imported rooms
+                    if len(room_pref) > 3: # Checks if there is a number in the preference
+                        
+                        # Breaks up room_pref into building acronym and room number
+                        building_pref = room_pref[:3]
+                        num_pref = room_pref[3:]
+                        
+                        # Fetches list of rooms for the specified building
+                        buildings_dict = self.getDB(f"{DatabaseHeaders.ROOMS.value}/{department_abbr}")
+                        buildings_list = list(buildings_dict.keys())
+                        room_nums_list = buildings_dict[[building_pref]]
+                        
+                        # Checks to see if the building exists in the database
+                        if not building_pref in buildings_list:
+                            format_error_count += 1
+                            format_error_msg += (f"Row {row_num} in {filename} contains an error.\n" +
+                                                 f"The building \"{room_pref}\" in {os.path.split(filename)[1]} does not exist.\n" + 
+                                                 f"Please add room numbers from {room_pref} to the rooms import csv file or change it to another building.\n\n")
+                        
+                        # Checks to see if the room exists in the database
+                        room_found = False
+                        for room_num in room_nums_list:
+                            if room_num == num_pref: room_found = True
+                        if not room_found: # If room not found, append a new format error
+                            format_error_count += 1
+                            format_error_msg += (f"Row {row_num} in {filename} contains an error.\n" +
+                                                 f"The room preference \"{room_pref}\" in {os.path.split(filename)[1]} does not exist.\n" + 
+                                                 f"Please add the room number to the rooms import csv file or remove it from the \"{ColumnHeaders.ROOM_PREF.value}\" column.\n\n")
+                    
+                    else: # Else, there is only an acronym, so we must check if the acronym exists in the database
+                        buildings_list = list(self.getDB(f"{DatabaseHeaders.ROOMS.value}/{department_abbr}").keys())
+                        if not room_pref in buildings_list:
+                            format_error_count += 1
+                            format_error_msg += (f"Row {row_num} in {filename} contains an error.\n" +
+                                                 f"The building \"{room_pref}\" in {os.path.split(filename)[1]} does not exist.\n" + 
+                                                 f"Please add room numbers from {room_pref} to the rooms import csv file or change it to another building.\n\n")
+                    # End of if len(room_pref)
+                # End of room preference check
+                                
                 
                 
                 # Check time block preferences
@@ -445,7 +499,7 @@ class DataOperation:
     
     # End of checkUserPass
     
-    def addUserPass(self, username, password, department, building, salt):
+    def addUserPass(self, username, password, department, salt):
         
         import hashlib, random, string
         
@@ -453,10 +507,9 @@ class DataOperation:
         salt = "".join(random.choices(string.ascii_lowercase, k=AccountHeaders.SALT_LEN.value))
         hashed_password = hashlib.sha256((password+salt).encode('utf-8')).hexdigest()
         
-        account_dict = { AccountHeaders.BUILDING.value : building,
+        account_dict = { AccountHeaders.SALT.value : salt,
                          AccountHeaders.DEPARTMENT.value : department,
-                         AccountHeaders.PASSWORD.value : hashed_password,
-                         AccountHeaders.SALT.value : salt }
+                         AccountHeaders.PASSWORD.value : hashed_password }
         
         self.updateDB(account_dict, f"{DatabaseHeaders.ACCOUNTS.value}/{username}")
     # End of addUserPass
@@ -636,7 +689,7 @@ class DataOperation:
         print(f"{user_department} Conflicts: {list(conflicts_dict.keys())}") # @DEBUG Prints conflicting courses
         
         # Update database
-        self.updateDB(department_dict, f"/{DatabaseHeaders.COURSES.value}")
+        self.updateDB(department_dict, f"/{DatabaseHeaders.COURSES.value}/{user_department}")
 
     # End of generate_assignments
     

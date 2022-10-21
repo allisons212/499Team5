@@ -57,20 +57,20 @@ def main():
         # CS Department and OKT
         course_csv_file = "ClassData/Dept1ClassDataConflicts.csv" # This is provided from GUI
         department_abbr = "CS"                          # This is provided from GUI
-        data_operation.importCourseCSV(course_csv_file, department_abbr) # Test a course csv file
-        data_operation.importRoomCSV("ClassData/Dept1Rooms.csv", department_abbr) # Test a room csv file
+        data_operation.importCSV(course_csv_file, "ClassData/Dept1Rooms.csv", department_abbr )
         
         # ECE Department and ENG
         course_csv_file = "ClassData/Dept2ClassData.csv"
         department_abbr = "ECE"
-        data_operation.importCourseCSV(course_csv_file, department_abbr)
-        data_operation.importRoomCSV("ClassData/Dept2Rooms.csv", department_abbr)
+        data_operation.importCSV(course_csv_file, "ClassData/Dept2Rooms.csv", department_abbr )
     
     except FileNotFoundError as fnfe:
         print(f"{fnfe}\n")
+        return
         
     except ImportFormatError as ife:
         print(f"{ife}\n")
+        return
     
     
 
@@ -115,6 +115,7 @@ def main():
     
     # Testing generate_assignment
     data_operation.generate_assignments(user_department="CS")
+    data_operation.generate_assignments(user_department="ECE")
 
 
 if __name__ == "__main__":
