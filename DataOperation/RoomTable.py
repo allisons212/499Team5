@@ -38,6 +38,9 @@
 ########################################################################
 
 
+from msilib import Table
+
+
 class RoomTable:
     """
     Data structure to organize time periods for every classroom
@@ -72,8 +75,8 @@ class RoomTable:
         """
         Checks if the table is full and updates the field accordingly
         """
-        for day in TableIndex.DAY_REF.keys():
-            for time in TableIndex.TIME_REF.keys():
+        for day in TableIndex.DAY_REF.values():
+            for time in TableIndex.TIME_REF.values():
                 if self.isEmptyCell(day, time):
                     self.isTableFull = False
                     return
@@ -119,6 +122,7 @@ class RoomTable:
         Returns:
             boolean: Returns True if cell is empty, False if cell is occupied
         """
+        
         if self.table[day][time]: return False
         else: return True
     
