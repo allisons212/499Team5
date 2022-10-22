@@ -242,7 +242,7 @@ class DataOperation:
                         # Fetches list of rooms for the specified building
                         buildings_dict = self.getDB(f"{DatabaseHeaders.ROOMS.value}/{department_abbr}")
                         buildings_list = list(buildings_dict.keys())
-                        room_nums_list = buildings_dict[[building_pref]]
+                        room_nums_list = buildings_dict[building_pref]
                         
                         # Checks to see if the building exists in the database
                         if not building_pref in buildings_list:
@@ -478,13 +478,13 @@ class DataOperation:
         try: # Fetches account of the specified username as a dict
             fetched_account = self.getDB(f"/{DatabaseHeaders.ACCOUNTS.value}/{username}")
             
-        except QueryNotFoundError: # Username not defined, return false
+        except QueryNotFoundError: # Username not found, return false
             return False
         
         # Username check passed
         # Split account info
-        fetched_salt = fetched_account['Salt']
-        fetched_password = fetched_account['Password']
+        fetched_salt = fetched_account[AccountHeaders.SALT.value]
+        fetched_password = fetched_account[AccountHeaders.PASSWORD.value]
         
         # Hash the plaintext password using hashlib SHA256
         import hashlib
@@ -499,8 +499,7 @@ class DataOperation:
     
     # End of checkUserPass
     
-    def addUserPass(self, username, password, department, salt):
-        
+    def addUserPass(self, username, password, department):
         import hashlib, random, string
         
         # Create a hashed password with a randomly generated salt
@@ -596,6 +595,7 @@ class DataOperation:
             new_room_tables[room_num] = new_table.importTable(table)
         
         return new_room_tables
+    # End of fetch_room_tables
         
         
 
@@ -618,7 +618,7 @@ class DataOperation:
         
         # For each building, we need to make the tables
         for building, list_of_rooms in buildings_dict.items():            
-            # Creates new dictionary of rooms, each room keying a dictionary to a RoomTable 2D List
+            # Creates new dictionary of rooms, each room keying a dictionary to a RoomTable object
             for room in list_of_rooms:
                 full_room = str(building) + str(room)
                 tables_dict[full_room] = RoomTable()
@@ -641,23 +641,23 @@ class DataOperation:
         department_room_tables = self._init_tables(user_department)
         
         # Gets courses in the user's department
-        department_dict = self.getDB(f"/{DatabaseHeaders.COURSES.value}/{user_department}")
+        department_courses = self.getDB(f"/{DatabaseHeaders.COURSES.value}/{user_department}")
         
         
-        #^ At this point, we have a dictionary of all the course sections as well
-        #^ as a dictionary of all the available rooms tables for that department.
+        # At this point, we have a dictionary of all the course sections as well
+        # as a dictionary of all the available rooms tables for that department.
         
-        #^ Time to make assignments.
+        # Time to make assignments.
         conflicts_dict = {}
         
-        #^ 1st - Assign courses with Room Preferences
-        department_room_tables, conflicts_dict = self._assign_with_room_pref(department_dict, department_room_tables, conflicts_dict)
+        # 1st - Assign courses with Room Preferences
+        department_room_tables, conflicts_dict = self._assign_with_room_pref(department_courses, department_room_tables, conflicts_dict)
         
-        #^ 2nd - Assign courses with Day/Time Preferences
-        department_room_tables, conflicts_dict = self._assign_with_day_time_pref(department_dict, department_room_tables, conflicts_dict)
+        # 2nd - Assign courses with Day/Time Preferences
+        department_room_tables, conflicts_dict = self._assign_with_day_time_pref(department_courses, department_room_tables, conflicts_dict)
 
-        #^ 3rd - Assign the rest of the courses
-        department_room_tables, conflicts_dict = self._assign_rest_of_courses(department_dict, department_room_tables, conflicts_dict)
+        # 3rd - Assign the rest of the courses
+        department_room_tables, conflicts_dict = self._assign_rest_of_courses(department_courses, department_room_tables, conflicts_dict)
         
         
         # Converts room tables to serializable 2D lists
@@ -680,16 +680,16 @@ class DataOperation:
                         
                         # Changes the course info in department_dict accordingly
                         # Changes Day Assignment, Time Assignment, and Room Assignment
-                        department_dict[course_in_cell][ColumnHeaders.ROOM_ASS.value] = room_num
-                        department_dict[course_in_cell][ColumnHeaders.DAY_ASS.value] = day
-                        department_dict[course_in_cell][ColumnHeaders.TIME_ASS.value] = time
+                        department_courses[course_in_cell][ColumnHeaders.ROOM_ASS.value] = room_num
+                        department_courses[course_in_cell][ColumnHeaders.DAY_ASS.value] = day
+                        department_courses[course_in_cell][ColumnHeaders.TIME_ASS.value] = time
         
         
         # @TODO conflicts_dict contains all the unassigned courses
         print(f"{user_department} Conflicts: {list(conflicts_dict.keys())}") # @DEBUG Prints conflicting courses
         
         # Update database
-        self.updateDB(department_dict, f"/{DatabaseHeaders.COURSES.value}/{user_department}")
+        self.updateDB(department_courses, f"/{DatabaseHeaders.COURSES.value}/{user_department}")
 
     # End of generate_assignments
     

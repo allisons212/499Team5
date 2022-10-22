@@ -11,8 +11,8 @@ def main():
     
     
     # Test checkUserPass
-    #print(data_operation.checkUserPass(username="CSChair", password="ComputerScienceDepartmentChair")) # Correct pass: ComputerScienceDepartmentChair
-    #print(data_operation.checkUserPass(username="ECEChair", password="ElectricalComputerEngineeringDepartmentChair")) # Correct pass: ElectricalComputerEngineeringDepartmentChair
+    #print(data_operation.checkUserPass(username="CSChair", password="CSChair")) # Correct pass: CSChair
+    #print(data_operation.checkUserPass(username="ECEChair", password="ECEChair")) # Correct pass: ECEChair
 
     
     # Test try-catch block for import CSV methods
