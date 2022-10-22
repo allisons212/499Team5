@@ -73,18 +73,18 @@ class DataOperation:
         })
     # End of authenticate_credentials
     
-    def importCSV(self, course_csv, room_csv, department):
+    def importCSV(self, course_csv_path, room_csv_path, department):
         """
         Imports CSV files into the database.
-        This method imports the room_csv first, then checks each room in course_csv to ensure that it exists.
+        This method imports the room_csv_path first, then checks each room in course_csv_path to ensure that it exists.
 
         Args:
-            course_csv (string): Path to course csv file
-            room_csv (string): Path to room csv file
+            course_csv_path (string): Path to course csv file
+            room_csv_path (string): Path to room csv file
             department (string): Department abbreviation (e.g., "CS", "ECE")
         """
-        self._importRoomCSV(room_csv, department)
-        self._importCourseCSV(course_csv, department)
+        self._importRoomCSV(room_csv_path, department)
+        self._importCourseCSV(course_csv_path, department)
     # End of importCSV
     
     def _importRoomCSV(self, filename, department):

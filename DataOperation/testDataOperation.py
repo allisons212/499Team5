@@ -2,31 +2,6 @@ from DataOperation import DataOperation
 from DataOperationEnums import *
 from DataOperationException import * # Custom exceptions
 
-
-def restoreDB(data_operation, willRestore):
-    if willRestore:
-        try:
-            # CS Department and Available Rooms
-            course_csv_file = "ClassData/Dept1ClassDataConflicts.csv" # This is provided from GUI
-            department_abbr = "CS"                          # This is provided from GUI
-            data_operation.importCourseCSV(course_csv_file, department_abbr) # Test a course csv file
-            data_operation.importRoomCSV("ClassData/AvailableRooms.csv") # Test a room csv file
-            
-            # ECE Department
-            course_csv_file = "ClassData/Dept2ClassData.csv"
-            department_abbr = "ECE"
-            data_operation.importCourseCSV(course_csv_file, department_abbr)
-        
-        except FileNotFoundError as fnfe:
-            print(f"{fnfe}\n")
-            
-        except ImportFormatError as ife:
-            print(f"{ife}\n")
-        finally:
-            return willRestore
-    
-    else: return willRestore
-
 def main():
 
     data_operation = DataOperation() # Runs constructor to authenticate credentials
@@ -38,19 +13,7 @@ def main():
     # Test checkUserPass
     #print(data_operation.checkUserPass(username="CSChair", password="ComputerScienceDepartmentChair")) # Correct pass: ComputerScienceDepartmentChair
     #print(data_operation.checkUserPass(username="ECEChair", password="ElectricalComputerEngineeringDepartmentChair")) # Correct pass: ElectricalComputerEngineeringDepartmentChair
-    
-    
-    
-    
-    
-    #willRestore = True
-    willRestore = False
-    if restoreDB(data_operation, willRestore): return
-    
-    
-    
-    
-    
+
     
     # Test try-catch block for import CSV methods
     try:
