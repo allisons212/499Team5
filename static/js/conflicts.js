@@ -32,6 +32,7 @@ conflictIcon.onclick = function () {
 span.onclick = function () {
   modal.style.display = "none";
   document.body.style.overflow = "auto";
+  roomDayTimeWarning.style.display = "none";
 }
 
 conflictSave.onclick = function () {
