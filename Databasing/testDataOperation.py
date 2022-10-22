@@ -13,6 +13,13 @@ def main():
     #print(data_operation.checkUserPass(username="ECEChair", password="ECEChair")) # Correct pass: ECEChair
 
     
+    # Test getEmptyRooms
+    #empty_cells = data_operation.getEmptyRooms("CS")
+    #for room, list_of_cells in empty_cells.items():
+    #    print(f"{room}: {list_of_cells}")
+    
+    
+    
     # Test try-catch block for import CSV methods
     try:
         # CS Department and OKT

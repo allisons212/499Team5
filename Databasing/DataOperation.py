@@ -552,38 +552,37 @@ class DataOperation:
     # End of getAccount
     
     
-    def getEmptyRooms(self, building):
+    def getEmptyRooms(self, department):
         """
-        Compiles a dictionary of all the empty periods in the specified building.
+        Compiles a dictionary of all the empty periods in the specified department.
         Keys are the room numbers.
         Values are lists of empty periods i.e., [ 'MW - A', 'MW - B', etc. ]
 
         Args:
-            building (string): Building acronym (e.g., "OKT", "ENG")
+            department (string): department acronym (e.g., "OKT", "ENG")
 
         Returns:
             dict: Keys are the room numbers, Values are lists of empty periods
         """
         
         # Fetches room tables from database
-        room_tables = self._fetch_room_tables(building)
+        room_tables = self._fetch_room_tables(department)
         
         empty_periods = {} # Will hold each empty spot. Keys = room number, Value = String of spot
         
         # Compiles all empty spots and places them into a dictionary
         for room_num, table in room_tables.items():
-            if table.isFull(): # Skips room if it is full
-                continue
+            if table.isFull(): continue # Skips room if it is full
             
             empty_cells = [] # List of empty cells with format: [ 'MW - A', 'MW - B', etc. ]
             
-            for day in TableIndex.DAY_REF.keys():
-                for time in TableIndex.TIME_REF.keys():
-                    if table.isEmptyCell(day, time): # If empty cell, then add to empty_cells
+            for day, day_index in TableIndex.DAY_REF.items():
+                for time, time_index in TableIndex.TIME_REF.items():
+                    if table.isEmptyCell(day_index, time_index): # If empty cell, then add to empty_cells
                         empty_cells.append(f"{day} - {time}")
             
             # Appends empty cells to cumulative dictionary
-            empty_periods[f"{building}{room_num}" ] = empty_cells
+            empty_periods[room_num] = empty_cells
         # End of room_tables for-loop
         
         return empty_periods
@@ -604,7 +603,8 @@ class DataOperation:
         
         for room_num, table in room_tables.items():
             new_table = RoomTable()
-            new_room_tables[room_num] = new_table.importTable(table)
+            new_table.importTable(table)
+            new_room_tables[room_num] = new_table
         
         return new_room_tables
     # End of fetch_room_tables
