@@ -11,7 +11,7 @@
 ########################################################################
 # Filename:     DataOperation.py
 # Purpose:      To establish an interface through which databasing
-#               operations can be called by a web server host.
+#               operations can be called by a python flask server.
 #
 # Editors of this file:     Devin Patel
 #                           Harrison Matthews
