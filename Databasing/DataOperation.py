@@ -82,6 +82,10 @@ class DataOperation:
             course_csv_path (string): Path to course csv file
             room_csv_path (string): Path to room csv file
             department (string): Department abbreviation (e.g., "CS", "ECE")
+        
+        Raises:
+            FileNotFoundError: If filename does not get resolved to a csv file.
+            ImportFormatError: If imported CSV file does not adhere to specified formatting guidelines.
         """
         self._importRoomCSV(room_csv_path, department)
         self._importCourseCSV(course_csv_path, department)
@@ -95,6 +99,10 @@ class DataOperation:
         Args:
             filename (string): Path directed to csv file to import
             department_abbr (string): Abbreviation of the building (e.g., CS, ECE) classes to update
+        
+        Raises:
+            FileNotFoundError: If filename does not get resolved to a csv file.
+            ImportFormatError: If imported CSV file does not adhere to specified formatting guidelines.
         """
         
         # Dictionary that we will hold our buildings as our keys, and lists of room numbers for value
@@ -160,8 +168,7 @@ class DataOperation:
         
         # Now that we have the dictionary that has each building as a key, and 
         # has the values as a list of the room numbers we need to put into database
-        ref = db.reference(f'/{DatabaseHeaders.ROOMS.value}/{department}')
-        ref.update(building_dictionary)
+        self.updateDB(building_dictionary, f'/{DatabaseHeaders.ROOMS.value}/{department}')
         
     # End of importRoomCSV
             
@@ -331,8 +338,7 @@ class DataOperation:
         
         # Updates the department's database tree
         department_dict = {department_abbr : dict_of_course_dicts}
-        ref = db.reference(f'/{DatabaseHeaders.COURSES.value}')
-        ref.update(department_dict)
+        self.updateDB(department_dict, f'/{DatabaseHeaders.COURSES.value}')
         
     # End of importCSV
 
@@ -358,9 +364,12 @@ class DataOperation:
         Raises:
             QueryNotFoundError: database_path doesn't return data
         """
-        
-        ref = db.reference(f'/{database_path}')
-        retrieved = ref.get()
+        retrieved = {}
+        try:
+            ref = db.reference(f'/{database_path}')
+            retrieved = ref.get()
+        except:
+            raise QueryNotFoundError()
         
         if retrieved:
             return retrieved
@@ -386,7 +395,7 @@ class DataOperation:
             database_path (string): Realtime Database path that will be updated by new_database_entry
         
         Raises:
-            ImproperDBPathError: When database_path does not address one of the Database Headers
+            ImproperDBPathError: When database_path does not address one of the Database Headers or the database reference fails
         """
         
         # Checks the path to ensure it consists of one of the Database Headers
@@ -400,8 +409,11 @@ class DataOperation:
             raise ImproperDBPathError()
 
         # Updates the database at the path if checks are passed
-        ref = db.reference(f'/{database_path}')
-        ref.update(new_database_entry)
+        try:
+            ref = db.reference(f'/{database_path}')
+            ref.update(new_database_entry)
+        except:
+            raise ImproperDBPathError()
         
     # End of update DB
     
@@ -535,8 +547,8 @@ class DataOperation:
         except QueryNotFoundError: # getDB can't find account
             raise QueryNotFoundError("Account not found.")
         
-        except KeyError: # account's 'department' or 'building' fields are nonexistent
-            raise KeyError("Account information not found.")
+        except KeyError: # account's 'department' field is nonexistent
+            raise KeyError("Account information incomplete, please contact your administrator.")
     # End of getAccount
     
     

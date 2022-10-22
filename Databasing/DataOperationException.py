@@ -42,6 +42,7 @@ class QueryNotFoundError(Exception):
 class ImproperDBPathError(Exception):
     """
     When a database path does not use any of the headers defined in DataOperationEnums.DatabaseHeaders
+    or the database reference fails.
     """
     
     def __init__(self, msg="The database query does not address any existing database headers."):

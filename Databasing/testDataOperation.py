@@ -2,6 +2,8 @@ from DataOperation import DataOperation
 from DataOperationEnums import *
 from DataOperationException import * # Custom exceptions
 
+import time
+
 def main():
 
     data_operation = DataOperation() # Runs constructor to authenticate credentials
@@ -14,14 +16,14 @@ def main():
     # Test try-catch block for import CSV methods
     try:
         # CS Department and OKT
-        course_csv_file = "ClassData/Dept1ClassDataConflicts.csv" # This is provided from GUI
-        department_abbr = "CS"                          # This is provided from GUI
-        data_operation.importCSV(course_csv_file, "ClassData/Dept1Rooms.csv", department_abbr )
+        course_csv_file = "ClassData/Dept1ClassDataConflicts.csv"
+        department_abbr = "CS"
+        data_operation.importCSV(course_csv_file, "ClassData/Dept1Rooms.csv", department_abbr)
         
         # ECE Department and ENG
         course_csv_file = "ClassData/Dept2ClassData.csv"
         department_abbr = "ECE"
-        data_operation.importCSV(course_csv_file, "ClassData/Dept2Rooms.csv", department_abbr )
+        data_operation.importCSV(course_csv_file, "ClassData/Dept2Rooms.csv", department_abbr)
     
     except FileNotFoundError as fnfe:
         print(f"{fnfe}\n")
@@ -31,7 +33,7 @@ def main():
         print(f"{ife}\n")
         return
     
-    
+
 
     """
     # Test try-catch block for getDB and updateDB
@@ -46,28 +48,11 @@ def main():
         
     except QueryNotFoundError as qnfe: # Raised by getDB
         print(qnfe)
+        return
         
     except ImproperDBPathError as idpe: # Raised by updateDB
         print(idpe)
-    """
-
-    """
-    # Updating Database to store other fields of data
-    try:
-        r = { "TestAccount" : "Test Password. This needs to be a hash when in production."
-            , "CSDeptChair" : "<SHA256 Hash>"
-            }
-        
-        data_operation.updateDB(r, DatabaseHeaders.ACCOUNTS.value)
-        
-        r = data_operation.getDB(DatabaseHeaders.ROOMS.value + "/OKT")
-        print(f"Room numbers are of type: {type(r)}")
-        
-    except QueryNotFoundError as qnfe: # Raised by getDB
-        print(qnfe)    
-    
-    except ImproperDBPathError as idpe: # Raised by updateDB
-        print(idpe)
+        return
     """
     
     # Testing generate_assignment
@@ -80,4 +65,9 @@ def main():
 
 
 if __name__ == "__main__":
+    start_time = time.time() # Used to measure execution time
+    
     main()
+    
+    # Prints execution time
+    print(f"\n\n---Execution Time: {time.time()-start_time:.3f} seconds---")
