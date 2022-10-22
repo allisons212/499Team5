@@ -710,6 +710,10 @@ class DataOperation:
         """
                 
         for course_name, course_info in courses_dict.items():
+            # Checks if it has a room preference
+            room_pref = course_info[ColumnHeaders.ROOM_PREF.value]
+            
+            if len(room_pref) > 3: continue     # Would be > 3 characters if room preference is specified
             
             # Gets preferred building
             c_building_pref = course_info[ColumnHeaders.ROOM_PREF.value][:3]
@@ -779,6 +783,10 @@ class DataOperation:
         """
                 
         for course_name, course_info in courses_dict.items():
+            # Checks if it has a room preference
+            room_pref = course_info[ColumnHeaders.ROOM_PREF.value]
+            
+            if len(room_pref) > 3: continue     # Would be > 3 characters if room preference is specified
             
             # Gets preferred building
             c_building_pref = course_info[ColumnHeaders.ROOM_PREF.value][:3]
@@ -854,64 +862,61 @@ class DataOperation:
             # Checks if it has a room preference
             room_pref = course_info[ColumnHeaders.ROOM_PREF.value]
             
-            if len(room_pref) > 3:      # Would be > 3 characters if room preference is specified
-                # Gets room table
-                selected_table = room_tables[room_pref]
-                
-                # Gets time/day fields
-                c_time_pref = course_info[ColumnHeaders.TIME_PREF.value]
-                c_day_pref = course_info[ColumnHeaders.DAY_PREF.value]
-                
-                # 4 combinations of day/time preferences:
-                #     1) Day and Time, 2) Only day, 3) Only time, 4) Neither time nor day
-                # Must prepare for all 4 outcomes
-                
-                if c_day_pref and c_time_pref: # Outcome 1
-                    pass # leave as is
-                
-                elif c_day_pref and not c_time_pref: # Outcome 2
-                    c_time_pref = "ABCDEFG" # Set to all possible time periods
-                
-                elif c_time_pref and not c_day_pref: # Outcome 3
-                    c_day_pref = "MWTR" # Set to all possible days
-                
-                else: # Outcome 4
-                    c_time_pref = "ABCDEFG" # Set to all possible time periods
-                    c_day_pref = "MWTR" # Set to all possible days
-                
-                
-                # Breaks up days into 2-character list to loop better (e.g., ['MW', 'TR'])
-                c_day_pref = list(c_day_pref[i:i+2] for i in range(0, len(c_day_pref), 2))
-                
-                
-                # Now that table is selected, loop through room table to check for an empty PREFERRED cell.
-                assignment_made = False    # Gets changed to True when assignment made, breaks out of loop(s)
-                for day in c_day_pref: # Will be either 'MW' or 'TR'
-                    
-                    for time in c_time_pref: # Will be a letter A-G
-                        
-                        # Checks if cell is empty, then sets the cell with the course name
-                        if selected_table.isEmptyCell(TableIndex.DAY_REF[day], TableIndex.TIME_REF[time]):
-                            selected_table.setCell(TableIndex.DAY_REF[day], TableIndex.TIME_REF[time], str=course_name)
-                            assignment_made = True
-                            break
-                        # If the cell is not empty, move on to the next preferred one
-                    # End of time for loop
-                    
-                    # Checks if assignment has been made
-                    if assignment_made: break 
-                # End of day for loop
-                
-        
-                # Checked if assignment was made, if not, then there was a conflict
-                # Append conflicting course to dictionary
-                if not assignment_made:
-                    conflicts_dict[course_name] = course_info
-                    
-            # End of if len(room_pref) > 3
+            if len(room_pref) <= 3: continue     # Would be > 3 characters if room preference is specified
+            # Gets room table
+            selected_table = room_tables[room_pref]
             
-            else: # We have no interest in this course at the moment
-                continue
+            # Gets time/day fields
+            c_time_pref = course_info[ColumnHeaders.TIME_PREF.value]
+            c_day_pref = course_info[ColumnHeaders.DAY_PREF.value]
+            
+            # 4 combinations of day/time preferences:
+            #     1) Day and Time, 2) Only day, 3) Only time, 4) Neither time nor day
+            # Must prepare for all 4 outcomes
+            
+            if c_day_pref and c_time_pref: # Outcome 1
+                pass # leave as is
+            
+            elif c_day_pref and not c_time_pref: # Outcome 2
+                c_time_pref = "ABCDEFG" # Set to all possible time periods
+            
+            elif c_time_pref and not c_day_pref: # Outcome 3
+                c_day_pref = "MWTR" # Set to all possible days
+            
+            else: # Outcome 4
+                c_time_pref = "ABCDEFG" # Set to all possible time periods
+                c_day_pref = "MWTR" # Set to all possible days
+            
+            
+            # Breaks up days into 2-character list to loop better (e.g., ['MW', 'TR'])
+            c_day_pref = list(c_day_pref[i:i+2] for i in range(0, len(c_day_pref), 2))
+            
+            
+            # Now that table is selected, loop through room table to check for an empty PREFERRED cell.
+            assignment_made = False    # Gets changed to True when assignment made, breaks out of loop(s)
+            for day in c_day_pref: # Will be either 'MW' or 'TR'
+                
+                for time in c_time_pref: # Will be a letter A-G
+                    
+                    # Checks if cell is empty, then sets the cell with the course name
+                    if selected_table.isEmptyCell(TableIndex.DAY_REF[day], TableIndex.TIME_REF[time]):
+                        selected_table.setCell(TableIndex.DAY_REF[day], TableIndex.TIME_REF[time], str=course_name)
+                        assignment_made = True
+                        break
+                    # If the cell is not empty, move on to the next preferred one
+                # End of time for loop
+                
+                # Checks if assignment has been made
+                if assignment_made: break 
+            # End of day for loop
+            
+    
+            # Checked if assignment was made, if not, then there was a conflict
+            # Append conflicting course to dictionary
+            if not assignment_made:
+                conflicts_dict[course_name] = course_info
+                
+        # End of courses_dict for-loop            
             
         return room_tables, conflicts_dict
     # End of _assign_with_room_pref

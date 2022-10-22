@@ -6,10 +6,6 @@ def main():
 
     data_operation = DataOperation() # Runs constructor to authenticate credentials
     
-    # Test exportCSV
-    #data_operation.exportCSV("CS", "ClassData/ExportCSData.csv")
-    
-    
     # Test checkUserPass
     #print(data_operation.checkUserPass(username="CSChair", password="CSChair")) # Correct pass: CSChair
     #print(data_operation.checkUserPass(username="ECEChair", password="ECEChair")) # Correct pass: ECEChair
@@ -72,13 +68,15 @@ def main():
     
     except ImproperDBPathError as idpe: # Raised by updateDB
         print(idpe)
-
-
     """
     
     # Testing generate_assignment
     data_operation.generate_assignments(user_department="CS")
     data_operation.generate_assignments(user_department="ECE")
+    
+    
+    # Test exportCSV
+    data_operation.exportCSV("CS", "ClassData/ExportCSData.csv")
 
 
 if __name__ == "__main__":
