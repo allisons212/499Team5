@@ -196,7 +196,7 @@ class DataOperation:
         with open(f, mode='r', encoding='utf-8-sig') as read_obj:
             csv_dict_reader = csv.DictReader(read_obj)
             
-            row_num = 1            # Current row number
+            row_num = 1   # Current row number
             
             # Reads in each row of csv file, 'row' is a dictionary keyed by the column headers
             for row in csv_dict_reader:
@@ -213,7 +213,7 @@ class DataOperation:
                                             "[2-3 Capital Letters][3-digit integer]-[2-digit integer]\n\n")
                 
                                                     
-                # No real need to check faculty name, but input must be sanitized
+                # Check faculty assignment
                 faculty_assignment = row[ColumnHeaders.FAC_ASSIGN.value] # e.g., Dr. Goober
                 match = re.findall(r"^[A-Za-z.' ]{1,40}$", str(faculty_assignment))
                 if not match or len(faculty_assignment) > 40: # Caps character length for names at 40
@@ -224,7 +224,7 @@ class DataOperation:
 
                 
                 # Check building code and room number
-                room_pref = row[ColumnHeaders.ROOM_PREF.value] # e.g., OKT203, SST123, MOR
+                room_pref = row[ColumnHeaders.ROOM_PREF.value] # e.g., OKT203, ENG123, MOR
                 match = re.findall(r"^[A-Z]{3}([0-9]{3}|)$", str(room_pref))
                 if not match:
                     format_error_count += 1
