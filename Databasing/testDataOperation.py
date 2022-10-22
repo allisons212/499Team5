@@ -8,10 +8,15 @@ def main():
 
     data_operation = DataOperation() # Runs constructor to authenticate credentials
     
+    """
+    # Test addUserPass
+    data_operation.addUserPass(username="CSChair", password="CSChair", department="CS")
+    data_operation.addUserPass(username="ECEChair", password="ECEChair", department="ECE")
+    
     # Test checkUserPass
-    #print(data_operation.checkUserPass(username="CSChair", password="CSChair")) # Correct pass: CSChair
-    #print(data_operation.checkUserPass(username="ECEChair", password="ECEChair")) # Correct pass: ECEChair
-
+    print(data_operation.checkUserPass(username="CSChair", password="CSChair")) # Correct pass: CSChair
+    print(data_operation.checkUserPass(username="ECEChair", password="ECEChair")) # Correct pass: ECEChair
+    """
     
     # Test getEmptyRooms
     #empty_cells = data_operation.getEmptyRooms("CS")
@@ -68,7 +73,7 @@ def main():
     
     
     # Test exportCSV
-    data_operation.exportCSV("CS", "ClassData/ExportCSData.csv")
+    #data_operation.exportCSV("CS", "ClassData/ExportCSData.csv")
 
 
 if __name__ == "__main__":

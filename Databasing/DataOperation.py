@@ -512,6 +512,14 @@ class DataOperation:
     # End of checkUserPass
     
     def addUserPass(self, username, password, department):
+        """
+        Adds a new account to the database.
+
+        Args:
+            username (string): Username of the account
+            password (string): Plaintext password of the account
+            department (string): Department abbreviation of the account
+        """
         import hashlib, random, string
         
         # Create a hashed password with a randomly generated salt
