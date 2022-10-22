@@ -1,4 +1,6 @@
 
+const colors = ["#277da1", "#577590", "#4d908e", "#43aa8b", "#90be6d", "#f9c74f", "#f9844a", "#f8961e", "#f3722c", "#f94144"];
+
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-app.js";
 import {
@@ -41,10 +43,11 @@ function renderDayAssignment(dayAssignments, courseData) {
     for (const [day, times] of Object.entries(dayAssignments)) {
         for (const [time, classes] of Object.entries(times)) {
             var data = "";
+
             for (const key of Object.values(classes)) {
                 // The string that contains the html code for the table
                 data +=
-                    '<div class="class">' +
+                    '<div class="class" style="border-color: rgba(0, 0, 0, 0.2);">' +
                     key +
                     "<br>" +
                     courseData[key]["Faculty Assignment"] +
@@ -57,6 +60,7 @@ function renderDayAssignment(dayAssignments, courseData) {
             document.getElementById(id).innerHTML = data;
             id = day + time + "1";
             document.getElementById(id).innerHTML = data;
+
         }
     }
 }
@@ -105,6 +109,7 @@ getData.addEventListener("click", async (e) => {
     //
     const snapshot = await onValue(dbRef);
     // Get all the data from the database
+    // let index = 0
     snapshot.forEach((childSnapshot) => {
         const childKey = childSnapshot.key;
         const childData = childSnapshot.val();
