@@ -1,5 +1,6 @@
+.vscode/*
 credentials/*
 __pycache__/*
-DataOperation/__pycache__/*
+Databasing/__pycache__/*
 test.txt
 test.py
