@@ -38,9 +38,6 @@
 ########################################################################
 
 
-from msilib import Table
-
-
 class RoomTable:
     """
     Data structure to organize time periods for every classroom

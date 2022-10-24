@@ -11,7 +11,7 @@
 ########################################################################
 # Filename:     DataOperation.py
 # Purpose:      To establish an interface through which databasing
-#               operations can be called by a web server host.
+#               operations can be called by a python flask server.
 #
 # Editors of this file:     Devin Patel
 #                           Harrison Matthews
@@ -73,7 +73,25 @@ class DataOperation:
         })
     # End of authenticate_credentials
     
-    def importRoomCSV(self, filename):
+    def importCSV(self, course_csv_path, room_csv_path, department):
+        """
+        Imports CSV files into the database.
+        This method imports the room_csv_path first, then checks each room in course_csv_path to ensure that it exists.
+
+        Args:
+            course_csv_path (string): Path to course csv file
+            room_csv_path (string): Path to room csv file
+            department (string): Department abbreviation (e.g., "CS", "ECE")
+        
+        Raises:
+            FileNotFoundError: If filename does not get resolved to a csv file.
+            ImportFormatError: If imported CSV file does not adhere to specified formatting guidelines.
+        """
+        self._importRoomCSV(room_csv_path, department)
+        self._importCourseCSV(course_csv_path, department)
+    # End of importCSV
+    
+    def _importRoomCSV(self, filename, department):
         """
         Reads CSV file AvailableRooms.csv with data and checks it for formatting.
         After it is error checked, it creates database entries for the given Department
@@ -81,6 +99,10 @@ class DataOperation:
         Args:
             filename (string): Path directed to csv file to import
             department_abbr (string): Abbreviation of the building (e.g., CS, ECE) classes to update
+        
+        Raises:
+            FileNotFoundError: If filename does not get resolved to a csv file.
+            ImportFormatError: If imported CSV file does not adhere to specified formatting guidelines.
         """
         
         # Dictionary that we will hold our buildings as our keys, and lists of room numbers for value
@@ -90,7 +112,7 @@ class DataOperation:
         row_number = 1
         
         # Counts all format errors before raising the exception
-        format_error_count = 0 
+        format_error_count = 0
         
         # Cumulative string to store all exception/error messages for each wrongly formatted entry
         format_error_msg = "" 
@@ -146,14 +168,13 @@ class DataOperation:
         
         # Now that we have the dictionary that has each building as a key, and 
         # has the values as a list of the room numbers we need to put into database
-        ref = db.reference(f'/{DatabaseHeaders.ROOMS.value}')
-        ref.update(building_dictionary)
+        self.updateDB(building_dictionary, f'/{DatabaseHeaders.ROOMS.value}/{department}')
         
     # End of importRoomCSV
             
             
 
-    def importCourseCSV(self, filename, department_abbr):
+    def _importCourseCSV(self, filename, department_abbr):
         """
         Reads CSV file with schedule data and checks for formatting.
         Afterwards, it creates database entries for each class section.
@@ -182,7 +203,7 @@ class DataOperation:
         with open(f, mode='r', encoding='utf-8-sig') as read_obj:
             csv_dict_reader = csv.DictReader(read_obj)
             
-            row_num = 1            # Current row number
+            row_num = 1   # Current row number
             
             # Reads in each row of csv file, 'row' is a dictionary keyed by the column headers
             for row in csv_dict_reader:
@@ -199,7 +220,7 @@ class DataOperation:
                                             "[2-3 Capital Letters][3-digit integer]-[2-digit integer]\n\n")
                 
                                                     
-                # No real need to check faculty name, but input must be sanitized
+                # Check faculty assignment
                 faculty_assignment = row[ColumnHeaders.FAC_ASSIGN.value] # e.g., Dr. Goober
                 match = re.findall(r"^[A-Za-z.' ]{1,40}$", str(faculty_assignment))
                 if not match or len(faculty_assignment) > 40: # Caps character length for names at 40
@@ -210,13 +231,53 @@ class DataOperation:
 
                 
                 # Check building code and room number
-                room_pref = row[ColumnHeaders.ROOM_PREF.value] # e.g., OKT203, SST123, MOR
+                room_pref = row[ColumnHeaders.ROOM_PREF.value] # e.g., OKT203, ENG123, MOR
                 match = re.findall(r"^[A-Z]{3}([0-9]{3}|)$", str(room_pref))
                 if not match:
                     format_error_count += 1
                     format_error_msg += (f"Row {row_num} in {filename} is formatted incorrectly.\n" +
                                             f"Please follow the following format for {ColumnHeaders.ROOM_PREF.value}:\n" +
                                             "[3 Capital Letters][Optional: 3-digit integer]\n\n")
+                    
+                else:  # Checks to ensure room preference exists in imported rooms
+                    if len(room_pref) > 3: # Checks if there is a number in the preference
+                        
+                        # Breaks up room_pref into building acronym and room number
+                        building_pref = room_pref[:3]
+                        num_pref = room_pref[3:]
+                        
+                        # Fetches list of rooms for the specified building
+                        buildings_dict = self.getDB(f"{DatabaseHeaders.ROOMS.value}/{department_abbr}")
+                        buildings_list = list(buildings_dict.keys())
+                        room_nums_list = buildings_dict[building_pref]
+                        
+                        # Checks to see if the building exists in the database
+                        if not building_pref in buildings_list:
+                            format_error_count += 1
+                            format_error_msg += (f"Row {row_num} in {filename} contains an error.\n" +
+                                                 f"The building \"{room_pref}\" in {os.path.split(filename)[1]} does not exist.\n" + 
+                                                 f"Please add room numbers from {room_pref} to the rooms import csv file or change it to another building.\n\n")
+                        
+                        # Checks to see if the room exists in the database
+                        room_found = False
+                        for room_num in room_nums_list:
+                            if room_num == num_pref: room_found = True
+                        if not room_found: # If room not found, append a new format error
+                            format_error_count += 1
+                            format_error_msg += (f"Row {row_num} in {filename} contains an error.\n" +
+                                                 f"The room preference \"{room_pref}\" in {os.path.split(filename)[1]} does not exist.\n" + 
+                                                 f"Please add the room number to the rooms import csv file or remove it from the \"{ColumnHeaders.ROOM_PREF.value}\" column.\n\n")
+                    
+                    else: # Else, there is only an acronym, so we must check if the acronym exists in the database
+                        buildings_list = list(self.getDB(f"{DatabaseHeaders.ROOMS.value}/{department_abbr}").keys())
+                        if not room_pref in buildings_list:
+                            format_error_count += 1
+                            format_error_msg += (f"Row {row_num} in {filename} contains an error.\n" +
+                                                 f"The building \"{room_pref}\" in {os.path.split(filename)[1]} does not exist.\n" + 
+                                                 f"Please add room numbers from {room_pref} to the rooms import csv file or change it to another building.\n\n")
+                    # End of if len(room_pref)
+                # End of room preference check
+                                
                 
                 
                 # Check time block preferences
@@ -277,8 +338,7 @@ class DataOperation:
         
         # Updates the department's database tree
         department_dict = {department_abbr : dict_of_course_dicts}
-        ref = db.reference(f'/{DatabaseHeaders.COURSES.value}')
-        ref.update(department_dict)
+        self.updateDB(department_dict, f'/{DatabaseHeaders.COURSES.value}')
         
     # End of importCSV
 
@@ -304,9 +364,12 @@ class DataOperation:
         Raises:
             QueryNotFoundError: database_path doesn't return data
         """
-        
-        ref = db.reference(f'/{database_path}')
-        retrieved = ref.get()
+        retrieved = {}
+        try:
+            ref = db.reference(f'/{database_path}')
+            retrieved = ref.get()
+        except:
+            raise QueryNotFoundError()
         
         if retrieved:
             return retrieved
@@ -332,7 +395,7 @@ class DataOperation:
             database_path (string): Realtime Database path that will be updated by new_database_entry
         
         Raises:
-            ImproperDBPathError: When database_path does not address one of the Database Headers
+            ImproperDBPathError: When database_path does not address one of the Database Headers or the database reference fails
         """
         
         # Checks the path to ensure it consists of one of the Database Headers
@@ -346,8 +409,11 @@ class DataOperation:
             raise ImproperDBPathError()
 
         # Updates the database at the path if checks are passed
-        ref = db.reference(f'/{database_path}')
-        ref.update(new_database_entry)
+        try:
+            ref = db.reference(f'/{database_path}')
+            ref.update(new_database_entry)
+        except:
+            raise ImproperDBPathError()
         
     # End of update DB
     
@@ -424,13 +490,13 @@ class DataOperation:
         try: # Fetches account of the specified username as a dict
             fetched_account = self.getDB(f"/{DatabaseHeaders.ACCOUNTS.value}/{username}")
             
-        except QueryNotFoundError: # Username not defined, return false
+        except QueryNotFoundError: # Username not found, return false
             return False
         
         # Username check passed
         # Split account info
-        fetched_salt = fetched_account['Salt']
-        fetched_password = fetched_account['Password']
+        fetched_salt = fetched_account[AccountHeaders.SALT.value]
+        fetched_password = fetched_account[AccountHeaders.PASSWORD.value]
         
         # Hash the plaintext password using hashlib SHA256
         import hashlib
@@ -445,32 +511,38 @@ class DataOperation:
     
     # End of checkUserPass
     
-    def addUserPass(self, username, password, department, building, salt):
-        
+    def addUserPass(self, username, password, department):
+        """
+        Adds a new account to the database.
+
+        Args:
+            username (string): Username of the account
+            password (string): Plaintext password of the account
+            department (string): Department abbreviation of the account
+        """
         import hashlib, random, string
         
         # Create a hashed password with a randomly generated salt
         salt = "".join(random.choices(string.ascii_lowercase, k=AccountHeaders.SALT_LEN.value))
         hashed_password = hashlib.sha256((password+salt).encode('utf-8')).hexdigest()
         
-        account_dict = { AccountHeaders.BUILDING.value : building,
+        account_dict = { AccountHeaders.SALT.value : salt,
                          AccountHeaders.DEPARTMENT.value : department,
-                         AccountHeaders.PASSWORD.value : hashed_password,
-                         AccountHeaders.SALT.value : salt }
+                         AccountHeaders.PASSWORD.value : hashed_password }
         
         self.updateDB(account_dict, f"{DatabaseHeaders.ACCOUNTS.value}/{username}")
     # End of addUserPass
     
     
-    def getAccount(self, username):
+    def getAccountDepartment(self, username):
         """
-        Returns account department and building as a tuple.
+        Returns account department.
 
         Args:
             username (string): Account username
 
         Returns:
-            Tuple: (Department Acronym, Building Acronym)
+            string: Department Acronym
             
         Raises:
             QueryNotFoundError: Account username is not found in database.
@@ -478,54 +550,53 @@ class DataOperation:
         """
         try:
             account = self.getDB(f"/{DatabaseHeaders.ACCOUNTS.value}/{username}")
-            return (account[AccountHeaders.DEPARTMENT.value], account[AccountHeaders.BUILDING.value])
+            return account[AccountHeaders.DEPARTMENT.value]
             
         except QueryNotFoundError: # getDB can't find account
             raise QueryNotFoundError("Account not found.")
         
-        except KeyError: # account's 'department' or 'building' fields are nonexistent
-            raise KeyError("Account information not found.")
+        except KeyError: # account's 'department' field is nonexistent
+            raise KeyError("Account information incomplete, please contact your administrator.")
     # End of getAccount
     
     
-    def getEmptyRooms(self, building):
+    def getEmptyRooms(self, department):
         """
-        Compiles a dictionary of all the empty periods in the specified building.
+        Compiles a dictionary of all the empty periods in the specified department.
         Keys are the room numbers.
         Values are lists of empty periods i.e., [ 'MW - A', 'MW - B', etc. ]
 
         Args:
-            building (string): Building acronym (e.g., "OKT", "ENG")
+            department (string): department acronym (e.g., "OKT", "ENG")
 
         Returns:
             dict: Keys are the room numbers, Values are lists of empty periods
         """
         
         # Fetches room tables from database
-        room_tables = self._fetch_room_tables(building)
+        room_tables = self._fetch_room_tables(department)
         
         empty_periods = {} # Will hold each empty spot. Keys = room number, Value = String of spot
         
         # Compiles all empty spots and places them into a dictionary
         for room_num, table in room_tables.items():
-            if table.isFull(): # Skips room if it is full
-                continue
+            if table.isFull(): continue # Skips room if it is full
             
             empty_cells = [] # List of empty cells with format: [ 'MW - A', 'MW - B', etc. ]
             
-            for day in TableIndex.DAY_REF.keys():
-                for time in TableIndex.TIME_REF.keys():
-                    if table.isEmptyCell(day, time): # If empty cell, then add to empty_cells
+            for day, day_index in TableIndex.DAY_REF.items():
+                for time, time_index in TableIndex.TIME_REF.items():
+                    if table.isEmptyCell(day_index, time_index): # If empty cell, then add to empty_cells
                         empty_cells.append(f"{day} - {time}")
             
             # Appends empty cells to cumulative dictionary
-            empty_periods[f"{building}{room_num}" ] = empty_cells
+            empty_periods[room_num] = empty_cells
         # End of room_tables for-loop
         
         return empty_periods
     # End of getEmptyRooms
     
-    def _fetch_room_tables(self, building):
+    def _fetch_room_tables(self, department):
         """
         Fetches room tables from database and converts them to RoomTable objects
 
@@ -535,14 +606,16 @@ class DataOperation:
         Returns:
             dict: Dictionary of RoomTable objects keyed by room number
         """
-        room_tables = self.getDB(f"/{DatabaseHeaders.TABLES.value}/{building}")
+        room_tables = self.getDB(f"/{DatabaseHeaders.TABLES.value}/{department}")
         new_room_tables = {}
         
         for room_num, table in room_tables.items():
             new_table = RoomTable()
-            new_room_tables[room_num] = new_table.importTable(table)
+            new_table.importTable(table)
+            new_room_tables[room_num] = new_table
         
         return new_room_tables
+    # End of fetch_room_tables
         
         
 
@@ -554,22 +627,21 @@ class DataOperation:
     #
     ######################################
     
-    def _init_tables(self):
+    def _init_tables(self, department):
         """
         Initializes room tables for each room and stores them out to database.
         """
         
         # Gets all the buildings
-        buildings_dict = self.getDB(f"/{DatabaseHeaders.ROOMS.value}")
-        tables_dict = {}
+        buildings_dict = self.getDB(f"/{DatabaseHeaders.ROOMS.value}/{department}")
+        tables_dict = {}            
         
         # For each building, we need to make the tables
         for building, list_of_rooms in buildings_dict.items():            
-            # Creates new dictionary of rooms, each room keying a dictionary to a RoomTable 2D List
-            new_building_dict = {}
+            # Creates new dictionary of rooms, each room keying a dictionary to a RoomTable object
             for room in list_of_rooms:
-                new_building_dict[room] = RoomTable()
-            tables_dict[building] = new_building_dict
+                full_room = str(building) + str(room)
+                tables_dict[full_room] = RoomTable()
     
         return tables_dict
             
@@ -577,79 +649,67 @@ class DataOperation:
     
     
     
-    def generate_assignments(self):
+    def generate_assignments(self, user_department):
         """
         Generates all the class assignments and marks conflicting assignments
+        
+        Args:
+            user_department: Department that the account belongs to (e.g., "CS", "ECE")
         """
         
-        # Generates schedule tables
-        building_room_tables = self._init_tables()
+        # Generates schedule tables for specified department
+        department_room_tables = self._init_tables(user_department)
         
-        # Gets all the departments
-        all_departments_dict = self.getDB(f"/{DatabaseHeaders.COURSES.value}")
+        # Gets courses in the user's department
+        department_courses = self.getDB(f"/{DatabaseHeaders.COURSES.value}/{user_department}")
         
-        # For each department, we need to make the assignments
-        for department, courses_dict in all_departments_dict.items():    
-            # Grabs all available rooms
-            ## First 3 letters of room preference will have building acronym,
-            ## so we use that to determine which list of available rooms to pull.
-            sample_room = courses_dict[list(courses_dict.keys())[0]][ColumnHeaders.ROOM_PREF.value] # Returns room preference of first section
-            building_name = sample_room[:3] # Grabs first 3 letters
-            
-            # Grabs room tables for current building
-            room_tables = building_room_tables[building_name]
-            
-            
-            #^ At this point, we have a dictionary of all the course sections as well
-            #^ as a dictionary of all the available rooms tables for that department's building.
-            
-            #^ Time to make assignments.
-            conflicts_dict = {}
-            
-            #^ 1st - Assign courses with Room Preferences
-            room_tables, conflicts_dict = self._assign_with_room_pref(courses_dict, room_tables, conflicts_dict)
-            
-            #^ 2nd - Assign courses with Day/Time Preferences
-            room_tables, conflicts_dict = self._assign_with_day_time_pref(courses_dict, room_tables, conflicts_dict)
+        
+        # At this point, we have a dictionary of all the course sections as well
+        # as a dictionary of all the available rooms tables for that department.
+        
+        # Time to make assignments.
+        conflicts_dict = {}
+        
+        # 1st - Assign courses with Room Preferences
+        department_room_tables, conflicts_dict = self._assign_with_room_pref(department_courses, department_room_tables, conflicts_dict)
+        
+        # 2nd - Assign courses with Day/Time Preferences
+        department_room_tables, conflicts_dict = self._assign_with_day_time_pref(department_courses, department_room_tables, conflicts_dict)
 
-            #^ 3rd - Assign the rest of the courses
-            room_tables, conflicts_dict = self._assign_rest_of_courses(courses_dict, room_tables, conflicts_dict)
+        # 3rd - Assign the rest of the courses
+        department_room_tables, conflicts_dict = self._assign_rest_of_courses(department_courses, department_room_tables, conflicts_dict)
+        
+        
+        # Converts room tables to serializable 2D lists
+        serialize_dict = {}
+        for room_num, table in department_room_tables.items():
+            serialize_dict[room_num] = table.getTable()
+        
+        # Updates Room Tables to Database
+        self.updateDB(serialize_dict, f"/{DatabaseHeaders.TABLES.value}/{user_department}")
+        
+        # Now that department_room_tables is done, loop through tables and update the database with the new assignments
+        for room_num, room_table in department_room_tables.items():
             
-            
-            # Converts room tables to serializable 2D lists
-            serialize_dict = {}
-            for room_num, table in room_tables.items():
-                serialize_dict[room_num] = table.getTable()
-            
-            # Updates Room Tables to Database
-            self.updateDB(serialize_dict, f"/{DatabaseHeaders.TABLES.value}/{building_name}")
-            
-            # Now that room_tables is done, loop through tables and update the database with the new assignments
-            for room_num, room_table in room_tables.items():
+            for day, day_index in TableIndex.DAY_REF.items():
                 
-                for day, day_index in TableIndex.DAY_REF.items():
+                for time, time_index in TableIndex.TIME_REF.items():
                     
-                    for time, time_index in TableIndex.TIME_REF.items():
+                    if not room_table.isEmptyCell(day_index, time_index): # If table cell is occupied
+                        course_in_cell = room_table.getCell(day_index, time_index) # Gets course name in that cell
                         
-                        if not room_table.isEmptyCell(day_index, time_index): # If table cell is occupied
-                            course_in_cell = room_table.getCell(day_index, time_index) # Gets course name in that cell
-                            
-                            # Changes the course info in courses_dict accordingly
-                            # Changes Day Assignment, Time Assignment, and Room Assignment
-                            courses_dict[course_in_cell][ColumnHeaders.ROOM_ASS.value] = building_name + room_num
-                            courses_dict[course_in_cell][ColumnHeaders.DAY_ASS.value] = day
-                            courses_dict[course_in_cell][ColumnHeaders.TIME_ASS.value] = time
-            
-            # Update all_departments_dict
-            all_departments_dict[department] = courses_dict
-            
-            # @TODO conflicts_dict contains all the unassigned courses
-            print(f"{department} Conflicts: {list(conflicts_dict.keys())}") # @DEBUG Prints conflicting courses
-            
-        # End department, courses_dict for loop
+                        # Changes the course info in department_dict accordingly
+                        # Changes Day Assignment, Time Assignment, and Room Assignment
+                        department_courses[course_in_cell][ColumnHeaders.ROOM_ASS.value] = room_num
+                        department_courses[course_in_cell][ColumnHeaders.DAY_ASS.value] = day
+                        department_courses[course_in_cell][ColumnHeaders.TIME_ASS.value] = time
+        
+        
+        # @TODO conflicts_dict contains all the unassigned courses
+        print(f"{user_department} Conflicts: {list(conflicts_dict.keys())}") # @DEBUG Prints conflicting courses
         
         # Update database
-        self.updateDB(all_departments_dict, f"/{DatabaseHeaders.COURSES.value}")
+        self.updateDB(department_courses, f"/{DatabaseHeaders.COURSES.value}/{user_department}")
 
     # End of generate_assignments
     
@@ -670,6 +730,13 @@ class DataOperation:
         """
                 
         for course_name, course_info in courses_dict.items():
+            # Checks if it has a room preference
+            room_pref = course_info[ColumnHeaders.ROOM_PREF.value]
+            
+            if len(room_pref) > 3: continue     # Would be > 3 characters if room preference is specified
+            
+            # Gets preferred building
+            c_building_pref = course_info[ColumnHeaders.ROOM_PREF.value][:3]
             
             # Gets time/day fields
             c_time_pref = course_info[ColumnHeaders.TIME_PREF.value]
@@ -694,7 +761,10 @@ class DataOperation:
             # Now, we need to loop through every room table to find the next available cell
             assignment_made = False    # Gets changed to True when assignment made, breaks out of loop(s)
             for room_num, table in room_tables.items():
+                # Checks if the right building is picked, skips room if not
+                if room_num[:3] != c_building_pref: continue
                 
+                # Right building picked, now check each cell in room_num
                 for day in c_day_pref: # Will be either 'MW' or 'TR'
                     
                     for time in c_time_pref: # Will be a letter A-G
@@ -733,6 +803,13 @@ class DataOperation:
         """
                 
         for course_name, course_info in courses_dict.items():
+            # Checks if it has a room preference
+            room_pref = course_info[ColumnHeaders.ROOM_PREF.value]
+            
+            if len(room_pref) > 3: continue     # Would be > 3 characters if room preference is specified
+            
+            # Gets preferred building
+            c_building_pref = course_info[ColumnHeaders.ROOM_PREF.value][:3]
             
             # Gets time/day fields
             c_time_pref = course_info[ColumnHeaders.TIME_PREF.value]
@@ -760,7 +837,10 @@ class DataOperation:
             # Now, we need to loop through every room table to find the next available cell
             assignment_made = False    # Gets changed to True when assignment made, breaks out of loop(s)
             for room_num, table in room_tables.items():
-
+                # Checks if the right building is picked, skips room if not
+                if room_num[:3] != c_building_pref: continue
+                
+                # Right building picked, now check each cell in room_num
                 for day in c_day_pref: # Will be either 'MW' or 'TR'
                     
                     for time in c_time_pref: # Will be a letter A-G
@@ -802,65 +882,61 @@ class DataOperation:
             # Checks if it has a room preference
             room_pref = course_info[ColumnHeaders.ROOM_PREF.value]
             
-            if len(room_pref) > 3:      # Would be > 3 characters if room preference is specified
-                # Gets room table
-                room_num = room_pref[3:]
-                selected_table = room_tables[room_num]
-                
-                # Gets time/day fields
-                c_time_pref = course_info[ColumnHeaders.TIME_PREF.value]
-                c_day_pref = course_info[ColumnHeaders.DAY_PREF.value]
-                
-                # 4 combinations of day/time preferences:
-                #     1) Day and Time, 2) Only day, 3) Only time, 4) Neither time nor day
-                # Must prepare for all 4 outcomes
-                
-                if c_day_pref and c_time_pref: # Outcome 1
-                    pass # leave as is
-                
-                elif c_day_pref and not c_time_pref: # Outcome 2
-                    c_time_pref = "ABCDEFG" # Set to all possible time periods
-                
-                elif c_time_pref and not c_day_pref: # Outcome 3
-                    c_day_pref = "MWTR" # Set to all possible days
-                
-                else: # Outcome 4
-                    c_time_pref = "ABCDEFG" # Set to all possible time periods
-                    c_day_pref = "MWTR" # Set to all possible days
-                
-                
-                # Breaks up days into 2-character list to loop better (e.g., ['MW', 'TR'])
-                c_day_pref = list(c_day_pref[i:i+2] for i in range(0, len(c_day_pref), 2))
-                
-                
-                # Now that table is selected, loop through room table to check for an empty PREFERRED cell.
-                assignment_made = False    # Gets changed to True when assignment made, breaks out of loop(s)
-                for day in c_day_pref: # Will be either 'MW' or 'TR'
-                    
-                    for time in c_time_pref: # Will be a letter A-G
-                        
-                        # Checks if cell is empty, then sets the cell with the course name
-                        if selected_table.isEmptyCell(TableIndex.DAY_REF[day], TableIndex.TIME_REF[time]):
-                            selected_table.setCell(TableIndex.DAY_REF[day], TableIndex.TIME_REF[time], str=course_name)
-                            assignment_made = True
-                            break
-                        # If the cell is not empty, move on to the next preferred one
-                    # End of time for loop
-                    
-                    # Checks if assignment has been made
-                    if assignment_made: break 
-                # End of day for loop
-                
-        
-                # Checked if assignment was made, if not, then there was a conflict
-                # Append conflicting course to dictionary
-                if not assignment_made:
-                    conflicts_dict[course_name] = course_info
-                    
-            # End of if len(room_pref) > 3
+            if len(room_pref) <= 3: continue     # Would be > 3 characters if room preference is specified
+            # Gets room table
+            selected_table = room_tables[room_pref]
             
-            else: # We have no interest in this course at the moment
-                continue
+            # Gets time/day fields
+            c_time_pref = course_info[ColumnHeaders.TIME_PREF.value]
+            c_day_pref = course_info[ColumnHeaders.DAY_PREF.value]
+            
+            # 4 combinations of day/time preferences:
+            #     1) Day and Time, 2) Only day, 3) Only time, 4) Neither time nor day
+            # Must prepare for all 4 outcomes
+            
+            if c_day_pref and c_time_pref: # Outcome 1
+                pass # leave as is
+            
+            elif c_day_pref and not c_time_pref: # Outcome 2
+                c_time_pref = "ABCDEFG" # Set to all possible time periods
+            
+            elif c_time_pref and not c_day_pref: # Outcome 3
+                c_day_pref = "MWTR" # Set to all possible days
+            
+            else: # Outcome 4
+                c_time_pref = "ABCDEFG" # Set to all possible time periods
+                c_day_pref = "MWTR" # Set to all possible days
+            
+            
+            # Breaks up days into 2-character list to loop better (e.g., ['MW', 'TR'])
+            c_day_pref = list(c_day_pref[i:i+2] for i in range(0, len(c_day_pref), 2))
+            
+            
+            # Now that table is selected, loop through room table to check for an empty PREFERRED cell.
+            assignment_made = False    # Gets changed to True when assignment made, breaks out of loop(s)
+            for day in c_day_pref: # Will be either 'MW' or 'TR'
+                
+                for time in c_time_pref: # Will be a letter A-G
+                    
+                    # Checks if cell is empty, then sets the cell with the course name
+                    if selected_table.isEmptyCell(TableIndex.DAY_REF[day], TableIndex.TIME_REF[time]):
+                        selected_table.setCell(TableIndex.DAY_REF[day], TableIndex.TIME_REF[time], str=course_name)
+                        assignment_made = True
+                        break
+                    # If the cell is not empty, move on to the next preferred one
+                # End of time for loop
+                
+                # Checks if assignment has been made
+                if assignment_made: break 
+            # End of day for loop
+            
+    
+            # Checked if assignment was made, if not, then there was a conflict
+            # Append conflicting course to dictionary
+            if not assignment_made:
+                conflicts_dict[course_name] = course_info
+                
+        # End of courses_dict for-loop            
             
         return room_tables, conflicts_dict
     # End of _assign_with_room_pref
