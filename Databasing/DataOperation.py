@@ -417,6 +417,66 @@ class DataOperation:
         
     # End of update DB
     
+    def updateSolutionAssignments(self, department, course_number, day, time, room_number):
+        """ Function takes in a course_number, day, time, and a room_number and updates the course number
+            in Department Courses, and changes the fields Classroom Assignment, Day Assignment, Time Assignment 
+            with the parameters that are given.
+            
+            Function also changes Room Tables in database so that the given classroom time is filled.
+            
+
+        Args:
+            department (string): Department acronym to inflict changes on
+            course_number (string): Number of the course that needs to be updated (CS106-01)
+            day (string): Day that the course will be assigned (MW) | (TR)
+            time (string): Time that the course will be assigned (E) | (A) ----> Any Letter A-G
+            room_number (string): Room Number that the Classroom Assignment will be (OKT123)
+            department 
+        """
+        
+        # Call getDB with the following pathway DatabaseHeaders.COURSES.value/department/coures_number
+        course_dict = self.getDB(f"/{DatabaseHeaders.COURSES.value}/{department}/{course_number}")
+        
+        # Change 3 fields:
+        # 1. Classroom Assignment
+        # 2. Day Assignment
+        # 3. Time Assignment
+        
+        # Create a new dictionary with the key:value that we want to change.
+        room_value = {ColumnHeaders.ROOM_ASS.value:room_number}
+        day_value = {ColumnHeaders.DAY_ASS.value: day}
+        time_value = {ColumnHeaders.TIME_ASS.value: time}
+        
+        # Update the course_dict with the new dictionary values.
+        course_dict.update(room_value)
+        course_dict.update(day_value)
+        course_dict.update(time_value)
+        
+        # Now we need to update the classroom in Room Tables, but lets get only the dictionary 
+        # that we need we dont need the entire Room Tables in the database.
+        
+        # Get room_tables from database with EXACT path of what we need to add
+        # This ends up being a list that is returned to us
+        room_tables_list = self.getDB(f"/{DatabaseHeaders.TABLES.value}/{department}/{room_number}/{TableIndex.DAY_REF[day]}")
+        
+        # Change the time slot in the list
+        room_tables_list[TableIndex.TIME_REF[time]] = course_number
+        
+        # Convert the retrieved room_tables_list into a dictionary structure
+        room_tables_entry_dict = {}
+        counter = 0
+        
+        for i in room_tables_list:
+            room_tables_entry_dict[counter] = i
+            counter = counter + 1
+        
+         # Update the Department Courses in database
+        self.updateDB(course_dict, f"/{DatabaseHeaders.COURSES.value}/{department}/{course_number}")
+        
+        # Update the room_tables in database
+        self.updateDB(room_tables_entry_dict, f"/{DatabaseHeaders.TABLES.value}/{department}/{room_number}/{TableIndex.DAY_REF[day]}")
+        
+    # End of updateSolutionAssignments
     
     def exportCSV(self, department_abbr, outfile=""):
         """
