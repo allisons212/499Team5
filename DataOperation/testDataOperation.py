@@ -74,7 +74,7 @@ def main():
     # Testing generate_assignment
     data_operation.generate_assignments()
     
-    #data_operation.updateSolutionAssignments("CS574-01", "MW", "A", "OKT204")
+    data_operation.updateSolutionAssignments("CS", "CS574-01", "MW", "A", "OKT204")
 
 
 if __name__ == "__main__":

@@ -461,7 +461,7 @@ class DataOperation:
         self.updateDB(account_dict, f"{DatabaseHeaders.ACCOUNTS.value}/{username}")
     # End of addUserPass
     
-    def updateSolutionAssignments(self, course_number, day, time, room_number) :
+    def updateSolutionAssignments(self, department, course_number, day, time, room_number):
         """ Function takes in a course_number, day, time, and a room_number and updates the course number
             in Department Courses, and changes the fields Classroom Assignment, Day Assignment, Time Assignment 
             with the parameters that are given.
@@ -470,23 +470,12 @@ class DataOperation:
             
 
         Args:
+            department (string): Department acronym to inflict changes on
             course_number (string): Number of the course that needs to be updated (CS106-01)
             day (string): Day that the course will be assigned (MW) | (TR)
             time (string): Time that the course will be assigned (E) | (A) ----> Any Letter A-G
             room_number (string): Room Number that the Classroom Assignment will be (OKT123)
         """
-        
-        # Determine length of department
-        end_iterator = -1
-        for char in course_number:
-            end_iterator = end_iterator + 1
-            
-            if char.isnumeric():
-                break
-        
-        # Split course_number string to determine the department we are working with
-        department = ""
-        department = course_number[0:end_iterator]
         
         # Call getDB with the following pathway DatabaseHeaders.COURSES.value/department/coures_number
         course_dict = self.getDB(f"/{DatabaseHeaders.COURSES.value}/{department}/{course_number}")
@@ -511,7 +500,7 @@ class DataOperation:
         
         # Get room_tables from database with EXACT path of what we need to add
         # This ends up being a list that is returned to us
-        room_tables_list = self.getDB(f"/{DatabaseHeaders.TABLES.value}/{room_number[0:3]}/{room_number[3:6]}/{TableIndex.DAY_REF[day]}")
+        room_tables_list = self.getDB(f"/{DatabaseHeaders.TABLES.value}/{department}/{room_number}/{TableIndex.DAY_REF[day]}")
         
         # Change the time slot in the list
         room_tables_list[TableIndex.TIME_REF[time]] = course_number
@@ -528,7 +517,7 @@ class DataOperation:
         self.updateDB(course_dict, f"/{DatabaseHeaders.COURSES.value}/{department}/{course_number}")
         
         # Update the room_tables in database
-        self.updateDB(room_tables_entry_dict, f"/{DatabaseHeaders.TABLES.value}/{room_number[0:3]}/{room_number[3:6]}/{TableIndex.DAY_REF[day]}")
+        self.updateDB(room_tables_entry_dict, f"/{DatabaseHeaders.TABLES.value}/{department}/{room_number}/{TableIndex.DAY_REF[day]}")
         
     
     def getEmptyRooms(self, building):
