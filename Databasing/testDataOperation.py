@@ -74,6 +74,9 @@ def main():
     
     # Test exportCSV
     #data_operation.exportCSV("CS", "ClassData/ExportCSData.csv")
+    
+    # Test updateSolutionAssignment
+    #data_operation.updateSolutionAssignments()
 
 
 if __name__ == "__main__":
