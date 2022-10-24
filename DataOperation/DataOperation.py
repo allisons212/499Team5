@@ -475,6 +475,7 @@ class DataOperation:
             day (string): Day that the course will be assigned (MW) | (TR)
             time (string): Time that the course will be assigned (E) | (A) ----> Any Letter A-G
             room_number (string): Room Number that the Classroom Assignment will be (OKT123)
+            department 
         """
         
         # Call getDB with the following pathway DatabaseHeaders.COURSES.value/department/coures_number
