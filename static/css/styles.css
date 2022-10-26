@@ -94,8 +94,6 @@ footer {
 
 /* Style page content */
 .main {
-
-
     padding: 25px;
     margin: 0 auto;
     margin-left: 200px; /* Same as the width of the sidebar */
@@ -321,7 +319,9 @@ visibility: visible;
     margin-top: 15px;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     table-layout: fixed;
-
+    min-width: 750px;
+    margin-left: auto;
+    margin-right: auto;
 
   }
   
