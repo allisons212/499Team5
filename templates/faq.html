@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="../static/css/styles.css" />
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+        />
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    </head>
+
+    <body>
+        <div class="topnav">
+            <a href="#html1" style="margin-top: 0px">
+                <i class="fa fa-bell-o" style="font-size: 25px"></i>
+            </a>
+            <div class="account">
+                <a href="{{ url_for('account') }}" class="accountIcon">
+                    <i class="fa fa-user" style="font-size: 50px"></i>
+                </a>
+                <div class="accountDropdownContent">
+                    <a href="{{ url_for('account') }}">
+                        <i class="fa fa-user"></i>
+                        View Account
+                    </a>
+                    <a href="#">Link 2</a>
+                    <a href="{{ url_for('login') }}">
+                        <i class="fa fa-sign-out"></i>
+                        Log Out
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="sidenav">
+            <a href="{{ url_for('generate_schedule') }}">
+                <img src="../static/Pictures/logo.png" alt="logo" />
+            </a>
+            <a href="{{ url_for('generate_schedule') }}">
+                <i class="fa fa-table"></i>
+                Create Schedule
+            </a>
+            <a href="{{ url_for('upload_csv') }}">
+                <i class="fa fa-upload"></i>
+                Upload CSV
+            </a>
+            <a href="{{ url_for('settings') }}">
+                <i class="fa fa-gear"></i>
+                Settings
+            </a>
+            <a href="{{ url_for('faq') }}" class="currentPage">
+                <i class="fa fa-question-circle"></i>
+                FAQs
+            </a>
+            <a href="{{ url_for('about_us') }}">
+                <i class="fa fa-group"></i>
+                About Us
+            </a>
+        </div>
+
+        <div class="main" id="faqs">
+            <h1>Frequently Asked Questions</h1>
+            <div class="listOfFAQs">
+            <ul>
+                <li><a href="#csvFormatting">How are the CSVs formatted?</a>
+                    <ul>
+                        <li><a href="#departmentClassDataCSV">How is the Department Class Data CSV formatted?</a></li>
+                        <li><a href="#availableRoomsCSV">How is the Avaliable Room CSV formatted?</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+
+            <div id="csvFormatting">
+                <h2>How are the CSVs formatted?</h2>
+                <p>
+                    The two CSVs that must be uploaded are the Department Class Data and room table CSVs. These have a
+                    specific form to them that must be followed.
+                </p>
+                <div id="departmentClassDataCSV">
+                <h3>How is the Department Class Data CSV formatted?</h3>
+                <p>
+                    The Department Class Data CSV has 6 fields. Course Selection which houses the course id that includes
+                    the department, the class number, and section (ex. CS100-01). Faculty Assignment which contains the
+                    teacher who will be teaching the class. Room Preference which contains the room that you wish the class
+                    to be taught. Time Block Preference which contains The time block you wish the class to be held at.
+                    These blocks range from A to G. You can have any combination of them, but you must have them all without
+                    spaces. Day Preference which contains the day you wish the class to be taught. This can either be MW or
+                    TR or a combination of both. Seats Open which contains the amount of seats for the given classroom.
+                </p>
+                <div class="faqExampleImage">
+                    <h4>Example of format of Class Data CSV:</h4>
+                    <img src="../static/Pictures/ExampleClassDataCSV.PNG" />
+                    <br>
+                    <a href="../static/SampleCSVs/Dept1ClassData.csv" download="Dept1ClassData">
+                        <button>Class Data CSV <i class="fa fa-download"></i></button>
+                    </a>
+                </div>
+            </div>
+            
+            
+            <div id="availableRoomsCSV">
+                <h3>How is the Avaliable Room CSV formatted?</h3>
+
+                <p>
+                    The Avaliable Room CSV have only 2 fields. Building which is the building where the rooms are located
+                    and Room Number which holds the room number of a given classroom. In order for a room to be included in
+                    the creation of the schedule, the room must be included in this CSV.
+                </p>
+                <div class="faqExampleImage">
+                    <h4>Example of format of Avaliable Rooms CSV:</h4>
+                    <img src="../static/Pictures/ExampleAvaliableRoomCSV.PNG"  style="width: 300px; height:300px;"/>
+                    <br>
+                    <a href="../static/SampleCSVs/AvailableRooms.csv" download="AvaliableRooms">
+                        <button>Room Table CSV <i class="fa fa-download"></i></button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

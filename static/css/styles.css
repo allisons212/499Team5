@@ -1,0 +1,557 @@
+
+
+/* Style sheet for the entire project */
+body {
+    background-color: #ffffff;
+    margin: 0px;
+    padding: 0px;
+}
+
+h {
+    color: black;
+    font-size: 24px; 
+    margin: auto; 
+    text-align: center; 
+    font-family: "Comic Sans MS", "Comic Sans", cursive ; 
+}
+
+/* p {
+    color: black; 
+    font-size: 18px; 
+    font-family: "Comic Sans MS", "Comic Sans", cursive ;
+} */
+
+p-slide {
+    color: black; 
+    font-size: 18px; 
+    font-family: "Comic Sans MS", "Comic Sans", cursive ;
+    animation-duration: 3s;
+    animation-name: slidein;
+}
+
+@keyframes slidein {
+    from {
+        margin-right: 0%;
+        margin-left: 100%;
+        width: 300%;
+      }
+    
+    to {
+        margin-left: 0%;
+        width: 100%;
+    }
+}
+
+footer {
+    background-color: #abcdef; 
+    margin: auto; 
+    text-align: center; 
+    padding-right: 2%; 
+    font-family: "Comic Sans MS", "Comic Sans", cursive ;
+}
+
+
+/* content from https://www.w3schools.com/ */
+.sidenav {
+    height: 100%; /* Full-height: remove this if you want "auto" height */
+    width: 200px; /* Set the width of the sidebar */
+    position: fixed; /* Fixed Sidebar (stay in place on scroll) */
+    z-index: 1; /* Stay on top */
+    top: 0; /* Stay at the top */
+    left: 0;
+    background-color: #27405a;
+    overflow-x: hidden; /* Disable horizontal scroll */
+    padding-top: 20px;
+    
+}
+
+/* The navigation menu links */
+/*Cambria, Cochin, Georgia, Times, 'Times New Roman', serif */
+.sidenav a {
+    padding: 6px 8px 25px 16px;
+    text-decoration: none;
+    font-size: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #b2bad6;
+    display: block;
+}
+
+/* When you mouse over the navigation links, change their color */
+.sidenav a:hover {
+    color: #ffffff;
+}
+.sidenav a.currentPage {
+    color: #fcda23;
+    background-color: #1e3044;
+}
+
+.sidenav a.currentPage:hover {
+    color: #ffe341;
+    background-color: #21364d;
+}
+
+
+
+/* Style page content */
+.main {
+
+
+    padding: 25px;
+    margin: 0 auto;
+    margin-left: 200px; /* Same as the width of the sidebar */
+    width: 80%;
+    height: 50%;
+}
+
+.generateScheduleHeader{
+    display: flex;
+    justify-content: space-between;
+}
+
+/* Style for the generate button on generateSchedule page */
+.generateButton{
+    background-color: #0078c8; 
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    padding: 15px 32px;
+    text-align: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 20px;
+    cursor: pointer;
+    display: inline-block;
+}
+/* The style of the generate button when it hovered over */
+.generateButton:hover{
+    background-color: #016bb3;
+    color: #e4e4e4; 
+}
+
+.generateEditors{
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.generateDownload{
+    font-size: 40px;
+    cursor: pointer;
+    color: #1f3347;
+    padding-right: 40px;
+    position: relative;
+    display: inline-block;
+    
+}
+.generateDownload:hover{
+    color: #283c52;
+}
+
+.generateDownload span{
+  visibility: hidden;
+  width: 70px;
+  background-color: #27405a;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  font-size: 10px;
+  
+  /* Position the tooltip */
+  position: absolute;
+  z-index: 1;
+  bottom: 100%;
+  left: 50%;
+  margin-left: -55px;
+}
+.generateDownload:hover span{
+  visibility: visible;
+}
+
+.generateConflicts{
+  font-size: 40px;
+  cursor: pointer;
+  color: #1f3347;
+  padding-right: 20px;
+  position: relative;
+  display: inline-block;
+  
+}
+.generateConflicts:hover{
+  color: #283c52;
+}
+
+.generateConflicts .generateConflictsText{
+visibility: hidden;
+width: 60px;
+background-color: #27405a;
+color: #fff;
+text-align: center;
+border-radius: 6px;
+padding: 5px 0;
+font-size: 10px;
+
+/* Position the tooltip */
+position: absolute;
+/* z-index: 1; */
+bottom: 100%;
+left: 50%;
+margin-left: -40px;
+}
+.generateConflicts:hover .generateConflictsText{
+visibility: visible;
+}
+
+.generateConflicts .conflictNums{
+  position: absolute;
+  /* top: -5px; */
+  right: 10px;
+  /* width: 10px;
+  height: 10px; */
+  font-size: 12px;
+  padding: 3px 8px;
+  border-radius: 150%;
+  background-color: red;
+  color: white;
+}
+
+/* The Modal (background) */
+.generateModal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  cursor: context-menu;
+}
+
+/* Modal Content */
+.modal-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+}
+
+/* The Close Button */
+.close {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.modal-content h1{
+  padding:0px;
+  margin:0px;
+  margin-bottom:50px;
+  /* margin-top: 10px; */
+}
+
+.modal-content h6{
+  padding:0px;
+  margin:0px;
+}
+
+.modal-content .roomDayTimeWarning{
+  margin-bottom: 0px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: red;
+  font-size: 15px;
+  padding-bottom: 0px;
+}
+.modal-content .conflictTeacherName{
+  font-size: 20px;
+}
+
+
+.modal-content .conflictDropDown{
+  margin-top:0px;
+  padding-top: 0px;
+}
+.modal-content .conflictDropDownLabel{
+  padding-top:0px;
+  font-size: 20px;
+}
+
+.modal-content .conflictDropDown select{
+  background-color: #fff;
+  color: #27405a;
+  border-color: #b2bad6;
+  border-radius: 5px;
+  padding: 8px;
+  font-size: 15px;
+  cursor:pointer;
+}
+
+.modal-content .conflictSave{
+  background-color: #0078c8;
+  color:#fff;
+  border-radius: 5px;
+  border:none;
+  padding:8px;
+  font-size: 15px;
+  cursor:pointer;
+}
+
+.modal-content .conflictSave:disabled{
+  background-color: #5894bb;
+  cursor: context-menu;
+}
+
+.modal-content #conflictEdit{
+  cursor: pointer;
+}
+
+
+.scheduleTable table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 15px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    table-layout: fixed;
+
+
+  }
+  
+  .scheduleTable td {
+    text-align: center;
+    align-items: center;
+    padding: 8px;
+    border: 2px solid #b2bad6;
+    background-color: #e4e4e4;
+  }
+
+  .scheduleTable th{
+    background-color: #0078c8;
+    color: #ffffff;
+    text-align: center;
+    padding: 20px;
+
+  }
+
+  .scheduleTime{
+    width:200px;
+    overflow: hidden;
+
+  }
+  #faqs{
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: inline-block;
+  }
+
+  #faqs h1{
+    font-size: 50px;
+    text-align: center;
+    color: #27405a;
+    margin-top: 0px;
+  }
+
+  #faqs .listOfFAQs{
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    align-items: center;
+  }
+  #faqs li a{
+    text-decoration: none;
+    color:#0078c8;
+    font-size: 20px;
+    padding: 10px;
+    margin-top: 10px;
+  }
+
+  #faqs li a:hover{
+    color:#3799da
+  }
+  #faqs li{
+    padding-top: 5px;
+    padding-bottom: 5px;
+    /* margin-top: 10px; */
+  }
+
+
+  #faqs h2, h3, h4{
+    color:#27405a;
+    padding-top: 20px;
+    /* padding-bottom: 20px; */
+  }
+
+  #faqs h2{
+    font-size: 30px;
+    padding-top: 0px;
+  }
+
+  #faqs .faqExampleImage{
+    text-align: center;
+    padding: 10px;
+    display: block;
+  }
+  .faqExampleImage  button{
+    background-color: #0078c8;
+    border-radius: 5px;
+    border-color: #0078c8;
+    /* max-width: 300px; */
+    padding: 10px;
+    color:#fff;
+    cursor: pointer;
+    font-size: 20px;
+    display: inline-block;
+    margin: 30px;
+  }
+
+
+
+  .aboutMembers {
+    /* display: flex; */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-align: center;
+  }
+
+  .aboutTitle {
+    text-align: center;
+    color: #27405a;
+    text-shadow: 2px 2px #b2bad6;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding-bottom: 20px;
+    font-size: 50px;
+  }
+
+  .theMember {
+    width: 100%;
+  }
+
+  .theMember img {
+    max-width: 200px;
+    max-height: 200px;
+    margin-right: auto;
+    margin-left: auto;
+    margin-bottom: 20px;
+    border-radius: 15px;
+  }
+
+  .theMember h5 {
+    max-width: 50%;
+    margin-right: auto;
+    margin-left: auto;
+    color: #27405a;
+    
+  }
+
+  .theMember h3{
+    margin-right: auto;
+    margin-left: auto;
+    color: #0078c8;
+    margin-bottom: 0px;
+  }
+
+  .theMember h4{
+    color: #27405a;
+  }
+
+  .aboutMembers {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+  }
+  
+  /* .theMembers1 { grid-area: 1 / 1 / 2 / 2; }
+  .theMembers2 { grid-area: 1 / 2 / 2 / 3; } */
+  .aboutMembers > div {
+    display: flex;
+    flex-direction: column;
+  }
+
+  
+  .class{
+    
+    border: 1px solid;
+    background-color: #0078c8;
+    color: #ffffff;
+    border-radius: 10px;
+    padding: 5px;
+    text-align:center;
+    height: 100px;
+    margin: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+  }
+
+/* On smaller screens, where height is less than 450px, change the style of the sidebar (less padding and a smaller font size) */
+@media screen and (max-height: 450px) {
+    .sidenav {padding-top: 15px;}
+    .sidenav a {font-size: 18px;}
+}
+
+.topnav {
+    background-color: #0078c8;
+    height: 100px; /* Full-height: remove this if you want "auto" height */
+     z-index: 1;
+    margin-left: 192px;
+    text-align: end;
+    padding-right: 20px;
+    padding-top: 30px;
+    
+}
+
+.topnav a {
+    color: #f2f2f2;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: inline-block;
+    padding: 5px;
+
+}
+
+.topnav a:hover {
+    color: #27405a;
+}
+
+.account {
+    position: relative;
+    display: inline-block;
+
+  }
+
+/* Dropdown Content (Hidden by Default) */
+.accountDropdownContent {
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: #27405a;
+    min-width: 160px;
+    z-index: 1;
+    text-align: center;
+  }
+  
+  /* Links inside the dropdown */
+  .accountDropdownContent a {
+    color: #b2bad6;
+    text-decoration: none;
+    display: block;
+    margin: 0px;
+    padding: 10px;
+  }
+  
+  /* Change color of dropdown links on hover */
+  .accountDropdownContent a:hover {
+    background-color: #3d628a;
+    color: #ffffff;
+}
+  
+  /* Show the dropdown menu on hover */
+  .account:hover .accountDropdownContent {display: block;}
+  
+

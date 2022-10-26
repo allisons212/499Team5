@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="../static/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+
+</head>
+
+<body>
+        <div class="topnav">
+            <a href="#html1" style="margin-top: 0px;">
+                <i class="fa fa-bell-o" style="font-size: 25px;"></i>
+            </a>
+            <div class="account">
+                <a href="{{ url_for('account') }}" class="accountIcon">
+                    <i class="fa fa-user" style="font-size: 50px;"></i>
+                </a>
+                <div class="accountDropdownContent">
+                    <a href="{{ url_for('account') }}">
+                        <i class="fa fa-user"></i>
+                        View Account
+                    </a>
+                    <a href="#">Link 2</a>
+                    <a href="{{ url_for('login') }}">
+                        <i class="fa fa-sign-out"></i>
+                        Log Out
+                    </a>
+                </div>
+            </div>
+
+
+        </div>
+
+
+        <div class="sidenav">
+            <a href="{{ url_for('generate_schedule') }}">
+                <img src="../static/Pictures/logo.png" alt="logo">
+            </a>
+            <a href="{{ url_for('generate_schedule') }}">
+                <i class="fa fa-table"></i>
+                Create Schedule
+            </a>
+            <a href="{{ url_for('upload_csv') }}" class="currentPage">
+                <i class="fa fa-upload"></i>
+                Upload CSV
+            </a>
+            <a href="{{ url_for('settings') }}">
+                <i class="fa fa-gear"></i>
+                Settings
+            </a>
+            <a href="{{ url_for('faq') }}">
+                <i class="fa fa-question-circle"></i>
+                FAQs
+            </a>
+            <a href="{{ url_for('about_us') }}">
+                <i class="fa fa-group"></i>
+                About Us
+            </a>
+        </div>
+
+
+<div class="main" align="center">
+    <div>
+        <form action="" method="post">
+
+            <label for="department">Choose a department:</label>
+            <select id="department" name="dept" required>
+                <option value="CS">CS</option>
+                <option value="ECE">ECE</option>
+                <option value="CPE">CPE</option>
+            </select>
+
+            <label for ="class">Choose a class:</label>
+            <input type="text" placeholder="Class" name="class" value="{{ request.form.classNum }}">
+            <label for="day">Choose a day:</label>
+            <select id = "day" name="day" required>
+                <option value="MW">Monday/Wednesday</option>
+                <option value="TR">Tuesday/Thursday</option>
+            </select>
+
+
+            <label for="time">Choose a time:</label>
+            <select id = "time" name="time" required>
+                <option value="A">A: 8:00 - 9:20 AM</option>
+                <option value="B">B: 9:40 - 11:00 AM</option>
+                <option value="C">C: 11:20 AM - 12:40 PM</option>
+                <option value="D">D: 1:00 - 2:20 PM</option>
+                <option value="E">E: 2:40 - 4:00 PM</option>
+                <option value="F">F: 4:20 - 5:40 PM</option>
+                <option value="G">G: 6:00 - 7:20 PM</option>
+            </select>
+            <label for="room">Choose a room:</label>
+            <select id="room" name="room" required>
+
+            </select>
+            <label for="prof">Choose a faculty member:</label>
+            <select id="prof" name="faculty" required>
+            </select>
+            <input type="submit" value="Submit Manual Input"/>
+        </form>
+        {% if error == 1 %}
+                <p class="error"><strong>Error:</strong> Invalid class number. </p>
+        {% endif %}
+    </div>
+    <div>
+        <p>OR</p>
+    </div>
+    <div>
+        <form action="" method="post">
+            <input type="file" id="uploadCSV" accept="text/csv" required/>
+            <input type="submit" value="Submit CSV"/>
+        </form>
+    </div>
+</div>
+<script defer type="module" src="../static/js/uploadCSVjs.js"></script>
+</body>
+
+</html>

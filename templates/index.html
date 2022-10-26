@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <link rel="stylesheet" href="../static/css/styles.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+
+    </head>
+
+    <body>
+        <div class="topnav">
+            <a href="#html1" style="margin-top: 0px;">
+                <i class="fa fa-bell-o" style="font-size: 25px;"></i>
+            </a>
+            <div class="account">
+                <a href="{{ url_for('account') }}" class="accountIcon">
+                    <i class="fa fa-user" style="font-size: 50px;"></i>
+                </a>
+                <div class="accountDropdownContent">
+                    <a href="{{ url_for('account') }}">
+                        <i class="fa fa-user"></i>
+                        View Account
+                    </a>
+                    <a href="#">Link 2</a>
+                    <a href="{{ url_for('login') }}">
+                        <i class="fa fa-sign-out"></i>
+                        Log Out
+                    </a>
+                </div>
+            </div>
+
+
+        </div>
+
+
+        <div class="sidenav">
+            <a href="{{ url_for('home') }}">
+                <img src="../static/logo.png" alt="logo">
+            </a>
+            <a href="{{ url_for('generate_schedule') }}">
+                <i class="fa fa-table"></i>
+                Create Schedule
+            </a>
+            <a href="{{ url_for('upload_csv') }}">
+                <i class="fa fa-upload"></i>
+                Upload CSV
+            </a>
+            <a href="{{ url_for('settings') }}">
+                <i class="fa fa-gear"></i>
+                Settings
+            </a>
+            <a href="{{ url_for('faq') }}">
+                <i class="fa fa-question-circle"></i>
+                FAQs
+            </a>
+            <a href="{{ url_for('about_us') }}">
+                <i class="fa fa-group"></i>
+                About Us
+            </a>
+        </div>
+
+
+        <div class="main">
+            <p>Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset
+                concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum.
+                Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>
+            <p>Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset
+                concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum.
+                Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>
+            <p>Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset
+                concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum.
+                Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>
+            <p>Some text to enable scrolling.. Lorem ipsum dolor sit amet, illum definitiones no quo, maluisset
+                concludaturque et eum, altera fabulas ut quo. Atqui causae gloriatur ius te, id agam omnis evertitur eum.
+                Affert laboramus repudiandae nec et. Inciderint efficiantur his ad. Eum no molestiae voluptatibus.</p>
+        </div>
+    </body>
+
+</html>
