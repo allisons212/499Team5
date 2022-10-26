@@ -764,12 +764,10 @@ class DataOperation:
                         department_courses[course_in_cell][ColumnHeaders.DAY_ASS.value] = day
                         department_courses[course_in_cell][ColumnHeaders.TIME_ASS.value] = time
         
-        
-        # @TODO conflicts_dict contains all the unassigned courses
-        print(f"{user_department} Conflicts: {list(conflicts_dict.keys())}") # @DEBUG Prints conflicting courses
-        
         # Update database
         self.updateDB(department_courses, f"/{DatabaseHeaders.COURSES.value}/{user_department}")
+        
+        return conflicts_dict
 
     # End of generate_assignments
     
