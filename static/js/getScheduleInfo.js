@@ -128,11 +128,11 @@ getData.addEventListener("click", async (e) => {
         
 
         // Checks to make sure that the day blocks are correct
-        if (!["MW", "TR"].includes(currentDay) || !["A", "B", "C", "D", "E", "F", "G"].includes(currentTime)) {
-            // console.error("An error occurred: incorrect day");
-            // return;
-            conflicts.push(course);
-        }
+        // if (!["MW", "TR"].includes(currentDay) || !["A", "B", "C", "D", "E", "F", "G"].includes(currentTime)) {
+        //     // console.error("An error occurred: incorrect day");
+        //     // return;
+        //     conflicts.push(course);
+        // }
 
         const currentTime = course["Time Assignment"];
 
