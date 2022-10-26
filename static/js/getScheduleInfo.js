@@ -1,6 +1,6 @@
 
 const colors = ["#277da1", "#577590", "#4d908e", "#43aa8b", "#90be6d", "#f9c74f", "#f9844a", "#f8961e", "#f3722c", "#f94144"];
-
+var conflicts = [];
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-app.js";
 import {
@@ -125,20 +125,22 @@ getData.addEventListener("click", async (e) => {
         console.log(courseName, course);
 
         const currentDay = course["Day Assignment"];
+        
 
         // Checks to make sure that the day blocks are correct
-        if (!["MW", "TR"].includes(currentDay)) {
-            console.error("An error occurred: incorrect day");
-            return;
+        if (!["MW", "TR"].includes(currentDay) || !["A", "B", "C", "D", "E", "F", "G"].includes(currentTime)) {
+            // console.error("An error occurred: incorrect day");
+            // return;
+            conflicts.push(course);
         }
 
         const currentTime = course["Time Assignment"];
 
         // Checks to make sure that the time blocks are correct
-        if (!["A", "B", "C", "D", "E", "F", "G"].includes(currentTime)) {
-            console.error("An error occurred: incorrect time");
-            return;
-        }
+        // if (!["A", "B", "C", "D", "E", "F", "G"].includes(currentTime)) {
+        //     console.error("An error occurred: incorrect time");
+        //     return;
+        // }
 
         dayAssignments[currentDay][currentTime].push(courseName); // Adds courseName to day Assignment in the corresponding spot
     }
