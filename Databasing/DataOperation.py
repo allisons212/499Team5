@@ -31,10 +31,10 @@ from firebase_admin import db
 
 from configparser import ConfigParser
 
-from RoomTable import *
+#from RoomTable import *
 
-from DataOperationException import * # Custom exceptions
-from DataOperationEnums import * # Custom enums
+#from DataOperationException import * # Custom exceptions
+#from DataOperationEnums import * # Custom enums
 
 
 class DataOperation:
@@ -58,7 +58,7 @@ class DataOperation:
         """
 
         # Loads config file
-        conf_file = 'credentials/firebase-auth.ini'
+        conf_file = '../credentials/firebase-auth.ini'
         config = ConfigParser()
         config.read(conf_file)
 

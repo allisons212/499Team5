@@ -28,12 +28,12 @@ def main():
     # Test try-catch block for import CSV methods
     try:
         # CS Department and OKT
-        course_csv_file = "ClassData/Dept1ClassDataConflicts.csv"
+        course_csv_file = "../ClassData/Dept1ClassDataConflicts.csv"
         department_abbr = "CS"
         data_operation.importCSV(course_csv_file, "ClassData/Dept1Rooms.csv", department_abbr)
         
         # ECE Department and ENG
-        course_csv_file = "ClassData/Dept2ClassData.csv"
+        course_csv_file = "../ClassData/Dept2ClassData.csv"
         department_abbr = "ECE"
         data_operation.importCSV(course_csv_file, "ClassData/Dept2Rooms.csv", department_abbr)
     
