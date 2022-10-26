@@ -7,7 +7,7 @@ from Databasing.DataOperationEnums import *
 from Databasing.DataOperationException import *
 
 # connect to firebase
-cred_obj = firebase_admin.credentials.Certificate('static/coursescheduler499-firebase-adminsdk-bzx0b-bfaba8ef2f.json') #input path to file here
+cred_obj = firebase_admin.credentials.Certificate('credentials/firebase-key.json') #input path to file here
 default_app = firebase_admin.initialize_app(cred_obj)
 
 app = Flask(__name__)
