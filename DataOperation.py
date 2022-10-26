@@ -47,8 +47,6 @@ class DataOperation:
         Authenticates credentials so access to the database is established.
         """
         self._authenticate_credentials()
-        with open("test.txt", 'w') as w:
-            w.write("authentication complete")
     # End of init        
 
 
