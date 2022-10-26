@@ -2,16 +2,18 @@
 from flask import Flask, render_template, redirect, url_for, request
 from flask_navigation import Navigation #pip install flask_navigation
 import firebase_admin #pip install firebase_admin
-from Databasing.RoomTable import *
-from Databasing.DataOperationEnums import *
-from Databasing.DataOperationException import *
+from RoomTable import *
+from DataOperationEnums import *
+from DataOperationException import *
+from DataOperation import DataOperation
 
 # connect to firebase
-cred_obj = firebase_admin.credentials.Certificate('credentials/firebase-key.json') #input path to file here
-default_app = firebase_admin.initialize_app(cred_obj)
+#cred_obj = firebase_admin.credentials.Certificate('credentials/firebase-key.json') #input path to file here
+#default_app = firebase_admin.initialize_app(cred_obj)
 
 app = Flask(__name__)
 nav = Navigation(app)
+db = DataOperation()
 
 # initializes navigations, add each url here
 nav.Bar('top', [
@@ -31,7 +33,7 @@ nav.Bar('top', [
 def login():
     error = None
     if request.method == 'POST':
-        if request.form['username'] != 'admin' or request.form['password'] != 'admin':
+        if not db.checkUserPass(request.form['username'], request.form['password']):
             error = 'Invalid Credentials. Please try again.'
         else:
             return redirect(url_for('generate_schedule'))

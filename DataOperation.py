@@ -47,6 +47,8 @@ class DataOperation:
         Authenticates credentials so access to the database is established.
         """
         self._authenticate_credentials()
+        with open("test.txt", 'w') as w:
+            w.write("authentication complete")
     # End of init        
 
 
@@ -58,7 +60,7 @@ class DataOperation:
         """
 
         # Loads config file
-        conf_file = '../credentials/firebase-auth.ini'
+        conf_file = 'credentials/firebase-auth.ini'
         config = ConfigParser()
         config.read(conf_file)
 
