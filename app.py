@@ -1,3 +1,28 @@
+########################################################################
+# Project Title:    Course Scheduling System
+# Class:            CS 499-01 - Sr. Project Design
+# Term:             FA 22
+# 
+# Team Number:      5
+# Team Members:     Devin Patel
+#                   Allison Sanders
+#                   Faith Grimmeisen
+#                   Harrison Matthews
+########################################################################
+# Filename:     app.py
+# Purpose:      To initialize and run the flask server that drives
+#               all frontend and backend operations.
+#
+#
+# Editors of this file:     Allison Sanders
+#                           Faith Grimmeisen
+#                           Devin Patel
+#                           Harrison Matthews
+# 
+# NOTES:
+#
+########################################################################
+
 
 from flask import Flask, render_template, redirect, url_for, request
 from flask_navigation import Navigation #pip install flask_navigation
