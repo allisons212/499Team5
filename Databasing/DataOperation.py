@@ -715,6 +715,9 @@ class DataOperation:
         
         Args:
             user_department: Department that the account belongs to (e.g., "CS", "ECE")
+        
+        Returns:
+            dict: Dictionary with all the unassigned courses
         """
         
         # Generates schedule tables for specified department
