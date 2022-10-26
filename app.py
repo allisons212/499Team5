@@ -1,15 +1,10 @@
 
 from flask import Flask, render_template, redirect, url_for, request
 from flask_navigation import Navigation #pip install flask_navigation
-import firebase_admin #pip install firebase_admin
 from RoomTable import *
 from DataOperationEnums import *
 from DataOperationException import *
 from DataOperation import DataOperation
-
-# connect to firebase
-#cred_obj = firebase_admin.credentials.Certificate('credentials/firebase-key.json') #input path to file here
-#default_app = firebase_admin.initialize_app(cred_obj)
 
 app = Flask(__name__)
 nav = Navigation(app)
