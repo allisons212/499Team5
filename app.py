@@ -1,5 +1,14 @@
+
 from flask import Flask, render_template, redirect, url_for, request
 from flask_navigation import Navigation #pip install flask_navigation
+import firebase_admin #pip install firebase_admin
+from Databasing.RoomTable import *
+from Databasing.DataOperationEnums import *
+from Databasing.DataOperationException import *
+
+# connect to firebase
+cred_obj = firebase_admin.credentials.Certificate('static/coursescheduler499-firebase-adminsdk-bzx0b-bfaba8ef2f.json') #input path to file here
+default_app = firebase_admin.initialize_app(cred_obj)
 
 app = Flask(__name__)
 nav = Navigation(app)
@@ -58,10 +67,15 @@ def generate_schedule():
 def settings():
     return render_template('settings.html')
 
-
-@app.route('/uploadCSV')
+@app.route('/uploadCSV', methods=['GET', 'POST'])
 def upload_csv():
-    return render_template('uploadCSV.html')
+    error = 0
+    if request.method == 'POST':
+        if request.form['classNum'] > 999 or request.form['classNum'] < 100:
+            error = 1
+        else:
+            error = 0
+    return render_template('uploadCSV.html', error=error)
 
 
 if __name__ == '__main__':
