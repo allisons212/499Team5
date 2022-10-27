@@ -489,6 +489,8 @@ class DataOperation:
                 department_abbr = ECE
             outfile (string): File path and name of the output csv. Default is "Export{department_abbr}Data.csv"
                 in current directory
+                
+        Return: fileString (string): Data from file in one long string
         
         Raises:
             QueryNotFoundError: database_path doesn't return data
@@ -525,6 +527,17 @@ class DataOperation:
                 new_row.update(section_info)
                 
                 writer.writerow(new_row)
+        
+        # Get data from outfile and put it into a long string variable
+        tempFile = open(outfile, 'r')
+        fileString = ""
+        fileString = tempFile.read()
+        
+        print(fileString)
+        
+        tempFile.close()
+        
+        return fileString
                 
     # End of exportCSV
     
