@@ -24,7 +24,7 @@ def main():
     #    print(f"{room}: {list_of_cells}")
     
     
-    
+    """
     # Test try-catch block for import CSV methods
     try:
         # CS Department and OKT
@@ -45,7 +45,7 @@ def main():
         print(f"{ife}\n")
         return
     
-
+    """
 
     """
     # Test try-catch block for getDB and updateDB
@@ -68,12 +68,12 @@ def main():
     """
     
     # Testing generate_assignment
-    data_operation.generate_assignments(user_department="CS")
-    data_operation.generate_assignments(user_department="ECE")
+    #data_operation.generate_assignments(user_department="CS")
+    #data_operation.generate_assignments(user_department="ECE")
     
     
     # Test exportCSV
-    #data_operation.exportCSV("CS", "ClassData/ExportCSData.csv")
+    data_operation.exportCSV("CS", "ClassData/ExportCSData.csv")
     
     # Test updateSolutionAssignment
     #data_operation.updateSolutionAssignments()

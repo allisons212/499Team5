@@ -490,6 +490,9 @@ class DataOperation:
             outfile (string): File path and name of the output csv. Default is "Export{department_abbr}Data.csv"
                 in current directory
         
+        Returns:
+            data (string): All of the data from the file as one long string
+        
         Raises:
             QueryNotFoundError: database_path doesn't return data
             PermissionError: Existing CSV file cannot be accessed (check if any programs are currently using it)
@@ -525,6 +528,16 @@ class DataOperation:
                 new_row.update(section_info)
                 
                 writer.writerow(new_row)
+        
+        
+        # Output the CSV file as one long string called data
+        fileString = open(outfile, "r")
+        data = fileString.read()
+        
+        fileString.close()
+        
+        return data
+        
                 
     # End of exportCSV
     
