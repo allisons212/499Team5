@@ -22,6 +22,7 @@
 
 
 import csv
+import io
 import re
 import os.path
 
@@ -509,33 +510,37 @@ class DataOperation:
                        ColumnHeaders.DAY_PREF.value, ColumnHeaders.TIME_PREF.value, ColumnHeaders.SEATS_OPEN.value ]
         
         # Now lets open a CSV file to write to
-        with open(outfile, 'w', encoding='utf-8-sig') as csvfile:
+        # with open(outfile, 'w', encoding='utf-8-sig') as csvfile:
+        csvfile = io.StringIO()
             
-            # Create a writer that has fieldnames equal to column_information. 
-            # Line Terminator must be set to \n or it will skip lines in the export CSV
-            writer = csv.DictWriter(csvfile, fieldnames = fieldnames, lineterminator = '\n')
-            writer.writeheader()
+        # Create a writer that has fieldnames equal to column_information. 
+        # Line Terminator must be set to \n or it will skip lines in the export CSV
+        writer = csv.DictWriter(csvfile, fieldnames = fieldnames, lineterminator = '\n')
+        writer.writeheader()
 
-        
-            # Iterate through the first part of the dictionary department_dict and get the section
-            # Append section info to a dict with the section name and write out to CSV
-            for section_name, section_info in department_dict.items():
-                new_row = { ColumnHeaders.COURSE_SEC.value : section_name }
-                
-                # section_info already has all the dictionary info we need, so we can just append it to new_row with .update()
-                # .update() takes key-value pairs from section_info and puts them into new_row, overwriting the values of any existing keys in new_row
-                new_row.update(section_info)
-                
-                writer.writerow(new_row)
+    
+        # Iterate through the first part of the dictionary department_dict and get the section
+        # Append section info to a dict with the section name and write out to CSV
+        for section_name, section_info in department_dict.items():
+            new_row = { ColumnHeaders.COURSE_SEC.value : section_name }
+            
+            # section_info already has all the dictionary info we need, so we can just append it to new_row with .update()
+            # .update() takes key-value pairs from section_info and puts them into new_row, overwriting the values of any existing keys in new_row
+            new_row.update(section_info)
+            
+            writer.writerow(new_row)
         
         # Get data from outfile and put it into a long string variable
-        tempFile = open(outfile, 'r')
-        fileString = ""
-        fileString = tempFile.read()
+        # tempFile = open(outfile, 'r')
+        # fileString = ""
+        # fileString = tempFile.read()
+
+        fileString = csvfile.getvalue()
+        csvfile.close()
         
-        print(fileString)
+        # print("print", fileString)
         
-        tempFile.close()
+        # tempFile.close()
         
         return fileString
                 

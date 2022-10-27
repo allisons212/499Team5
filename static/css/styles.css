@@ -199,7 +199,7 @@ visibility: visible;
 
 .generateConflicts .conflictNums{
   position: absolute;
-  /* top: -5px; */
+  top: -5px;
   right: 10px;
   /* width: 10px;
   height: 10px; */
@@ -312,22 +312,25 @@ visibility: visible;
   cursor: pointer;
 }
 
+.scheduleTable{
+  /* text-align: center;
+  margin-left: auto;
+  margin-right: auto; */
+}
 
 .scheduleTable table {
     border-collapse: collapse;
     width: 100%;
     margin-top: 15px;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    table-layout: fixed;
+    /* table-layout: fixed; */
     min-width: 750px;
-    margin-left: auto;
-    margin-right: auto;
+    /* margin-left: auto;
+    margin-right: auto; */
 
   }
-  
   .scheduleTable td {
-    text-align: center;
-    align-items: center;
+    vertical-align:top;
     padding: 8px;
     border: 2px solid #b2bad6;
     background-color: #e4e4e4;
@@ -336,7 +339,7 @@ visibility: visible;
   .scheduleTable th{
     background-color: #0078c8;
     color: #ffffff;
-    text-align: center;
+    /* text-align: center; */
     padding: 20px;
 
   }
@@ -481,7 +484,6 @@ visibility: visible;
     color: #ffffff;
     border-radius: 10px;
     padding: 5px;
-    text-align:center;
     height: 100px;
     margin: 5px;
     display: flex;
@@ -504,6 +506,9 @@ visibility: visible;
     text-align: end;
     padding-right: 20px;
     padding-top: 30px;
+    /* position:fixed; */
+    /* top:0; */
+    /* width:100%; */
     
 }
 

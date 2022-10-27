@@ -122,6 +122,34 @@ def upload_csv():
         
     return render_template('uploadCSV.html', error=error)
 
+@app.post('/assignments/generate')
+def generate_assignments():
+    department = request.get_json()['department']
+
+    conflicts = db.generate_assignments(department)
+
+    return conflicts
+
+# @app.get('/assignments/<class_id>')
+# def get_url_params(class_id):
+#     return {"class_id": class_id}
+
+
+# @app.get('/assignments/anything')
+# def get_query_params():
+#     class_id = request.args["class_id"]
+#     return {"class_id": class_id}
+
+# Uncomment when exportCSV is finished
+@app.get('/csv/export')
+def export_csv():
+    department = request.args["department"]
+    exportFile = db.exportCSV(department)
+    print(exportFile)
+
+    return exportFile
+    
+
 
 if __name__ == '__main__':
     app.run()

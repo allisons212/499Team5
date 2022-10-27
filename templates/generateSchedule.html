@@ -22,7 +22,7 @@
                         <i class="fa fa-user"></i>
                         View Account
                     </a>
-                    <a href="#">Link 2</a>
+                    <!-- <a href="#">Link 2</a> -->
                     <a href="{{ url_for('login') }}">
                         <i class="fa fa-sign-out"></i>
                         Log Out
@@ -43,10 +43,10 @@
                 <i class="fa fa-upload"></i>
                 Upload CSV
             </a>
-            <a href="{{ url_for('settings') }}">
+            <!-- <a href="{{ url_for('settings') }}">
                 <i class="fa fa-gear"></i>
                 Settings
-            </a>
+            </a> -->
             <a href="{{ url_for('faq') }}">
                 <i class="fa fa-question-circle"></i>
                 FAQs
@@ -59,12 +59,12 @@
 
         <div class="main">
             <div class="generateScheduleHeader">
-                <button class="generateButton" type="submit" id="getData">Generate</button>
+                <button class="generateButton" type="button" id="getData">Generate</button> 
                 <div class="generateEditors">
                     <div class="generateConflicts">
                         <i class="fa fa-warning" id="conflictsIcon"></i>
                         <span class="generateConflictsText">Conflicts</span>
-                        <span class="conflictNums">3</span>
+                        <span class="conflictNums" id="conflictNums"></span>
                         <!-- The Modal -->
                         <div id="myModal" class="generateModal">
                             <!-- Modal content -->
@@ -101,7 +101,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="generateDownload">
+                    <div class="generateDownload" id="downloadButton">
                         <i class="fa fa-download"></i>
                         <span>Download</span>
                     </div>

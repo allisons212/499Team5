@@ -1,8 +1,12 @@
 
 const colors = ["#277da1", "#577590", "#4d908e", "#43aa8b", "#90be6d", "#f9c74f", "#f9844a", "#f8961e", "#f3722c", "#f94144"];
 var conflicts = [];
+
+var conflictNums = document.getElementById("conflictNums");
+conflictNums.style.display = "none";
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-app.js";
+import ky from "https://cdn.skypack.dev/ky"
 import {
     getDatabase,
     ref,
@@ -80,6 +84,19 @@ const database = getDatabase(app);
 
 // Event that occurs when generate button is pressed
 getData.addEventListener("click", async (e) => {
+
+    // const response = await fetch("/assignments/generate", { method: "POST", body: JSON.stringify({ department: "CS" }) })
+    // const conflicts = await response.json()
+    const conflicts = await ky.post("/assignments/generate", { json: { department: "CS" } }).json()
+
+    console.log(Object.keys(conflicts).length)
+
+    if(Object.keys(conflicts).length != 0){
+         conflictNums.textContent = Object.keys(conflicts).length;
+         conflictNums.style.display = inline;
+    }
+
+
     document.querySelectorAll(".class").forEach((c) => c.remove());
     const dbRef = ref(database, "Department Courses/CS"); // TODO: This is hardcoded right now to only do CS. Need to make it variable depending on which department user is over.
     var courseData = {}; // All the data stored
@@ -125,7 +142,7 @@ getData.addEventListener("click", async (e) => {
         console.log(courseName, course);
 
         const currentDay = course["Day Assignment"];
-        
+
 
         // Checks to make sure that the day blocks are correct
         // if (!["MW", "TR"].includes(currentDay) || !["A", "B", "C", "D", "E", "F", "G"].includes(currentTime)) {
@@ -153,3 +170,18 @@ getData.addEventListener("click", async (e) => {
     //     onlyOnce: true
     // });
 });
+
+
+// Uncomment when exportCSV is finished
+downloadButton.addEventListener("click", async () => {
+    const department = "CS"
+
+    var link = document.createElement("a");
+    // If you don't know the name or want to use
+    // the webserver default set name = ''
+    link.setAttribute('download', "Export" + department + "Data.csv");
+    link.href = `/csv/export?department=${department}`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+})
