@@ -93,13 +93,13 @@
                 <option value="G">G: 6:00 - 7:20 PM</option>
             </select>
             <label for="room">Choose a room:</label>
-            <select id="room" name="room" required>
+            <select id="room" name="room" >
 
             </select>
             <label for="prof">Choose a faculty member:</label>
-            <select id="prof" name="faculty" required>
+            <select id="prof" name="faculty" >
             </select>
-            <input type="submit" value="Submit Manual Input"/>
+            <input type="submit" name="submit_button" value="Submit Manual Input"/>
         </form>
         {% if error == 1 %}
                 <p class="error"><strong>Error:</strong> Invalid class number. </p>
@@ -109,13 +109,17 @@
         <p>OR</p>
     </div>
     <div>
-        <form action="" method="post">
-            <input type="file" id="uploadCSV" accept="text/csv" required/>
-            <input type="submit" value="Submit CSV"/>
+        <form action="" method="post" enctype="multipart/form-data">
+            <input type="file" name="file" id="uploadCSV" accept="text/csv" required/>
+            <input type="submit" name="submit_button" value="Submit CSV"/>
         </form>
+
+        {% if fileUploadSuccess %}
+            <p class="error"><strong>Success:</strong> {{fileUploadSuccess}} </p>
+        {% endif %}
     </div>
 </div>
-<script defer type="module" src="../static/js/uploadCSVjs.js"></script>
+<!--<script defer type="module" src="../static/js/uploadCSVjs.js"></script> -->
 </body>
 
 </html>

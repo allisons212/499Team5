@@ -30,6 +30,7 @@ from RoomTable import *
 from DataOperationEnums import *
 from DataOperationException import *
 from DataOperation import DataOperation
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 nav = Navigation(app)
@@ -82,6 +83,7 @@ def faq():
 
 @app.route('/generate_schedule')
 def generate_schedule():
+    db.generate_assignments("CS")
     return render_template('generateSchedule.html')
 
 
@@ -89,14 +91,35 @@ def generate_schedule():
 def settings():
     return render_template('settings.html')
 
-@app.route('/uploadCSV', methods=['GET', 'POST'])
+# POST View for uploadCSV
+@app.route('/uploadCSV', methods=['POST', 'GET'])
 def upload_csv():
+    fileUploadSuccess = None
     error = 0
     if request.method == 'POST':
-        if request.form['classNum'] > 999 or request.form['classNum'] < 100:
-            error = 1
-        else:
-            error = 0
+        #if request.form['classNum'] > 999 or request.form['classNum'] < 100:
+            #error = 1
+        #else:
+            #error = 0
+        
+        if request.form['submit_button'] == 'Submit CSV':
+            # Begin file reading
+            uploadedFile = request.files['file']
+            
+            # Need to save the file in a directory so that it can be found by DataOperation
+            uploadedFile.save(secure_filename(uploadedFile.filename))
+            
+            # IF there is something in the file then  call db with the file and Acronym
+            if uploadedFile.filename!= '':
+                db._importCourseCSV(uploadedFile.filename, "CS")
+                fileUploadSuccess = "File Uploaded Successfully!"
+                return render_template('uploadCSV.html', fileUploadSuccess=fileUploadSuccess)
+        elif request.form['submit_button'] == 'Submit Manual Input':
+            print("MANUAL INPUT BUTTON TEST")
+            
+    elif request.method == 'GET':
+        return render_template('uploadCSV.html')
+        
     return render_template('uploadCSV.html', error=error)
 
 
