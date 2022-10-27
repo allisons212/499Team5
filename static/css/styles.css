@@ -97,7 +97,7 @@ footer {
     padding: 25px;
     margin: 0 auto;
     margin-left: 200px; /* Same as the width of the sidebar */
-    width: 80%;
+    
     height: 50%;
 }
 
@@ -344,9 +344,10 @@ visibility: visible;
 
   }
 
+
   .scheduleTime{
-    width:200px;
-    overflow: hidden;
+    max-width:200px;
+    /* overflow: hidden; */
 
   }
   #faqs{
@@ -502,13 +503,12 @@ visibility: visible;
     background-color: #0078c8;
     height: 100px; /* Full-height: remove this if you want "auto" height */
      z-index: 1;
-    margin-left: 192px;
+     /* width: 80%; */
     text-align: end;
     padding-right: 20px;
     padding-top: 30px;
-    /* position:fixed; */
-    /* top:0; */
-    /* width:100%; */
+    margin-left: 200px;
+    
     
 }
 

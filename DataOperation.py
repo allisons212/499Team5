@@ -787,6 +787,7 @@ class DataOperation:
         
         # Update database
         self.updateDB(department_courses, f"/{DatabaseHeaders.COURSES.value}/{user_department}")
+        print("Conflicts:", conflicts_dict)
         
         return conflicts_dict
 

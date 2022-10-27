@@ -83,7 +83,7 @@ def faq():
 
 @app.route('/generate_schedule')
 def generate_schedule():
-    db.generate_assignments("CS")
+    # db.generate_assignments("CS")
     return render_template('generateSchedule.html')
 
 
@@ -140,7 +140,6 @@ def generate_assignments():
 #     class_id = request.args["class_id"]
 #     return {"class_id": class_id}
 
-# Uncomment when exportCSV is finished
 @app.get('/csv/export')
 def export_csv():
     department = request.args["department"]
