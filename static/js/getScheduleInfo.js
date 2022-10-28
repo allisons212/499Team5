@@ -1,6 +1,5 @@
 
 const colors = ["#277da1", "#577590", "#4d908e", "#43aa8b", "#90be6d", "#f9c74f", "#f9844a", "#f8961e", "#f3722c", "#f94144"];
-var conflicts = [];
 
 var conflictNums = document.getElementById("conflictNums");
 conflictNums.style.display = "none";
@@ -77,6 +76,12 @@ if (localStorage.hasOwnProperty("dayAssignments") && localStorage.hasOwnProperty
     renderDayAssignment(dayAssignments, courseData);
 }
 
+if (localStorage.hasOwnProperty("conflicts")) {
+    const conflicts = JSON.parse(localStorage.getItem("conflicts"))
+    conflictNums.textContent = Object.keys(conflicts).length;
+    conflictNums.style.display = "inline";
+}
+
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
@@ -91,10 +96,12 @@ getData.addEventListener("click", async (e) => {
 
     console.log(Object.keys(conflicts).length)
 
-    if(Object.keys(conflicts).length != 0){
-         conflictNums.textContent = Object.keys(conflicts).length;
-         conflictNums.style.display = "inline";
+    if (Object.keys(conflicts).length != 0) {
+        conflictNums.textContent = Object.keys(conflicts).length;
+        conflictNums.style.display = "inline";
+        localStorage.setItem("conflicts", JSON.stringify(conflicts));
     }
+
 
 
     document.querySelectorAll(".class").forEach((c) => c.remove());
@@ -158,9 +165,9 @@ getData.addEventListener("click", async (e) => {
         //     console.error("An error occurred: incorrect time");
         //     return;
         // }
-        if(["MW", "TR"].includes(currentDay) && ["A", "B", "C", "D", "E", "F", "G"].includes(currentTime))
+        if (["MW", "TR"].includes(currentDay) && ["A", "B", "C", "D", "E", "F", "G"].includes(currentTime))
 
-        dayAssignments[currentDay][currentTime].push(courseName); // Adds courseName to day Assignment in the corresponding spot
+            dayAssignments[currentDay][currentTime].push(courseName); // Adds courseName to day Assignment in the corresponding spot
     }
 
     // store dayAssignment in local storage
