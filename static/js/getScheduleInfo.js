@@ -93,7 +93,7 @@ getData.addEventListener("click", async (e) => {
 
     if(Object.keys(conflicts).length != 0){
          conflictNums.textContent = Object.keys(conflicts).length;
-         conflictNums.style.display = inline;
+         conflictNums.style.display = "inline";
     }
 
 
@@ -158,6 +158,7 @@ getData.addEventListener("click", async (e) => {
         //     console.error("An error occurred: incorrect time");
         //     return;
         // }
+        if(["MW", "TR"].includes(currentDay) && ["A", "B", "C", "D", "E", "F", "G"].includes(currentTime))
 
         dayAssignments[currentDay][currentTime].push(courseName); // Adds courseName to day Assignment in the corresponding spot
     }
