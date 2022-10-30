@@ -233,7 +233,8 @@ visibility: visible;
   padding: 20px;
   border: 1px solid #888;
   width: 80%;
-  overflow: auto;
+  overflow-y:auto;
+  max-height: 80%;
 }
 
 /* The Close Button */
@@ -263,6 +264,11 @@ visibility: visible;
   margin:0px;
 }
 
+.modal-content .noConflicts{
+  text-align: center;
+  padding: 20px;
+}
+
 .modal-content .roomDayTimeWarning{
   margin-bottom: 0px;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -271,6 +277,9 @@ visibility: visible;
   padding-bottom: 0px;
   padding-left: 10px;
 }
+
+
+
 .modal-content .conflictTeacherName{
   font-size: 20px;
 }
@@ -307,6 +316,33 @@ visibility: visible;
   cursor:pointer;
 }
 
+.modal-content .submitConflicts{
+  text-align: end;
+  /* display: inline-block; */
+}
+.modal-content .submitWarning{
+  /* background-color: rgba(173, 149, 13, 0.616); */
+  color: red;
+  font-size: 15px;
+  padding: 5px;
+  margin:0px;
+  display: inline-block;
+}
+
+.modal-content .submitConflictSolutionsButton{
+  background-color: #0078c8;
+  color:#fff;
+  border-radius: 5px;
+  border:none;
+  padding:15px;
+  font-size: 20px;
+  cursor:pointer;
+  text-align:right;
+  margin: 10px;
+  margin-right: 20px;
+  display: inline-block;
+}
+
 .modal-content .conflictSave:disabled{
   background-color: #5894bb;
   cursor: context-menu;
@@ -315,12 +351,6 @@ visibility: visible;
 .modal-content #conflictEdit{
   cursor: pointer;
   padding-left: 10px;
-}
-
-.scheduleTable{
-  /* text-align: center;
-  margin-left: auto;
-  margin-right: auto; */
 }
 
 .scheduleTable table {

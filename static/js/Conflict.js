@@ -1,5 +1,8 @@
-export class Conflict{
-    constructor(newClassName, newTeacher){
+
+// Class that contains the info for each conflict
+export class Conflict {
+    // Creates all the values needed and set them to the correct HTML for when they are displayed to the screen
+    constructor(newClassName, newTeacher) {
         this.className = newClassName;
         this.teacher = newTeacher;
         this.roomsDropDown = document.createElement("select");
@@ -11,27 +14,25 @@ export class Conflict{
         this.room = "";
         this.dayAndTime = "";
 
-        // this.roomsDropDown.addEventListener('input', listenRoomsDropDown(this.roomsDropDown, this.dayTimeDropDown, this.roomsValue));
 
         this.conflictSave.type = "submit";
         this.conflictSave.classList.add("conflictSave");
 
-
         this.conflictEdit.innerHTML = '<i class="fa fa-pencil" id="conflictEdit" style="font-size: 20px"></i>';
-        this.roomDayTimeWarning.innerHTML = '<i class="fa fa-exclamation-circle"></i> Must have both room and day and time selected.';
-
-
+        this.roomDayTimeWarning.innerHTML =
+            '<i class="fa fa-exclamation-circle"></i> Must have both room and day and time selected.';
 
         var option = document.createElement("option");
         option.value = "";
         option.text = "--Select--";
         this.roomsDropDown.add(option);
+        this.roomsDropDown.value = ""
+        option = document.createElement("option");
+        option.value = "";
+        option.text = "--Select--";
         this.dayTimeDropDown.add(option);
+        this.dayTimeDropDown.value = ""
 
-        // console.log(this.roomsDropDown.options.length)
-
-        // this.dayTimeDropDown.options[0].selected = 'selected';
-        // this.roomsDropDown.options[0].selected = 'selected';
 
         this.roomsDropDown.name = "rooms";
         this.roomsDropDown.classList.add("conflictRooms");
@@ -40,7 +41,7 @@ export class Conflict{
 
         this.roomsDropDownLabel = document.createElement("label");
         this.roomsDropDownLabel.innerHTML = "Classroom Selection  ";
-        this.roomsDropDownLabel.classList.add("conflictDropDownLabel")
+        this.roomsDropDownLabel.classList.add("conflictDropDownLabel");
         this.roomsDropDownLabel.htmlFor = "rooms";
 
         this.dayTimeDropDownLabel = document.createElement("label");
@@ -48,116 +49,94 @@ export class Conflict{
         this.dayTimeDropDownLabel.classList.add("conflictDropDownLabel");
         this.dayTimeDropDownLabel.htmlFor = "dayAndTime";
 
-
         this.roomDayTimeWarning.style.display = "none";
-        this.roomDayTimeWarning.classList.add("roomDayTimeWarning")
+        this.roomDayTimeWarning.classList.add("roomDayTimeWarning");
         this.dayTimeDropDown.style.cursor = "context-menu";
         this.conflictEdit.style.display = "none";
         this.dayTimeDropDown.disabled = true;
 
         this.conflictSave.textContent = "Save";
-
-        // this.conflictSave.onclick = function () {
-        //     console.log("GENERAL KENOBI");
-        //     if (this.roomsDropDown.value != "" && this.dayTimeDropDown.value != "") {
-        //       this.conflictSave.disabled = true;
-        //       this.dayTimeDropDown.disabled = true;
-        //       this.roomsDropDown.disabled = true
-        //       this.dayTimeDropDown.style.cursor = "context-menu";
-        //       this.roomsDropDown.style.cursor = "context-menu"
-        //       this.conflictEdit.style.display = "inline";
-        //       this.roomDayTimeWarning.style.display = "none";
-        //     }
-        //     else {
-        //       this.roomDayTimeWarning.style.display = "inline";
-        //     }
-        //   }
-
-        
+        this.saved = false;
     }
 
-    // setDayAndTime(newDay){
-    //     this.day = newDay;
-    // }
-    // setRoom(newRoom){
-    //     this.room = newRoom;
-    // }
+    // Create a conflict from the given information and return the new conflict created (given from local storage)
+    static fromLocal({ className, teacher, dayAndTime, room }) {
+        const temp = new Conflict(className, teacher);
 
-    // getRoom(){
-    //     return this.room;
-    // }
+        temp.dayAndTime = dayAndTime;
+        temp.room = room;
 
+        return temp;
+    }
 
-    setRoomDropDown(emptyRooms){
+    // Return the information stored in the conflict to be used in local storage
+    toLocal() {
+        return {
+            className: this.className,
+            teacher: this.teacher,
+            dayAndTime: this.dayAndTime,
+            room: this.room,
+        };
+    }
 
-        if(this.roomsDropDown.options.length > 0){
-            for(let i = this.roomsDropDown.options.length; i >= 0; i--) {
+    // Set the values used in the roomDropDown
+    setRoomDropDown(emptyRooms) {
+        if (this.roomsDropDown.options.length > 0) {
+            for (let i = this.roomsDropDown.options.length; i >= 0; i--) {
                 this.roomsDropDown.remove(i);
-             }
-          
+            }
         }
 
         var option = document.createElement("option");
         option.value = "";
         option.text = "--Select--";
         this.roomsDropDown.appendChild(option);
-        for(const room of Object.keys(emptyRooms)){
+        for (const room of Object.keys(emptyRooms).sort()) {
             var option = document.createElement("option");
             option.value = room;
             option.text = room;
-            option.classList.add("conflictRoom")
+            option.classList.add("conflictRoom");
             this.roomsDropDown.add(option);
         }
+
+        this.roomsDropDown.value = this.room
     }
 
-    removeFromRoomDropDown(room){
-        for(let i = 0; i < this.roomsDropDown.length; i++){
-            if(this.roomsDropDown.options[i].value === room){
+    // Remove a room from dropdown
+    removeFromRoomDropDown(room) {
+        for (let i = 0; i < this.roomsDropDown.length; i++) {
+            if (this.roomsDropDown.options[i].value === room) {
                 this.roomsDropDown.remove(i);
             }
         }
     }
 
-    setDayTimeDropDown(daysAndTimes){
-        if(this.dayTimeDropDown.options.length > 0){
-            for(let i = this.dayTimeDropDown.options.length; i >= 0; i--) {
+    // Set the dayAndTimeDropDown given the days and times for a room 
+    setDayTimeDropDown(daysAndTimes) {
+        if (this.dayTimeDropDown.options.length > 0) {
+            for (let i = this.dayTimeDropDown.options.length; i >= 0; i--) {
                 this.dayTimeDropDown.remove(i);
-             }
-          
+            }
         }
         var option = document.createElement("option");
         option.value = "";
         option.text = "--Select--";
         this.dayTimeDropDown.appendChild(option);
-        for(let i = 0; i < daysAndTimes.length; i++){
+        for (const dayAndTime of daysAndTimes.sort()) {
             var option = document.createElement("option");
-            option.value = daysAndTimes[i];
-            option.text = daysAndTimes[i];
+            option.value = dayAndTime;
+            option.text = dayAndTime;
             option.classList.add("conflictDayTime");
             this.dayTimeDropDown.add(option);
-          }
+        }
     }
 
-    removeFromDayTimeDropDown(dayAndTime){
-        for(let i = 0; i < this.dayTimeDropDown.length; i++){
-            if(this.dayTimeDropDown.options[i].value === dayAndTime){
+    // Remove the day and time from a given room
+    removeFromDayTimeDropDown(dayAndTime) {
+        for (let i = 0; i < this.dayTimeDropDown.length; i++) {
+            if (this.dayTimeDropDown.options[i].value === dayAndTime) {
                 this.dayTimeDropDown.remove(i);
             }
         }
     }
-
-
-
-
-
-
 }
-
-
-
-
-
-
-
-
-

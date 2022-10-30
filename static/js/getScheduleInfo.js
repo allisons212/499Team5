@@ -1,19 +1,32 @@
+const colors = [
+    "#277da1",
+    "#577590",
+    "#4d908e",
+    "#43aa8b",
+    "#90be6d",
+    "#f9c74f",
+    "#f9844a",
+    "#f8961e",
+    "#f3722c",
+    "#f94144",
+];
 
-const colors = ["#277da1", "#577590", "#4d908e", "#43aa8b", "#90be6d", "#f9c74f", "#f9844a", "#f8961e", "#f3722c", "#f94144"];
-
-var conflictNums = document.getElementById("conflictNums");
+const conflictNums = document.getElementById("conflictNums");
 conflictNums.style.display = "none";
+const noConflicts = document.getElementById("noConflicts");
+noConflicts.style.display = "none";
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-app.js";
-import ky from "https://cdn.skypack.dev/ky"
+import ky from "https://cdn.skypack.dev/ky";
 import {
     getDatabase,
     ref,
     onValue as _onValue,
     child,
 } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-database.js";
-
+import { Conflict } from "./Conflict.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-analytics.js";
+import { getConflictSolutions } from "./setConflicts.js";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -63,7 +76,6 @@ function renderDayAssignment(dayAssignments, courseData) {
             document.getElementById(id).innerHTML = data;
             id = day + time + "1";
             document.getElementById(id).innerHTML = data;
-
         }
     }
 }
@@ -76,10 +88,13 @@ if (localStorage.hasOwnProperty("dayAssignments") && localStorage.hasOwnProperty
     renderDayAssignment(dayAssignments, courseData);
 }
 
-if (localStorage.hasOwnProperty("conflicts")) {
-    const conflicts = JSON.parse(localStorage.getItem("conflicts"))
-    conflictNums.textContent = Object.keys(conflicts).length;
+if (localStorage.hasOwnProperty("conflictSolutions")) {
+    const conflictSolutions = JSON.parse(localStorage.getItem("conflictSolutions"));
+    conflictNums.textContent = Object.keys(conflictSolutions).length;
     conflictNums.style.display = "inline";
+    noConflicts.style.display = "none";
+} else {
+    noConflicts.style.display = "inline";
 }
 
 // Initialize Firebase
@@ -90,19 +105,26 @@ const database = getDatabase(app);
 // Event that occurs when generate button is pressed
 getData.addEventListener("click", async (e) => {
 
-    // const response = await fetch("/assignments/generate", { method: "POST", body: JSON.stringify({ department: "CS" }) })
-    // const conflicts = await response.json()
-    const conflicts = await ky.post("/assignments/generate", { json: { department: "CS" } }).json()
+    const conflicts = await ky.post("/assignments/generate", { json: { department: "CS" } }).json(); // run generate_assignments and store the conflicts
 
-    console.log(Object.keys(conflicts).length)
-
+    // If there are conflicts store them in local storage and update the conflict page
     if (Object.keys(conflicts).length != 0) {
         conflictNums.textContent = Object.keys(conflicts).length;
         conflictNums.style.display = "inline";
-        localStorage.setItem("conflicts", JSON.stringify(conflicts));
+
+        const conflictSolutions = Object.entries(conflicts).map(([className, classInfo]) => ({
+            className,
+            teacher: classInfo["Faculty Assignment"],
+            room: "",
+            dayAndTime: "",
+        }));
+
+        localStorage.setItem("conflictSolutions", JSON.stringify(conflictSolutions));
+        getConflictSolutions();
+        noConflicts.style.display = "none";
+    } else {
+        noConflicts.style.display = "inline";
     }
-
-
 
     document.querySelectorAll(".class").forEach((c) => c.remove());
     const dbRef = ref(database, "Department Courses/CS"); // TODO: This is hardcoded right now to only do CS. Need to make it variable depending on which department user is over.
@@ -150,23 +172,9 @@ getData.addEventListener("click", async (e) => {
 
         const currentDay = course["Day Assignment"];
 
-
-        // Checks to make sure that the day blocks are correct
-        // if (!["MW", "TR"].includes(currentDay) || !["A", "B", "C", "D", "E", "F", "G"].includes(currentTime)) {
-        //     // console.error("An error occurred: incorrect day");
-        //     // return;
-        //     conflicts.push(course);
-        // }
-
         const currentTime = course["Time Assignment"];
 
-        // Checks to make sure that the time blocks are correct
-        // if (!["A", "B", "C", "D", "E", "F", "G"].includes(currentTime)) {
-        //     console.error("An error occurred: incorrect time");
-        //     return;
-        // }
         if (["MW", "TR"].includes(currentDay) && ["A", "B", "C", "D", "E", "F", "G"].includes(currentTime))
-
             dayAssignments[currentDay][currentTime].push(courseName); // Adds courseName to day Assignment in the corresponding spot
     }
 
@@ -177,19 +185,17 @@ getData.addEventListener("click", async (e) => {
     // }, {
     //     onlyOnce: true
     // });
-
 });
 
-
 downloadButton.addEventListener("click", async () => {
-    const department = "CS"
+    const department = "CS";
 
     var link = document.createElement("a");
     // If you don't know the name or want to use
     // the webserver default set name = ''
-    link.setAttribute('download', "Export" + department + "Data.csv");
+    link.setAttribute("download", "Export" + department + "Data.csv");
     link.href = `/csv/export?department=${department}`;
     document.body.appendChild(link);
     link.click();
     link.remove();
-})
+});
