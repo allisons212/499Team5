@@ -9,19 +9,25 @@
 
     </head>
 
-    <body>
-        <div class="container">
-            <h1>Please login before accessing Schedule Builder.</h1>
-            <br>
-            <form action="" method="post">
-                <input type="text" placeholder="Username" name="username" value="{{ request.form.username }}">
-                <input type="password" placeholder="Password" name="password" value="{{ request.form.password }}">
-                <input class="btn btn-default" type="submit" value="Login">
-            </form>
-            {% if error %}
-                <p class="error"><strong>Error:</strong> {{ error }}
-            {% endif %}
+    <body style="overflow: hidden";>
+        <div class="topbar" style="font-size: 0; vertical-align: top; line-height: 0;"></div>
+        <div style="width: 100%; font-size: 0;">
+            <div style="width:50%; float:left; height:100%">
+                <p style="display: compact; height: 100vh; background-image: url('/static/Pictures/campus-photos-carousel-12.jpg'); line-height: 0; background-repeat: no-repeat; font-size: 0; vertical-align: top; background-attachment: fixed; background-size: cover;"></p>
+            </div>
+            <div style="margin-left:50%; height:100%;">
+                <div style="padding-top: 50px; text-align: center;">
+                <form action="" method="post" style="margin: auto; width: 50%">
+                    <input type="text" placeholder="Username" name="username" value="">
+                    <input type="password" placeholder="Password" name="password" value="">
+                    <input class="btn btn-default" type="submit" value="Login">
+                </form>
+                </div>
+            </div>
         </div>
+
+
+
     </body>
 
 </html>

@@ -74,7 +74,7 @@
             </select>
 
             <label for ="class">Choose a class:</label>
-            <input type="text" placeholder="Class" name="class" value="{{ request.form.classNum }}">
+            <input type="number" placeholder="Class" maxlength="3" minlength="3" class value="{{ request.form.classNum }}">
             <label for="day">Choose a day:</label>
             <select id = "day" name="day" required>
                 <option value="MW">Monday/Wednesday</option>

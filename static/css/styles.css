@@ -560,6 +560,50 @@ visibility: visible;
     color: #27405a;
 }
 
+.topbar {
+    background-color: #0078c8;
+    height: 100px; /* Full-height: remove this if you want "auto" height */
+     z-index: 1;
+     /* width: 80%; */
+    text-align: end;
+    padding-right: 20px;
+    padding-top: 30px;
+    margin-left: 0px;
+
+
+}
+input[type=text], select {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+input[type=password], select {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+input[type=submit] {
+  width: 100%;
+  background-color: #0428aa;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+input[type=submit]:hover {
+    background-color: #0078c8;
+}
 .account {
     position: relative;
     display: inline-block;

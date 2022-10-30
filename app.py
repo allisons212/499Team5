@@ -25,8 +25,8 @@
 
 
 from flask import Flask, render_template, redirect, url_for, request
-from flask_navigation import Navigation
-from numpy import empty #pip install flask_navigation
+from flask_navigation import Navigation #pip install flask_navigation
+from numpy import empty # pip install numpy
 from RoomTable import *
 from DataOperationEnums import *
 from DataOperationException import *
@@ -98,10 +98,6 @@ def upload_csv():
     fileUploadSuccess = None
     error = 0
     if request.method == 'POST':
-        #if request.form['classNum'] > 999 or request.form['classNum'] < 100:
-            #error = 1
-        #else:
-            #error = 0
         
         if request.form['submit_button'] == 'Submit CSV':
             # Begin file reading
