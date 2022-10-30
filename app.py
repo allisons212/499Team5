@@ -25,7 +25,8 @@
 
 
 from flask import Flask, render_template, redirect, url_for, request
-from flask_navigation import Navigation #pip install flask_navigation
+from flask_navigation import Navigation
+from numpy import empty #pip install flask_navigation
 from RoomTable import *
 from DataOperationEnums import *
 from DataOperationException import *
@@ -147,6 +148,13 @@ def export_csv():
     print(exportFile)
 
     return exportFile
+
+@app.get('/empty/rooms')
+def get_empty_rooms():
+    department = request.args["department"]
+    emptyRooms = db.getEmptyRooms(department)
+    print(emptyRooms)
+    return emptyRooms
     
 
 

@@ -177,10 +177,10 @@ getData.addEventListener("click", async (e) => {
     // }, {
     //     onlyOnce: true
     // });
+
 });
 
 
-// Uncomment when exportCSV is finished
 downloadButton.addEventListener("click", async () => {
     const department = "CS"
 
