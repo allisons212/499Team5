@@ -74,7 +74,7 @@
             </select>
 
             <label for ="class">Choose a class:</label>
-            <input type="number" placeholder="Class" maxlength="3" minlength="3" class value="{{ request.form.classNum }}">
+            <input type="number" name="class" placeholder="Class" maxlength="3" minlength="3" class value="{{ request.form.classNum }}">
             <label for="day">Choose a day:</label>
             <select id = "day" name="day" required>
                 <option value="MW">Monday/Wednesday</option>
@@ -93,11 +93,14 @@
                 <option value="G">G: 6:00 - 7:20 PM</option>
             </select>
             <label for="room">Choose a room:</label>
-            <select id="room" name="room" >
+            <select id="room" name="room" required >
+                <option value="OKT101">OKT101</option>
+                <option value="102">102</option> 
 
             </select>
             <label for="prof">Choose a faculty member:</label>
-            <select id="prof" name="faculty" >
+            <select id="prof" name="faculty" required >
+                <option value="Professor">Professor</option>
             </select>
             <input type="submit" name="submit_button" value="Submit Manual Input"/>
         </form>
@@ -110,9 +113,12 @@
     </div>
     <div>
         <form action="" method="post" enctype="multipart/form-data">
-            <input type="file" name="file" id="uploadCSV" accept="text/csv" required/>
+            <input type="file" name="files[]" multiple ="true" autocomplete="off" id="uploadCSV" accept="text/csv" required/>
             <input type="submit" name="submit_button" value="Submit CSV"/>
         </form>
+        {% if fileError  %}
+            <p class="error"><strong>ERROR:</strong> {{fileError}}</p>
+        {% endif %}
 
         {% if fileUploadSuccess %}
             <p class="error"><strong>Success:</strong> {{fileUploadSuccess}} </p>

@@ -32,8 +32,10 @@ from DataOperationEnums import *
 from DataOperationException import *
 from DataOperation import DataOperation
 from werkzeug.utils import secure_filename
+import os
 
 app = Flask(__name__)
+app.config["UPLOAD_FOLDER"] = "static/upload/"
 nav = Navigation(app)
 db = DataOperation()
 
@@ -96,12 +98,42 @@ def settings():
 @app.route('/uploadCSV', methods=['POST', 'GET'])
 def upload_csv():
     fileUploadSuccess = None
+    fileError = None
     error = 0
     if request.method == 'POST':
         
         if request.form['submit_button'] == 'Submit CSV':
+            
+            # Get the list of files from the button
+            files = request.files.getlist('files[]')
+            numFiles = len(request.files.getlist('files[]'))
+            if(numFiles != 2):
+                fileError = "Must give exactly 2 files. "
+                return render_template('uploadCSV.html', fileError=fileError)
+            else:
+                # Iterate through file list and store them in upload_folder
+                for file in files:
+                    filename = secure_filename(file.filename)
+                    file.save(app.config['UPLOAD_FOLDER'] + filename)
+
+                # Pop files from list
+                file1 = files.pop()
+                file2 = files.pop()
+
+                # Set equal to filename
+                file1 = file1.filename
+                file2 = file2.filename
+
+                # Call backend to import the CSV's into firebase
+                db.importCSV(f"static/upload/{file1}", f"static/upload/{file2}", "CS")
+                fileUploadSuccess = "File Uploaded Successfully!"
+
+                # Render the template with updated text on screen
+                return render_template('uploadCSV.html', fileUploadSuccess=fileUploadSuccess)
+
+            """
             # Begin file reading
-            uploadedFile = request.files['file']
+            uploadedFile = request.files['DepartmentFile']
             
             # Need to save the file in a directory so that it can be found by DataOperation
             uploadedFile.save(secure_filename(uploadedFile.filename))
@@ -109,10 +141,15 @@ def upload_csv():
             # IF there is something in the file then  call db with the file and Acronym
             if uploadedFile.filename!= '':
                 db._importCourseCSV(uploadedFile.filename, "CS")
+                # Signal to user that it was successful
                 fileUploadSuccess = "File Uploaded Successfully!"
+                # Render them template with the updated text on screen
                 return render_template('uploadCSV.html', fileUploadSuccess=fileUploadSuccess)
         elif request.form['submit_button'] == 'Submit Manual Input':
             print("MANUAL INPUT BUTTON TEST")
+            test = request.form['dept']
+            print(test)
+            """
             
     elif request.method == 'GET':
         return render_template('uploadCSV.html')
@@ -155,4 +192,4 @@ def get_empty_rooms():
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug = True)
