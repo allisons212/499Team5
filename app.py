@@ -109,13 +109,12 @@ def upload_csv():
             CourseFile = request.files['courses']
             RoomsFile = request.files['rooms']
 
+            # Create a list and append the files to it
             Files = []
             Files.append(CourseFile)
             Files.append(RoomsFile)
 
-            print(Files)
-
-            # Add the files to the upload folder
+            # iterate over the list and add them to the upload folder
             for file in Files:
                 filename = secure_filename(file.filename)
                 file.save(app.config['UPLOAD_FOLDER'] + filename)
