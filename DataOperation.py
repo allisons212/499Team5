@@ -1022,21 +1022,4 @@ class DataOperation:
     # End of _assign_with_room_pref
     
     
-    ######################################
-    #
-    # @DEBUG Methods
-    # @TODO DELETE THESE METHODS BEFORE PUSHING TO PRODUCTION
-    #
-    ######################################
-    
-    def print_room_tables(self, room_tables, building):
-        with open("test.txt",'w') as w:
-            for room, table in room_tables.items():
-                string = f"{building}{room}:{table}"
-                w.write(string+"\n\n")
-
-    def print_one_table(self, room_table, room, building):
-        print(f"{building}{room}:{room_table}")
-            
-    
 # End of DataOperation
