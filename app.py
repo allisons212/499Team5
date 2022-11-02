@@ -34,10 +34,27 @@ from DataOperation import DataOperation
 from werkzeug.utils import secure_filename
 import os
 
+
+class User:
+    user_account = ""
+    
+    def __init__(self):
+        pass
+    
+    def setUser(self, newUser):
+        self.user_account = newUser
+    
+    def getUser(self):
+        return self.user_account
+
+
 app = Flask(__name__)
 app.config["UPLOAD_FOLDER"] = "static/upload/"
 nav = Navigation(app)
 db = DataOperation()
+user = User()
+
+
 
 # initializes navigations, add each url here
 nav.Bar('top', [
@@ -61,6 +78,7 @@ def login():
             error = 'Invalid Credentials. Please try again.'
             return render_template('login.html', error=error)
         else:
+            user.setUser(db.getAccountDepartment(request.form['username']))
             return redirect(url_for('generate_schedule'))
     return render_template('login.html', error=error)
 
@@ -87,7 +105,7 @@ def faq():
 
 @app.route('/generate_schedule')
 def generate_schedule():
-    # db.generate_assignments("CS")
+    db.generate_assignments(user.getUser())
     return render_template('generateSchedule.html')
 
 
@@ -109,13 +127,12 @@ def upload_csv():
             CourseFile = request.files['courses']
             RoomsFile = request.files['rooms']
 
+            # Create a list and append the files to it
             Files = []
             Files.append(CourseFile)
             Files.append(RoomsFile)
 
-            print(Files)
-
-            # Add the files to the upload folder
+            # iterate over the list and add them to the upload folder
             for file in Files:
                 filename = secure_filename(file.filename)
                 file.save(app.config['UPLOAD_FOLDER'] + filename)
@@ -131,7 +148,7 @@ def upload_csv():
             RoomsFile = RoomsFile.filename
 
             # Call the database to call the CourseFile
-            db.importCSV(f"static/upload/{CourseFile}", f"static/upload/{RoomsFile}", "CS")
+            db.importCSV(f"static/upload/{CourseFile}", f"static/upload/{RoomsFile}", user.getUser())
             fileUploadSuccess = "File Uploaded Successfully!"
 
             # Render the template with updated text on screen
@@ -146,7 +163,7 @@ def upload_csv():
 def generate_assignments():
     department = request.get_json()['department']
 
-    conflicts = db.generate_assignments(department)
+    conflicts = db.generate_assignments(user.getUser())
 
     return conflicts
 
@@ -163,16 +180,14 @@ def generate_assignments():
 @app.get('/csv/export')
 def export_csv():
     department = request.args["department"]
-    exportFile = db.exportCSV(department)
-    print(exportFile)
+    exportFile = db.exportCSV(user.getUser())
 
     return exportFile
 
 @app.get('/empty/rooms')
 def get_empty_rooms():
     department = request.args["department"]
-    emptyRooms = db.getEmptyRooms(department)
-    print(emptyRooms)
+    emptyRooms = db.getEmptyRooms(user.getUser())
     return emptyRooms
     
 
