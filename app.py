@@ -59,6 +59,7 @@ def login():
     if request.method == 'POST':
         if not db.checkUserPass(request.form['username'], request.form['password']):
             error = 'Invalid Credentials. Please try again.'
+            return render_template('login.html', error=error)
         else:
             return redirect(url_for('generate_schedule'))
     return render_template('login.html', error=error)
@@ -103,53 +104,38 @@ def upload_csv():
     if request.method == 'POST':
         
         if request.form['submit_button'] == 'Submit CSV':
+
+            # Request each file
+            CourseFile = request.files['courses']
+            RoomsFile = request.files['rooms']
+
+            Files = []
+            Files.append(CourseFile)
+            Files.append(RoomsFile)
+
+            print(Files)
+
+            # Add the files to the upload folder
+            for file in Files:
+                filename = secure_filename(file.filename)
+                file.save(app.config['UPLOAD_FOLDER'] + filename)
             
-            # Get the list of files from the button
-            files = request.files.getlist('files[]')
-            numFiles = len(request.files.getlist('files[]'))
-            if(numFiles != 2):
-                fileError = "Must give exactly 2 files. "
-                return render_template('uploadCSV.html', fileError=fileError)
-            else:
-                # Iterate through file list and store them in upload_folder
-                for file in files:
-                    filename = secure_filename(file.filename)
-                    file.save(app.config['UPLOAD_FOLDER'] + filename)
+            # Put each course file in CourseFile
+            CourseFile = Files[0]
 
-                # Pop files from list
-                file1 = files.pop()
-                file2 = files.pop()
+            # Put each room file in RoomsFile
+            RoomsFile = Files[1]
 
-                # Set equal to filename
-                file1 = file1.filename
-                file2 = file2.filename
+            # CourseFile RoomsFile
+            CourseFile = CourseFile.filename
+            RoomsFile = RoomsFile.filename
 
-                # Call backend to import the CSV's into firebase
-                db.importCSV(f"static/upload/{file1}", f"static/upload/{file2}", "CS")
-                fileUploadSuccess = "File Uploaded Successfully!"
+            # Call the database to call the CourseFile
+            db.importCSV(f"static/upload/{CourseFile}", f"static/upload/{RoomsFile}", "CS")
+            fileUploadSuccess = "File Uploaded Successfully!"
 
-                # Render the template with updated text on screen
-                return render_template('uploadCSV.html', fileUploadSuccess=fileUploadSuccess)
-
-            """
-            # Begin file reading
-            uploadedFile = request.files['DepartmentFile']
-            
-            # Need to save the file in a directory so that it can be found by DataOperation
-            uploadedFile.save(secure_filename(uploadedFile.filename))
-            
-            # IF there is something in the file then  call db with the file and Acronym
-            if uploadedFile.filename!= '':
-                db._importCourseCSV(uploadedFile.filename, "CS")
-                # Signal to user that it was successful
-                fileUploadSuccess = "File Uploaded Successfully!"
-                # Render them template with the updated text on screen
-                return render_template('uploadCSV.html', fileUploadSuccess=fileUploadSuccess)
-        elif request.form['submit_button'] == 'Submit Manual Input':
-            print("MANUAL INPUT BUTTON TEST")
-            test = request.form['dept']
-            print(test)
-            """
+            # Render the template with updated text on screen
+            return render_template('uploadCSV.html', fileUploadSuccess=fileUploadSuccess)
             
     elif request.method == 'GET':
         return render_template('uploadCSV.html')
