@@ -68,7 +68,7 @@ footer {
 /* The navigation menu links */
 /*Cambria, Cochin, Georgia, Times, 'Times New Roman', serif */
 .sidenav a {
-    padding: 6px 8px 25px 16px;
+    padding: 15px 8px 15px 16px;
     text-decoration: none;
     font-size: 20px;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -590,6 +590,16 @@ input[type=password], select {
   border-radius: 4px;
   box-sizing: border-box;
 }
+input[type=number], select {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
 input[type=submit] {
   width: 100%;
   background-color: #0428aa;
