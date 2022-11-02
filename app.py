@@ -105,7 +105,6 @@ def faq():
 
 @app.route('/generate_schedule')
 def generate_schedule():
-    db.generate_assignments(user.getUser())
     return render_template('generateSchedule.html')
 
 
