@@ -38,6 +38,7 @@ app = Flask(__name__)
 app.config["UPLOAD_FOLDER"] = "static/upload/"
 nav = Navigation(app)
 db = DataOperation()
+user_account = ""
 
 # initializes navigations, add each url here
 nav.Bar('top', [
@@ -130,7 +131,7 @@ def upload_csv():
             RoomsFile = RoomsFile.filename
 
             # Call the database to call the CourseFile
-            db.importCSV(f"static/upload/{CourseFile}", f"static/upload/{RoomsFile}", "CS")
+            db.importCSV(f"static/upload/{CourseFile}", f"static/upload/{RoomsFile}", db.getAccountDepartment(user_account))
             fileUploadSuccess = "File Uploaded Successfully!"
 
             # Render the template with updated text on screen
