@@ -74,12 +74,17 @@ nav.Bar('top', [
 def login():
     error = None
     if request.method == 'POST':
-        if not db.checkUserPass(request.form['username'], request.form['password']):
+        # If the username or password field is blank, then collect error message
+        if request.form['username'] == "" or request.form['password'] == "":
+            error = "Invalid Credentials. Please try again."
+        # If the fields are just wrong, then collect the error message
+        elif not db.checkUserPass(request.form['username'], request.form['password']):
             error = 'Invalid Credentials. Please try again.'
-            return render_template('login.html', error=error)
+        # IF the credentials are correct then redirect to homepage and set the user acronym to the users department.
         else:
             user.setUser(db.getAccountDepartment(request.form['username']))
             return redirect(url_for('generate_schedule'))
+    # IF we get to this point then we need to render the error to the user
     return render_template('login.html', error=error)
 
 
