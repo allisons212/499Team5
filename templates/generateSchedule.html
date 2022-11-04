@@ -11,17 +11,17 @@
 
     <body>
         <div class="topnav">
-            <!-- <a href="#html1" style="margin-top: 0px">
-                <i class="fa fa-bell-o" style="font-size: 25px"></i>
-            </a> -->
+            <h1 class="departmentTitle">{{department}} Department Schedule Builder</h1>
             <div class="account">
-                <a href="{{ url_for('login') }}">
-                    <i class="fa fa-sign-out" id="logoutIcon"></i>
-                </a>
 
-                <div class="logOutText">Log Out</div>
+                    <a href="{{ url_for('login') }}">
+                        <i class="fa fa-sign-out" id="logoutIcon" ></i>
+                    </a>
+                    
+                    <div class="logOutText">Log Out</div>  
             </div>
         </div>
+
 
         <div class="sidenav">
             <a href="{{ url_for('generate_schedule') }}">

@@ -13,9 +13,7 @@
 
     <body>
         <div class="topnav">
-            <!-- <a href="#html1" style="margin-top: 0px;">
-                <i class="fa fa-bell-o" style="font-size: 25px;"></i>
-            </a> -->
+            <h1 class="departmentTitle">{{department}} Department Schedule Builder</h1>
             <div class="account">
                 <a href="{{ url_for('login') }}">
                     <i class="fa fa-sign-out" id="logoutIcon"></i>
@@ -52,69 +50,72 @@
         </div>
 
         <div class="main">
-            <div >
+            <div>
                 <h2 class="uploadCSVFormTitle">Manual Entry</h2>
                 <form action="" method="post">
-                    <div class="uploadCSVDropDown">
-                    <label for="department">Choose a department:</label>
-                    
-                        <select id="department" name="dept" required>
-                            <option value="CS">CS</option>
-                            <option value="ECE">ECE</option>
-                            <option value="CPE">CPE</option>
-                        </select>
-                    
-                    <label for="class">Choose a class:</label>
-
-                        <input
-                            type="number"
-                            placeholder="Class"
-                            maxlength="3"
-                            minlength="3"
-                            class
-                            value="{{ request.form.classNum }}"
-                        />
-                    </div>
-
-                    <div class="uploadCSVDropDown">
-                        <label for="prof">Choose a faculty member:</label>
-                            <select id="prof" name="faculty"></select>
-
-                            <label for="room">Choose a room:</label>
-                            
-                                <select id="room" name="room"></select>
-                            </div>
+                    <div class="uploadCSVForm">
                         <div class="uploadCSVDropDown">
-                        <label for="day">Choose a day:</label>
-                        
-                        <select id="day" name="day" required>
-                            <option value="MW">Monday/Wednesday</option>
-                            <option value="TR">Tuesday/Thursday</option>
-                        </select>
+                            <label for="department">Choose a department:</label>
 
-                    <label for="time">Choose a time:</label>
-                        <select id="time" name="time" required>
-                            <option value="A">A: 8:00 - 9:20 AM</option>
-                            <option value="B">B: 9:40 - 11:00 AM</option>
-                            <option value="C">C: 11:20 AM - 12:40 PM</option>
-                            <option value="D">D: 1:00 - 2:20 PM</option>
-                            <option value="E">E: 2:40 - 4:00 PM</option>
-                            <option value="F">F: 4:20 - 5:40 PM</option>
-                            <option value="G">G: 6:00 - 7:20 PM</option>
-                        </select>
+                            <select id="department" name="dept" required>
+                                <option value="CS">CS</option>
+                                <option value="ECE">ECE</option>
+                                <option value="CPE">CPE</option>
+                            </select>
+                        </div>
+
+                        <div class="uploadCSVDropDown">
+                            <label for="class">Choose a class:</label>
+
+                            <input
+                                type="number"
+                                placeholder="Class"
+                                maxlength="3"
+                                minlength="3"
+                                class
+                                value="{{ request.form.classNum }}"
+                            />
+                        </div>
+
+                        <div class="uploadCSVDropDown">
+                            <label for="prof">Choose a faculty member:</label>
+                            <select id="prof" name="faculty"></select>
+                        </div>
+                        <div class="uploadCSVDropDown">
+                            <label for="room">Choose a room:</label>
+
+                            <select id="room" name="room"></select>
+                        </div>
+
+                        <div class="uploadCSVDropDown">
+                            <label for="day">Choose a day:</label>
+
+                            <select id="day" name="day" required>
+                                <option value="MW">Monday/Wednesday</option>
+                                <option value="TR">Tuesday/Thursday</option>
+                            </select>
+                        </div>
+                        <div class="uploadCSVDropDown">
+                            <label for="time">Choose a time:</label>
+                            <select id="time" name="time" required>
+                                <option value="A">A: 8:00 - 9:20 AM</option>
+                                <option value="B">B: 9:40 - 11:00 AM</option>
+                                <option value="C">C: 11:20 AM - 12:40 PM</option>
+                                <option value="D">D: 1:00 - 2:20 PM</option>
+                                <option value="E">E: 2:40 - 4:00 PM</option>
+                                <option value="F">F: 4:20 - 5:40 PM</option>
+                                <option value="G">G: 6:00 - 7:20 PM</option>
+                            </select>
+                        </div>
                     </div>
-
-                    
-
-
                     <input class="uploadCSVSubmit" type="submit" name="submit_button" value="Submit Manual Input" />
                 </form>
                 {% if error == 1 %}
-                <p class="error"><strong>Error:</strong> Invalid class number.</p>
+                <p class="successfulUpload"><strong>Error:</strong> Invalid class number.</p>
                 {% endif %}
             </div>
-            <div style="font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif">
-                <hr style="margin-top:50px;">
+            <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif">
+                <hr style="margin-top: 50px" />
                 <!-- <h2 class="uploadCSVFormTitle" style="font-size:30px; margin-top:50px; margin-bottom: 50px;">OR</h2>
                 <hr> -->
                 <h2 class="uploadCSVFormTitle">CSV Upload</h2>
@@ -122,18 +123,20 @@
             <div>
                 <form action="" method="post" enctype="multipart/form-data">
                     <div class="uploadCSVFile">
-                    <label for="uploadCSV">Upload Courses:</label>
-                    <input type="file" name="courses" id="uploadCSV" accept="text/csv" required />
-                </div>
-                <div class="uploadCSVFile">
-                    <label for="uploadRooms">Upload Rooms:</label>
-                    <input type="file" name="r" id="uploadRooms" accept="text/csv" required/>
-                </div>
+                        <div class="individualFileUpload">
+                            <label for="uploadCSV">Upload Courses:</label>
+                            <input type="file" name="courses" id="uploadCSV" accept="text/csv" required />
+                        </div>
+                        <div class="individualFileUpload">
+                            <label for="uploadRooms">Upload Rooms:</label>
+                            <input type="file" name="rooms" id="uploadRooms" accept="text/csv" required />
+                        </div>
+                    </div>
                     <input class="uploadCSVSubmit" type="submit" name="submit_button" value="Submit CSV" />
                 </form>
 
                 {% if fileUploadSuccess %}
-                <p class="error"><strong>Success:</strong> {{fileUploadSuccess}}</p>
+                <p class="successfulUpload"><strong>Success:</strong> {{fileUploadSuccess}}</p>
                 {% endif %}
             </div>
         </div>

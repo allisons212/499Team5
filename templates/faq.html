@@ -12,18 +12,17 @@
 
     <body>
         <div class="topnav">
-            <!-- <a href="#html1" style="margin-top: 0px">
-                <i class="fa fa-bell-o" style="font-size: 25px"></i>
-            </a> -->
+            <h1 class="departmentTitle">{{department}} Department Schedule Builder</h1>
             <div class="account">
-                
-                <a href="{{ url_for('login') }}">
-                    <i class="fa fa-sign-out" id="logoutIcon" ></i>
-                </a>
-                
-                <div class="logOutText">Log Out</div>  
+
+                    <a href="{{ url_for('login') }}">
+                        <i class="fa fa-sign-out" id="logoutIcon" ></i>
+                    </a>
+                    
+                    <div class="logOutText">Log Out</div>  
+            </div>
         </div>
-        </div>
+
 
         <div class="sidenav">
             <a href="{{ url_for('generate_schedule') }}">
@@ -68,7 +67,7 @@
                         <li><a href="#dayAcronyms">Day Acronyms</a></li>
                     </ul>
                 </li>
-                <li><a href="#csvUpload">How do you resolve conflicts?</a></li>
+                <li><a href="#csvUpload">How do you upload a CSV?</a></li>
                 <li><a href="#csvFormatting">How are the CSVs formatted?</a>
                     <ul>
                         <li><a href="#departmentClassDataCSV">How is the Department Class Data CSV formatted?</a></li>
@@ -106,7 +105,7 @@
 
 
     <div id="csvUpload">
-        <h2>How do you resolve conflicts?</h2>
+        <h2>How do you upload a CSV?</h2>
         <p>
             INFO ABOUT HOW TO UPLOAD CSV
         </p>

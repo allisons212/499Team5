@@ -63,7 +63,7 @@ function renderDayAssignment(dayAssignments, courseData) {
             for (const key of Object.values(classes)) {
                 // The string that contains the html code for the table
                 data +=
-                    '<div class="class" style="border-color: rgba(0, 0, 0, 0.2);">' +
+                    '<div class="class' + day + time + '" style="border-color: rgba(0, 0, 0, 0.2);">' +
                     key +
                     "<br>" +
                     courseData[key]["Faculty Assignment"] +

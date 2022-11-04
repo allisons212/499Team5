@@ -90,7 +90,7 @@ def home():
 
 @app.route('/aboutUs') # make each of these for each html
 def about_us():
-    return render_template('aboutUs.html')
+    return render_template('aboutUs.html', department=user.getUser())
 
 
 @app.route('/account')
@@ -100,12 +100,12 @@ def account():
 
 @app.route('/faq')
 def faq():
-    return render_template('faq.html')
+    return render_template('faq.html', department=user.getUser())
 
 
 @app.route('/generate_schedule')
 def generate_schedule():
-    return render_template('generateSchedule.html')
+    return render_template('generateSchedule.html', department=user.getUser())
 
 
 @app.route('/settings')
@@ -151,12 +151,12 @@ def upload_csv():
             fileUploadSuccess = "File Uploaded Successfully!"
 
             # Render the template with updated text on screen
-            return render_template('uploadCSV.html', fileUploadSuccess=fileUploadSuccess)
+            return render_template('uploadCSV.html', department=user.getUser(), fileUploadSuccess=fileUploadSuccess)
             
     elif request.method == 'GET':
-        return render_template('uploadCSV.html')
+        return render_template('uploadCSV.html', department=user.getUser())
         
-    return render_template('uploadCSV.html', error=error)
+    return render_template('uploadCSV.html', department=user.getUser(), error=error)
 
 @app.post('/assignments/generate')
 def generate_assignments():
@@ -188,7 +188,7 @@ def get_empty_rooms():
     department = request.args["department"]
     emptyRooms = db.getEmptyRooms(user.getUser())
     return emptyRooms
-    
+   
 
 
 if __name__ == '__main__':
