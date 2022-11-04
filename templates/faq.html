@@ -16,21 +16,13 @@
                 <i class="fa fa-bell-o" style="font-size: 25px"></i>
             </a> -->
             <div class="account">
-                <a href="{{ url_for('account') }}" class="accountIcon">
-                    <i class="fa fa-user" style="font-size: 50px"></i>
+                
+                <a href="{{ url_for('login') }}">
+                    <i class="fa fa-sign-out" id="logoutIcon" ></i>
                 </a>
-                <div class="accountDropdownContent">
-                    <a href="{{ url_for('account') }}">
-                        <i class="fa fa-user"></i>
-                        View Account
-                    </a>
-                    <!-- <a href="#">Link 2</a> -->
-                    <a href="{{ url_for('login') }}">
-                        <i class="fa fa-sign-out"></i>
-                        Log Out
-                    </a>
-                </div>
-            </div>
+                
+                <div class="logOutText">Log Out</div>  
+        </div>
         </div>
 
         <div class="sidenav">
