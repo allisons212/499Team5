@@ -76,7 +76,7 @@ def login():
     if request.method == 'POST':
         # If the username or password field is blank, then collect error message
         if request.form['username'] == "" or request.form['password'] == "":
-            error = "Invalid Credentials. Please try again."
+            error = "No Username or password typed in. Please try again."
         # If the fields are just wrong, then collect the error message
         elif not db.checkUserPass(request.form['username'], request.form['password']):
             error = 'Invalid Credentials. Please try again.'
