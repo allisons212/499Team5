@@ -63,6 +63,7 @@ footer {
     background-repeat: no-repeat;
     font-size: 0;
     /* vertical-align: top;  */
+    margin-top: 150px;
     background-attachment: fixed;
     background-size: cover;
     width: 50%;
@@ -169,8 +170,9 @@ input[type="password"] {
 }
 
 .generateScheduleHeader {
-    display: flex;
-    justify-content: space-between;
+    /* display: flex; */
+    /* justify-content: space-between; */
+    min-width:845px;
 }
 
 /* Style for the generate button on generateSchedule page */
@@ -184,7 +186,7 @@ input[type="password"] {
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
     font-size: 20px;
     cursor: pointer;
-    display: inline-block;
+    /* display: inline-block; */
 }
 /* The style of the generate button when it hovered over */
 .generateButton:hover {
@@ -194,13 +196,16 @@ input[type="password"] {
 
 .generateEditors {
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    /* margin-left: 20px; */
+    /* min-width: 142px; */
+    float: right;
 }
 
 .generateDownload {
     font-size: 40px;
     cursor: pointer;
     color: #1f3347;
-    padding-right: 40px;
+    padding-right: 10px;
     position: relative;
     display: inline-block;
 }
@@ -421,7 +426,6 @@ input[type="password"] {
     width: 100%;
     margin-top: 15px;
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-
     min-width: 750px;
 }
 .scheduleTable td {
@@ -471,6 +475,9 @@ input[type="password"] {
 #faqs {
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
     display: inline-block;
+    margin: 10px;
+    margin-left: 260px;
+    
 }
 
 #faqs h1 {
@@ -514,10 +521,21 @@ h4 {
     padding-top: 0px;
 }
 
+#faqs a {
+    text-decoration: none;
+    color: #0078c8;
+    font-size: 15px;
+}
+
+#faqs a:hover {
+    color: #3799da;
+}
+
 #faqs .faqExampleImage {
     text-align: center;
     padding: 10px;
     display: block;
+
 }
 .faqExampleImage button {
     background-color: #0078c8;
@@ -535,6 +553,10 @@ h4 {
 .faqExampleImage button:hover {
     background-color: #016bb3;
     color: #e4e4e4;
+}
+
+.faqExampleImage img{
+    border: 1px solid #b2bad6;
 }
 
 .aboutMembers {
@@ -614,12 +636,11 @@ h4 {
 .topnav {
     background-color: #0078c8;
     height: 150px; /* Full-height: remove this if you want "auto" height */
-    /* width: 80%; */
     text-align: end;
     padding-right: 20px;
-    /* padding-top: 20px; */
     margin-left: 200px;
-    /* display: flex; */
+    min-width: 885px;
+    width:auto;
 }
 
 .topnav .departmentTitle {
@@ -773,7 +794,7 @@ input[type=submit]:hover {
     border-color: #b2bad6;
     padding: 8px;
     font-size: 15px;
-    min-width: 200px;
+    min-width: 183px;
     width: 25%;
     margin: 10px;
     cursor: text;

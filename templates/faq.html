@@ -162,14 +162,46 @@
         <div id="howToGenerateSchedule">
             <h2>How do you generate a schedule?</h2>
             <p>
-                INFO ON HOW TO GENERATE SCHEDULE
+                After the <a href="#csvUpload">correct CSVs have been uploaded</a>,  Click the generate button on the create schedule page. 
+                This will generate a schedule from the CSVs. The schedule table will then be filled out with the created schedule. 
+                <div class="faqExampleImage">
+                    <h4 style="margin-top:0px;">Example of how the schedule will look:</h4>
+                    <img src="../static/Pictures/ScheduleGUIExample.PNG" style="width: 1000px; height:600px; margin-bottom: 20px">
+                </div>
+                If there were conflicts that need to be resolved for some classes, a notification will show up on th conflicts icon.
+                These conflicts must be resolved so the classes that all the classes in the CSV can be put into the schedule.
+                For more information on how to resolve conflicts go <a href="#resolveConflicts">here</a>.
+                <div class="faqExampleImage">
+                    <h4 style="margin-top:0px;">Example of how the conflict notification will look:</h4>
+                    <img src="../static/Pictures/ConflictsExample.PNG" style="width: 100px; border:0px; margin-bottom: 20px">
+                </div>
+                After all conflicts have been resolved, you can then download the schedule in CSV format. To do this, click on the download icon
+                and the file will be immediately downloaded to your downloads folder.
+
             </p>
         </div>
 
         <div id="resolveConflicts">
             <h2>How do you resolve conflicts?</h2>
             <p>
-                INFO ON HOW TO RESOLVE CONFLICTS
+                Once a <a href="#howToGenerateSchedule">schedule has been generated</a>, any conflicts that are created must be resolved. To solve conflicts,
+                click on the conflict icon to see the conflict resolution window.
+                <div class="faqExampleImage">
+                    <h4 style="margin-top:0px;">Conflict Resolution page:</h4>
+                    <img src="../static/Pictures/conflictPage.PNG" style="height: 550px; margin-bottom: 20px">
+                </div>
+                Once in this window, you will see all the classes with conflicts. These classes need to be assigned a classroom and day and time. To start resolving
+                the conflict click on the Classroom Selection dropdown for a given class and select a classroom. Once a classroom is selected, you can see all the avaliable
+                days and times for the given classroom in the Day and Time dropdown. Select a day and time for the class. Once you have selected a classroom and a day and time,
+                you will then click the save button to lock this selection in place. Once the save button is successfuly pressed, you cannot edit that given selection. If you wish 
+                to change the selection, click on the edit icon that has appeared next to the save button. Once pressed, the selection that you have previously made will no longer
+                be saved until you click the save icon again. Once you have selected and saved all conflict solutions, click the submit button at the bottom of the conflict page.
+                This will save and send all the conflict solutions that you have completed. Once the conflicts have been submitted, you must 
+                <a href="#howToGenerateSchedule">generate the schedule again</a> with the new changes that you have completed. If you decide to exit the conflicts page before you have
+                submitted all your conflicts, only the conflicts that you have saved will be preserved, so make sure you save all the conflicts you wish to keep before closing out of the 
+                conflict resolution window.
+
+                
             </p>
         </div>
     </body>

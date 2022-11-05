@@ -188,6 +188,13 @@ def get_empty_rooms():
     department = request.args["department"]
     emptyRooms = db.getEmptyRooms(user.getUser())
     return emptyRooms
+
+@app.get('/get/DB')
+def get_DB():
+    print("test")
+    department_path = "Department Courses/" + user.getUser()
+    print(department_path)
+    return db.getDB(department_path)
    
 
 

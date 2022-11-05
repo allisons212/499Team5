@@ -50,6 +50,38 @@
         </div>
 
         <div class="main">
+            <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif">
+                
+                <!-- <h2 class="uploadCSVFormTitle" style="font-size:30px; margin-top:50px; margin-bottom: 50px;">OR</h2>
+                <hr> -->
+                <h2 class="uploadCSVFormTitle">CSV Upload</h2>
+            </div>
+            <div>
+                <form action="" method="post" enctype="multipart/form-data">
+                    <div class="uploadCSVFile">
+                        <div class="individualFileUpload">
+                            <label for="uploadCSV">Upload Courses:</label>
+                            <input type="file" name="courses" id="uploadCSV" accept="text/csv" required />
+                        </div>
+                        <div class="individualFileUpload">
+                            <label for="uploadRooms">Upload Rooms:</label>
+                            <input type="file" name="rooms" id="uploadRooms" accept="text/csv" required />
+                        </div>
+                    </div>
+                    <input class="uploadCSVSubmit" type="submit" name="submit_button" value="Submit CSV" />
+                </form>
+
+                {% if fileUploadSuccess %}
+                <p class="successfulUpload"><strong>Success:</strong> {{fileUploadSuccess}} Generate schedule on Create Schedule page.</p>
+                {% endif %}
+            </div>
+            <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif">
+                <hr style="margin-top: 50px" />
+                <!-- <h2 class="uploadCSVFormTitle" style="font-size:30px; margin-top:50px; margin-bottom: 50px;">OR</h2>
+                <hr> -->
+               
+            </div>
+
             <div>
                 <h2 class="uploadCSVFormTitle">Manual Entry</h2>
                 <form action="" method="post">
@@ -114,32 +146,9 @@
                 <p class="successfulUpload"><strong>Error:</strong> Invalid class number.</p>
                 {% endif %}
             </div>
-            <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif">
-                <hr style="margin-top: 50px" />
-                <!-- <h2 class="uploadCSVFormTitle" style="font-size:30px; margin-top:50px; margin-bottom: 50px;">OR</h2>
-                <hr> -->
-                <h2 class="uploadCSVFormTitle">CSV Upload</h2>
-            </div>
-            <div>
-                <form action="" method="post" enctype="multipart/form-data">
-                    <div class="uploadCSVFile">
-                        <div class="individualFileUpload">
-                            <label for="uploadCSV">Upload Courses:</label>
-                            <input type="file" name="courses" id="uploadCSV" accept="text/csv" required />
-                        </div>
-                        <div class="individualFileUpload">
-                            <label for="uploadRooms">Upload Rooms:</label>
-                            <input type="file" name="rooms" id="uploadRooms" accept="text/csv" required />
-                        </div>
-                    </div>
-                    <input class="uploadCSVSubmit" type="submit" name="submit_button" value="Submit CSV" />
-                </form>
-
-                {% if fileUploadSuccess %}
-                <p class="successfulUpload"><strong>Success:</strong> {{fileUploadSuccess}}</p>
-                {% endif %}
-            </div>
+            
         </div>
         <!--<script defer type="module" src="../static/js/uploadCSVjs.js"></script> -->
+
     </body>
 </html>

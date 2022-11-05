@@ -16,43 +16,43 @@ conflictNums.style.display = "none";
 const noConflicts = document.getElementById("noConflicts");
 noConflicts.style.display = "none";
 // Import the functions you need from the SDKs you need
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-app.js";
+// import { initializeApp } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-app.js";
 import ky from "https://cdn.skypack.dev/ky";
-import {
-    getDatabase,
-    ref,
-    onValue as _onValue,
-    child,
-} from "https://www.gstatic.com/firebasejs/9.10.0/firebase-database.js";
+// import {
+//     getDatabase,
+//     ref,
+//     onValue as _onValue,
+//     child,
+// } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-database.js";
 import { Conflict } from "./Conflict.js";
-import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-analytics.js";
+// import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-analytics.js";
 import { getConflictSolutions } from "./setConflicts.js";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+// // TODO: Add SDKs for Firebase products that you want to use
+// // https://firebase.google.com/docs/web/setup#available-libraries
 
-const onValue = (...args) =>
-    new Promise((res, rej) => {
-        try {
-            _onValue(...args, res, {
-                onlyOnce: true,
-            });
-        } catch (e) {
-            rej(e);
-        }
-    });
+// const onValue = (...args) =>
+//     new Promise((res, rej) => {
+//         try {
+//             _onValue(...args, res, {
+//                 onlyOnce: true,
+//             });
+//         } catch (e) {
+//             rej(e);
+//         }
+//     });
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-    apiKey: "AIzaSyDpRnVPxpDY8qXPbe9GPZGOgfPwlSGiTAk",
-    authDomain: "coursescheduler499.firebaseapp.com",
-    databaseURL: "https://coursescheduler499-default-rtdb.firebaseio.com",
-    projectId: "coursescheduler499",
-    storageBucket: "coursescheduler499.appspot.com",
-    messagingSenderId: "499198271274",
-    appId: "1:499198271274:web:3aa01385d66f9759060853",
-    measurementId: "G-8GZ9VBXDJ1",
-};
+// // Your web app's Firebase configuration
+// // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+// const firebaseConfig = {
+//     apiKey: "AIzaSyDpRnVPxpDY8qXPbe9GPZGOgfPwlSGiTAk",
+//     authDomain: "coursescheduler499.firebaseapp.com",
+//     databaseURL: "https://coursescheduler499-default-rtdb.firebaseio.com",
+//     projectId: "coursescheduler499",
+//     storageBucket: "coursescheduler499.appspot.com",
+//     messagingSenderId: "499198271274",
+//     appId: "1:499198271274:web:3aa01385d66f9759060853",
+//     measurementId: "G-8GZ9VBXDJ1",
+// };
 
 // Store the information that was gotten from the database in the table
 function renderDayAssignment(dayAssignments, courseData) {
@@ -93,19 +93,27 @@ if (localStorage.hasOwnProperty("conflictSolutions")) {
     conflictNums.textContent = Object.keys(conflictSolutions).length;
     conflictNums.style.display = "inline";
     noConflicts.style.display = "none";
+    // console.log("Hello")
 } else {
+    getConflictSolutions()
     noConflicts.style.display = "inline";
+    // console.log("There")
 }
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
-const database = getDatabase(app);
+// const app = initializeApp(firebaseConfig);
+// const analytics = getAnalytics(app);
+// const database = getDatabase(app);
 
 // Event that occurs when generate button is pressed
 getData.addEventListener("click", async (e) => {
 
     const conflicts = await ky.post("/assignments/generate", { json: { department: "CS" } }).json(); // run generate_assignments and store the conflicts
+    const getDBData = await ky.get("/get/DB").json()
+    // for(const [key, value] of Object.entries(getDBData)){
+    //     console.log("key: " + key + " value: " + value) 
+    //     console.log(getDBData[key])
+    // }
 
     // If there are conflicts store them in local storage and update the conflict page
     if (Object.keys(conflicts).length != 0) {
@@ -122,12 +130,22 @@ getData.addEventListener("click", async (e) => {
         localStorage.setItem("conflictSolutions", JSON.stringify(conflictSolutions));
         getConflictSolutions();
         noConflicts.style.display = "none";
+        // console.log("General")
     } else {
+        if(localStorage.hasOwnProperty("conflictSolutions")){
+           
+            localStorage.removeItem("conflictSolutions");
+            
+        }
+        getConflictSolutions()
         noConflicts.style.display = "inline";
+        conflictNums.style.display = "none"
+        // console.log("Kenobi")
+        
     }
 
     document.querySelectorAll(".class").forEach((c) => c.remove());
-    const dbRef = ref(database, "Department Courses/CS"); // TODO: This is hardcoded right now to only do CS. Need to make it variable depending on which department user is over.
+    // const dbRef = ref(database, "Department Courses/CS"); // TODO: This is hardcoded right now to only do CS. Need to make it variable depending on which department user is over.
     var courseData = {}; // All the data stored
     // The day and time assignments for the class. The course name is stored in the arrays.
     var dayAssignments = {
@@ -153,15 +171,19 @@ getData.addEventListener("click", async (e) => {
 
     // onValue(dbRef, (snapshot) => {
     //
-    const snapshot = await onValue(dbRef);
-    // Get all the data from the database
-    // let index = 0
-    snapshot.forEach((childSnapshot) => {
-        const childKey = childSnapshot.key;
-        const childData = childSnapshot.val();
+    // const snapshot = await onValue(dbRef);
+    // // Get all the data from the database
+    // // let index = 0
+    // snapshot.forEach((childSnapshot) => {
+    //     const childKey = childSnapshot.key;
+    //     const childData = childSnapshot.val();
 
-        courseData[childKey] = childData;
-    });
+    //     courseData[childKey] = childData;
+    // });
+
+    for(const [className, classInfo] of Object.entries(getDBData)){
+        courseData[className] = classInfo;
+    }
 
     // Store the courseData in the local storage.
     localStorage.setItem("courseData", JSON.stringify(courseData));

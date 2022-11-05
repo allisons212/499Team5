@@ -28,7 +28,7 @@ const getSelectedRooms = async (reset = false) => {
     return _selectedRooms;
 };
 
-// Get the conflicts that were greated from the generate_assignments() python function which is in local storage
+// Get the conflicts that were generated from the generate_assignments() python function which is in local storage
 const updateConflictSolution = (conflict) => {
     const current = JSON.parse(localStorage.getItem("conflictSolutions"));
     const conflictIndex = current.findIndex((c) => c.className === conflict.className);
@@ -85,7 +85,7 @@ async function appendConflicts(conflictSolutions) {
         // Occurs when the edit icon is clicked
         conflict.conflictEdit.onclick = function () {
             // Enable the save button and dropdown menus and disable the edit icon
-            conflict.conflictSave.disabled = false; 
+            conflict.conflictSave.disabled = false;
             conflict.dayTimeDropDown.disabled = false;
             conflict.roomsDropDown.disabled = false;
             conflict.conflictEdit.style.display = "none";
@@ -93,7 +93,7 @@ async function appendConflicts(conflictSolutions) {
             conflict.roomsDropDown.style.cursor = "pointer";
             addDayTimesRoomsBack(conflictSolutions, conflict.room, conflict.dayAndTime); // Add the classrooms and days and times that were removed by the save button back
             // Reset the saved data of the conflict
-            conflict.room = ""; 
+            conflict.room = "";
             conflict.dayAndTime = "";
             conflict.saved = false;
             updateConflictSolution(conflict); // Update the local storage
@@ -139,17 +139,16 @@ async function appendConflicts(conflictSolutions) {
         const resetOnExit = async () => {
             closeIcon.removeEventListener("click", resetOnExit);
 
-
             await conflict.setRoomDropDown(selectedRooms);
             // If a room is selected, put the day and times for the selected room in the dropdown menus for each conflict
             if (conflict.room !== "") {
                 await conflict.setDayTimeDropDown(selectedRooms[conflict.room]);
-    
+
                 // If dayAndTime contain something save the values
                 if (conflict.dayAndTime !== "") {
                     conflict.dayTimeDropDown.value = conflict.dayAndTime;
                     conflict.dayTimeDropDown.disabled = false;
-    
+
                     saveConflict(conflictSolutions, conflict);
                 }
             } else {
@@ -259,11 +258,11 @@ const handleSubmit = () => {
 
 // Display the modal that contains all the conflict information
 function showModal() {
+    // console.log("conflict solutions", conflictSolutions);
     if (conflictSolutions) {
         appendConflicts(conflictSolutions);
         submitButton.style.display = "inline";
-    }
-    else{
+    } else {
         submitButton.style.display = "none";
     }
 
@@ -288,9 +287,13 @@ function hideModal() {
 }
 
 // Update the conflictSolutions with information stored in local storage
-export function getConflictSolutions(){
+export function getConflictSolutions() {
     if (localStorage.hasOwnProperty("conflictSolutions")) {
-        conflictSolutions = JSON.parse(localStorage.getItem("conflictSolutions")).map((each) => Conflict.fromLocal(each));
+        conflictSolutions = JSON.parse(localStorage.getItem("conflictSolutions")).map((each) =>
+            Conflict.fromLocal(each)
+        );
+    } else {
+        conflictSolutions = null; // If there are currently no conflicts, remove the conflicts saved from before.
     }
 }
 
