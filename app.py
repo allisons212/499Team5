@@ -140,12 +140,6 @@ def upload_csv():
             for file in Files:
                 filename = secure_filename(file.filename)
                 file.save(app.config['UPLOAD_FOLDER'] + filename)
-            
-            # Put each course file in CourseFile
-            CourseFile = Files[0]
-
-            # Put each room file in RoomsFile
-            RoomsFile = Files[1]
 
             # CourseFile RoomsFile
             CourseFile = CourseFile.filename
