@@ -241,7 +241,7 @@ const handleX = () => {
 };
 
 // Event listener added onto submit button
-const handleSubmit = () => {
+const handleSubmit = async () => {
     const submitWarning = document.getElementById("submitWarning");
 
     // Checks to see if all conflict solutions are saved and if so, submit. If not, display a warning
@@ -252,13 +252,18 @@ const handleSubmit = () => {
             // TODO: call python function used to update database with conflict solutions
             submitWarning.style.display = "none";
             console.log("submitted");
+            for(const conflict of conflictSolutions){
+                await ky.put("/update/solution/assignments", { json: conflict.toLocal() })
+            }
+            localStorage.removeItem("conflictSolutions");
+            conflictSolutions = null
         }
     }
 };
 
 // Display the modal that contains all the conflict information
 function showModal() {
-    // console.log("conflict solutions", conflictSolutions);
+    console.log("conflict solutions", conflictSolutions);
     if (conflictSolutions) {
         appendConflicts(conflictSolutions);
         submitButton.style.display = "inline";

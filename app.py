@@ -165,8 +165,6 @@ def upload_csv():
 
 @app.post('/assignments/generate')
 def generate_assignments():
-    department = request.get_json()['department']
-
     conflicts = db.generate_assignments(user.getUser())
 
     return conflicts
@@ -183,14 +181,12 @@ def generate_assignments():
 
 @app.get('/csv/export')
 def export_csv():
-    department = request.args["department"]
     exportFile = db.exportCSV(user.getUser())
 
     return exportFile
 
 @app.get('/empty/rooms')
 def get_empty_rooms():
-    department = request.args["department"]
     emptyRooms = db.getEmptyRooms(user.getUser())
     return emptyRooms
 
@@ -200,6 +196,19 @@ def get_DB():
     department_path = "Department Courses/" + user.getUser()
     print(department_path)
     return db.getDB(department_path)
+
+@app.put('/update/solution/assignments')
+def update_solution_assignments():
+    # department, course_number, day, time, room_number
+    department = user.getUser()
+    body = request.get_json()
+    print(body)
+    course_number = body["className"]
+    dayAndTime = body["dayAndTime"]
+    day, time = dayAndTime.split(" - ")
+    room_number = body["room"]
+    db.updateSolutionAssignments(department, course_number, day, time, room_number)
+    return { "success": True }
    
 
 
