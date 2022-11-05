@@ -20,6 +20,10 @@ const department = "CS"; // TODO: Change this to be less hardcoded
 let _selectedRooms = null;
 
 submitWarning.style.display = "none";
+const noConflicts = document.getElementById("noConflicts");
+
+const conflictNums = document.getElementById("conflictNums");
+
 
 // Get the empty rooms from the getEmptyRooms() python function
 const getSelectedRooms = async (reset = false) => {
@@ -254,9 +258,21 @@ const handleSubmit = async () => {
             console.log("submitted");
             for(const conflict of conflictSolutions){
                 await ky.put("/update/solution/assignments", { json: conflict.toLocal() })
+                // classConflictsContainer.removeChild(className);
+                // classConflictsContainer.removeChild(conflictTeacher);
+                // classConflictsContainer.removeChild(ConflictDropDown);
             }
+            // while (classConflictsContainer.firstChild) {
+
+            //     classConflictsContainer.removeChild(classConflictsContainer.firstChild);
+            // }
+            classConflictsContainer.innerHTML = ""
             localStorage.removeItem("conflictSolutions");
             conflictSolutions = null
+            noConflicts.style.display = "inline";
+            submitButton.style.display = "none";
+            conflictNums.style.display = "none";
+            
         }
     }
 };

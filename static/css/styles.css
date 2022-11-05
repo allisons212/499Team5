@@ -55,7 +55,7 @@ footer {
     margin-bottom: 0px;
 }
 
-.loginPage p {
+.loginPage .uahImage {
     display: compact;
 
     background-image: url("/static/Pictures/campus-photos-carousel-12.jpg");

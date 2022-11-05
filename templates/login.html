@@ -12,11 +12,13 @@
     <body class="loginPage">
         <div class="topnav" style="margin:0px; position: fixed; width:100%;"></div>
 
-                <p ></p>
+                <p class="uahImage"></p>
             <div class="loginForm">
+                
                 <!-- <div> -->
                     <img src="../static/Pictures/logo.png">
                     <!-- <div> -->
+                        
                 <form action="" method="post" style="margin: auto; width: 50%">
                     <div>
                     <input type="text" placeholder="Username" name="username" value="">
@@ -26,6 +28,9 @@
                 </div>
                     <input class="btn btn-default" type="submit" value="Login">
                 </form>
+                {% if error %}
+                <p class="error"><strong>Error:</strong> Invalid class number.</p>
+                {% endif %}
                 <!-- </div> -->
             </div>
             
