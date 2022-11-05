@@ -37,7 +37,6 @@ from RoomTable import *
 from DataOperationException import * # Custom exceptions
 from DataOperationEnums import * # Custom enums
 
-
 class DataOperation:
     """
     This class holds all the methods that are necessary for database operations
@@ -48,6 +47,7 @@ class DataOperation:
         Authenticates credentials so access to the database is established.
         """
         self._authenticate_credentials()
+
     # End of init        
 
 
@@ -444,9 +444,9 @@ class DataOperation:
         # 3. Time Assignment
         
         # Create a new dictionary with the key:value that we want to change.
-        room_value = {ColumnHeaders.ROOM_ASS.value:room_number}
-        day_value = {ColumnHeaders.DAY_ASS.value: day}
-        time_value = {ColumnHeaders.TIME_ASS.value: time}
+        room_value = {ColumnHeaders.ROOM_PREF.value:room_number}
+        day_value = {ColumnHeaders.DAY_PREF.value: day}
+        time_value = {ColumnHeaders.TIME_PREF.value: time}
         
         # Update the course_dict with the new dictionary values.
         course_dict.update(room_value)
@@ -787,7 +787,6 @@ class DataOperation:
         
         # Update database
         self.updateDB(department_courses, f"/{DatabaseHeaders.COURSES.value}/{user_department}")
-        print("Conflicts:", conflicts_dict)
         
         return conflicts_dict
 
