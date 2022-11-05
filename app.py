@@ -157,6 +157,7 @@ def upload_csv():
         
     return render_template('uploadCSV.html', department=user.getUser(), error=error)
 
+
 @app.post('/assignments/generate')
 def generate_assignments():
     conflicts = db.generate_assignments(user.getUser())
@@ -203,7 +204,6 @@ def update_solution_assignments():
     room_number = body["room"]
     db.updateSolutionAssignments(department, course_number, day, time, room_number)
     return { "success": True }
-   
 
 
 if __name__ == '__main__':

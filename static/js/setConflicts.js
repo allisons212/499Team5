@@ -24,6 +24,10 @@ const noConflicts = document.getElementById("noConflicts");
 
 const conflictNums = document.getElementById("conflictNums");
 
+const updateGenerateButton = document.getElementById("updateGenerateButton");
+
+updateGenerateButton.style.visibility = "hidden";
+
 
 // Get the empty rooms from the getEmptyRooms() python function
 const getSelectedRooms = async (reset = false) => {
@@ -272,6 +276,7 @@ const handleSubmit = async () => {
             noConflicts.style.display = "inline";
             submitButton.style.display = "none";
             conflictNums.style.display = "none";
+            updateGenerateButton.style.visibility = "visible";
             
         }
     }

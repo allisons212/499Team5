@@ -15,6 +15,10 @@ const conflictNums = document.getElementById("conflictNums");
 conflictNums.style.display = "none";
 const noConflicts = document.getElementById("noConflicts");
 noConflicts.style.display = "none";
+
+const updateGenerateButton = document.getElementById("updateGenerateButton");
+
+
 // Import the functions you need from the SDKs you need
 // import { initializeApp } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-app.js";
 import ky from "https://cdn.skypack.dev/ky";
@@ -107,7 +111,7 @@ if (localStorage.hasOwnProperty("conflictSolutions")) {
 
 // Event that occurs when generate button is pressed
 getData.addEventListener("click", async (e) => {
-
+    updateGenerateButton.style.visibility = "hidden";
     const conflicts = await ky.post("/assignments/generate", { json: { department: "CS" } }).json(); // run generate_assignments and store the conflicts
     const getDBData = await ky.get("/get/DB").json()
     // for(const [key, value] of Object.entries(getDBData)){

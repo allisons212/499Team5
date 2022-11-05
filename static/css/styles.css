@@ -186,12 +186,21 @@ input[type="password"] {
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
     font-size: 20px;
     cursor: pointer;
+    float:left;
     /* display: inline-block; */
 }
 /* The style of the generate button when it hovered over */
 .generateButton:hover {
     background-color: #016bb3;
     color: #e4e4e4;
+}
+
+.updateGenerateButton{
+    margin-left: 10px;
+    float:left;
+    font-size: 15px;
+    margin-top: 20px;
+    color:red
 }
 
 .generateEditors {

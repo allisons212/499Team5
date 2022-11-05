@@ -13,15 +13,13 @@
         <div class="topnav">
             <h1 class="departmentTitle">{{department}} Department Schedule Builder</h1>
             <div class="account">
+                <a href="{{ url_for('login') }}">
+                    <i class="fa fa-sign-out" id="logoutIcon"></i>
+                </a>
 
-                    <a href="{{ url_for('login') }}">
-                        <i class="fa fa-sign-out" id="logoutIcon" ></i>
-                    </a>
-                    
-                    <div class="logOutText">Log Out</div>  
+                <div class="logOutText">Log Out</div>
             </div>
         </div>
-
 
         <div class="sidenav">
             <a href="{{ url_for('generate_schedule') }}">
@@ -51,7 +49,13 @@
 
         <div class="main">
             <div class="generateScheduleHeader">
+                <!-- <div> -->
                 <button class="generateButton" type="button" id="getData">Generate</button>
+                <h6 class="updateGenerateButton" id="updateGenerateButton">
+                    <i class="fa fa-exclamation-circle"></i>
+                    Changes have been made. Click Generate to Update!
+                </h6>
+                <!-- </div> -->
                 <div class="generateEditors">
                     <div class="generateConflicts">
                         <i class="fa fa-warning" id="conflictsIcon"></i>
@@ -68,7 +72,6 @@
                                 </div>
 
                                 <div id="classConflicts">
-                                    
                                     <!--Here is where all the information from setConflict is created-->
                                 </div>
                                 <div class="submitConflicts">

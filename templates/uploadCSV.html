@@ -68,11 +68,11 @@
                             <input type="file" name="rooms" id="uploadRooms" accept="text/csv" required />
                         </div>
                     </div>
-                    <input class="uploadCSVSubmit" type="submit" name="submit_button" value="Submit CSV" />
+                    <input class="uploadCSVSubmit" type="submit" name="submit_button" value="Submit CSV" id="uploadCSVSubmitButton" />
                 </form>
 
                 {% if fileUploadSuccess %}
-                <p class="successfulUpload"><strong>Success:</strong> {{fileUploadSuccess}} Generate schedule on Create Schedule page.</p>
+                <p class="successfulUpload" id="uploadCSVSuccessMessage"><strong>Success:</strong> {{fileUploadSuccess}} Generate schedule on Create Schedule page.</p>
                 {% endif %}
             </div>
             <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif">
@@ -148,7 +148,7 @@
             </div>
             
         </div>
-        <!--<script defer type="module" src="../static/js/uploadCSVjs.js"></script> -->
+        <script defer type="module" src="../static/js/uploadCSVjs.js"></script>
 
     </body>
 </html>
