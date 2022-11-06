@@ -812,6 +812,13 @@ input[type=submit]:hover {
     outline-color: red;
 } */
 
+.uploadCSVDropDown select[disabled]{
+    color: #27405a;
+    border-color: #b2bad6;
+    opacity: 1;
+    cursor: context-menu;
+}
+
 .classOverwriteWarning{
     /* min-width: 1000px; */
     text-align: left;

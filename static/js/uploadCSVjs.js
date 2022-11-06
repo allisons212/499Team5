@@ -66,3 +66,8 @@ classTextBox.addEventListener("input", async (e) => {
     }
 });
 
+if(department.options.length === 1 ){
+    department.style.appearance = "none";
+    department.disabled = true
+}
+
