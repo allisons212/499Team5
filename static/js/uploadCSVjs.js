@@ -44,24 +44,46 @@
 
 import ky from "https://cdn.skypack.dev/ky";
 
+
+const classTextBox = document.getElementById("classTextBox");
+const getDBData = await ky.get("/get/DB").json()
+const classOverwriteWarning = document.getElementById("classOverwriteWarning");
+const department = document.getElementById("department");
+
 const uploadCSVSubmitButton = document.getElementById("uploadCSVSubmitButton");
 const uploadCSVSuccessMessage = document.getElementById("uploadCSVSuccessMessage");
 const uploadCSV = document.getElementById("uploadCSV");
 const uploadRooms = document.getElementById("uploadRooms");
 let fileUploadSuccess = ""
 
-// const updateGenerateButton = document.getElementById("updateGenerateButton");
+classTextBox.addEventListener("input", async (e) => {
 
-// updateGenerateButton.style.visibility = "hidden";
+    let realClassName = department.value + classTextBox.value;
+    for(const className of Object.keys(getDBData)){
+        
+        if(realClassName === className){
+            classOverwriteWarning.style.visibility = "visible";
+            break;
+        }
+        else{
+            classOverwriteWarning.style.visibility = "hidden";
+        }
+    }
+});
 
-// uploadCSVSuccessMessage.style.display = "none";
-
+if(department.options.length === 1 ){
+    department.style.appearance = "none";
+    department.disabled = true
+}
 uploadCSVSubmitButton.addEventListener("click", async (e) => {
     console.log("Hello");
     if(uploadCSV.value != "" && uploadRooms.value != ""){
         localStorage.clear();
         // updateGenerateButton.style.visibility = "visible"
     }
+
+
+
 
 
 

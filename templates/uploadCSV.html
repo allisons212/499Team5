@@ -51,7 +51,6 @@
 
         <div class="main" id="CSVUploadForms">
             <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif">
-                
                 <!-- <h2 class="uploadCSVFormTitle" style="font-size:30px; margin-top:50px; margin-bottom: 50px;">OR</h2>
                 <hr> -->
                 <h2 class="uploadCSVFormTitle">CSV Upload</h2>
@@ -72,51 +71,72 @@
                 </form>
 
                 {% if fileUploadSuccess %}
+<<<<<<< HEAD
                 <p class="successfulUpload" id="uploadCSVSuccessMessage"><strong>Success:</strong> {{fileUploadSuccess}} Generate schedule on Create Schedule page.</p>
+=======
+                <p class="successfulUpload">
+                    <strong>Success:</strong> {{fileUploadSuccess}} Generate schedule on Create Schedule page.
+                </p>
+>>>>>>> manualEntryFunction
                 {% endif %}
             </div>
             <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif">
                 <hr style="margin-top: 50px" />
                 <!-- <h2 class="uploadCSVFormTitle" style="font-size:30px; margin-top:50px; margin-bottom: 50px;">OR</h2>
                 <hr> -->
-               
             </div>
 
             <div>
                 <h2 class="uploadCSVFormTitle">Manual Entry</h2>
+                {% if success %}
+                <h3 class="manualSuccess"><strong>Success: </strong> {{success}}</h3>
+                {% endif %} {% if error %} {% for i in error %}
+                <h3 class="manualError">
+                    <i class="fa fa-exclamation-circle"></i> <strong>Error:</strong> {{ i }}
+                    <i class="fa fa-exclamation-circle"></i>
+                </h3>
+                {% endfor %} {% endif %}
+                <div class="classOverwriteWarning">
+                    <h4 id="classOverwriteWarning">
+                        <i class="fa fa-exclamation-circle"></i> Warning! Class already in database. Are you sure you
+                        want to overwrite it?
+                    </h4>
+                </div>
+
                 <form action="" method="post">
                     <div class="uploadCSVForm">
                         <div class="uploadCSVDropDown">
                             <label for="department">Choose a department:<span>*</span></label>
 
-                            <select id="department" name="dept" required>
-                                <option value="CS">CS</option>
-                                <option value="ECE">ECE</option>
-                                <option value="CPE">CPE</option>
+                            <select id="department" name="dept"  required>
+                                <option value="{{ departmentManual }}">{{ departmentManual }}</option>
                             </select>
                         </div>
 
                         <div class="uploadCSVDropDown">
                             <label for="class">Choose a class:<span>*</span></label>
 
-                            <input
-                                type="number"
-                                placeholder="Class"
-                                maxlength="3"
-                                minlength="3"
-                                class
-                                value="{{ request.form.classNum }}"
-                            />
+                            <input name="class" type="text" placeholder="Class" id="classTextBox" />
                         </div>
 
                         <div class="uploadCSVDropDown">
+<<<<<<< HEAD
                             <label for="prof">Choose a faculty member:<span>*</span></label>
                             <select id="prof" name="faculty"></select>
+=======
+                            <label for="prof">Choose a faculty member:</label>
+                            <input id="faculty" name="faculty" type="text" placeholder="Faculty Member" />
+>>>>>>> manualEntryFunction
                         </div>
+
                         <div class="uploadCSVDropDown">
                             <label for="room">Choose a room:<span>*</span></label>
 
-                            <select id="room" name="room"></select>
+                            <select id="room" name="room">
+                                {% for room in rooms %}
+                                <option value="{{ room }}">{{ room }}</option>
+                                {% endfor %}
+                            </select>
                         </div>
 
                         <div class="uploadCSVDropDown">
@@ -142,13 +162,12 @@
                     </div>
                     <input class="uploadCSVSubmit" type="submit" name="submit_button" value="Submit Manual Input" />
                 </form>
-                {% if error == 1 %}
-                <p class="successfulUpload"><strong>Error:</strong> Invalid class number.</p>
-                {% endif %}
             </div>
-            
         </div>
         <script defer type="module" src="../static/js/uploadCSVjs.js"></script>
+<<<<<<< HEAD
 
+=======
+>>>>>>> manualEntryFunction
     </body>
 </html>

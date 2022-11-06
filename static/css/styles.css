@@ -50,6 +50,7 @@ footer {
 
 .loginPage {
     display: inline;
+    overflow-x: hidden;
     overflow-x: hidden; 
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
     margin-bottom: 0px;
@@ -757,10 +758,18 @@ input[type=submit]:hover {
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
     font-size: 50px;
 }
+.manualError{
+    color: red;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 18px;
+    padding: 0px;
+    margin: 0px;
+    padding-bottom: 10px;
+}
 
-#CSVUploadForms span {
-        color: red;
-        margin-left: 2px;
+.manualSuccess{
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 18px;
 }
 
 .uploadCSVForm{
@@ -782,9 +791,7 @@ input[type=submit]:hover {
     border-radius: 5px;
     padding: 8px;
     font-size: 15px;
-    /* cursor:pointer; */
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-    display: flex;
 }
 
 .uploadCSVDropDown select {
@@ -792,6 +799,7 @@ input[type=submit]:hover {
     background-color: #fff;
     color: #27405a;
     border-color: #b2bad6;
+    outline-color: #8d93a7;
     border-radius: 5px;
     padding: 8px;
     font-size: 15px;
@@ -799,6 +807,65 @@ input[type=submit]:hover {
     width: 25%;
     margin: 10px;
     cursor: pointer;
+    border-width: 2px;
+}
+
+.uploadCSVDropDown select:hover{
+    border-color: #8d93a7;
+}
+
+.uploadCSVDropDown ::placeholder{
+    color: #27405a;
+}
+
+/* .uploadCSVDropDown select{
+    border-color: red;
+    outline-color: red;
+} */
+
+.uploadCSVDropDown select[disabled]{
+    color: #27405a;
+    border-color: #b2bad6;
+    opacity: 1;
+    cursor: context-menu;
+}
+
+.classOverwriteWarning{
+    /* min-width: 1000px; */
+    text-align: left;
+    /* margin-right: 250px; */
+    padding-top: 0px;
+    width: 800px;
+    /* height: 50px; */
+    margin-top: 0px;
+    float: right;   
+    justify-content: center;
+}
+.classOverwriteWarning h4{
+    padding: 0px;
+    margin: 0px;
+    padding-top: 30px;
+    color: rgb(219, 147, 53) ;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    visibility: hidden;
+}
+
+
+.uploadCSVDropDown input[type=text]{
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #fff;
+    color: #27405a;
+    border-radius: 5px;
+    border-color: #b2bad6;
+    outline-color: #8d93a7;
+    padding: 8px;
+    font-size: 15px;
+    min-width: 182px;
+    width: 25%;
+    margin: 10px;
+    cursor: text;
+    border-width: 2px;
+    border-style: solid;
 }
 
 .uploadCSVDropDown input[type="number"] {
