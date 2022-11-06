@@ -50,7 +50,7 @@ footer {
 
 .loginPage {
     display: inline;
-    /* overflow: hidden; */
+    overflow-x: hidden;
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
     margin-bottom: 0px;
 }
@@ -63,7 +63,7 @@ footer {
     background-repeat: no-repeat;
     font-size: 0;
     /* vertical-align: top;  */
-    margin-top: 150px;
+    /* margin-top: 150px; */
     background-attachment: fixed;
     background-size: cover;
     width: 50%;
