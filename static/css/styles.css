@@ -51,7 +51,7 @@ footer {
 .loginPage {
     display: inline;
     overflow-x: hidden;
-    overflow-x: hidden; 
+    overflow-x: hidden;
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
     margin-bottom: 0px;
 }
@@ -77,7 +77,7 @@ footer {
 .loginForm {
     text-align: center;
     padding: 20px;
-    margin-top: 200px; 
+    margin-top: 200px;
     margin-left: 50%;
     width: auto;
     height: auto;
@@ -104,6 +104,19 @@ input[type="password"] {
     border-radius: 5px;
     width: 25%;
     min-width: 100px;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #fff;
+    color: #27405a;
+    border-radius: 5px;
+    border-color: #b2bad6;
+    outline-color: #8d93a7;
+    cursor: text;
+    border-width: 2px;
+    border-style: solid;
+}
+
+.loginForm input[type="text"]:hover, input[type="password"]:hover{
+    border-color: #8d93a7;
 }
 
 .loginForm input[type="submit"] {
@@ -173,7 +186,7 @@ input[type="password"] {
 .generateScheduleHeader {
     /* display: flex; */
     /* justify-content: space-between; */
-    min-width:845px;
+    min-width: 845px;
 }
 
 /* Style for the generate button on generateSchedule page */
@@ -187,7 +200,7 @@ input[type="password"] {
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
     font-size: 20px;
     cursor: pointer;
-    float:left;
+    float: left;
     /* display: inline-block; */
 }
 /* The style of the generate button when it hovered over */
@@ -196,13 +209,13 @@ input[type="password"] {
     color: #e4e4e4;
 }
 
-.updateGenerateButton{
+.updateGenerateButton {
     margin-left: 10px;
-    float:left;
+    float: left;
     font-size: 15px;
     margin-top: 20px;
-    color:red;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: red;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .generateEditors {
@@ -453,7 +466,13 @@ input[type="password"] {
     min-width: 100px;
 }
 
-.classMWA, .classMWC, .classMWE, .classMWG, .classTRB, .classTRD, .classTRF {
+.classMWA,
+.classMWC,
+.classMWE,
+.classMWG,
+.classTRB,
+.classTRD,
+.classTRF {
     border: 1px solid;
     background-color: #0078c8;
     color: #ffffff;
@@ -466,7 +485,13 @@ input[type="password"] {
     align-items: center;
 }
 
-.classMWB, .classMWD, .classMWF, .classTRA, .classTRC, .classTRE, .classTRG{
+.classMWB,
+.classMWD,
+.classMWF,
+.classTRA,
+.classTRC,
+.classTRE,
+.classTRG {
     border: 1px solid;
     background-color: #27405a;
     color: #fff;
@@ -488,7 +513,6 @@ input[type="password"] {
     display: inline-block;
     margin: 10px;
     margin-left: 260px;
-    
 }
 
 #faqs h1 {
@@ -546,7 +570,6 @@ h4 {
     text-align: center;
     padding: 10px;
     display: block;
-
 }
 .faqExampleImage button {
     background-color: #0078c8;
@@ -566,7 +589,7 @@ h4 {
     color: #e4e4e4;
 }
 
-.faqExampleImage img{
+.faqExampleImage img {
     border: 1px solid #b2bad6;
 }
 
@@ -631,9 +654,6 @@ h4 {
     flex-direction: column;
 }
 
-
-
-
 /* On smaller screens, where height is less than 450px, change the style of the sidebar (less padding and a smaller font size) */
 @media screen and (max-height: 450px) {
     .sidenav {
@@ -651,7 +671,7 @@ h4 {
     padding-right: 20px;
     margin-left: 200px;
     min-width: 885px;
-    width:auto;
+    width: auto;
 }
 
 .topnav .departmentTitle {
@@ -758,21 +778,21 @@ input[type=submit]:hover {
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
     font-size: 50px;
 }
-.manualError{
+.manualError {
     color: red;
-    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
     font-size: 18px;
     padding: 0px;
     margin: 0px;
     padding-bottom: 10px;
 }
 
-.manualSuccess{
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+.manualSuccess {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
     font-size: 18px;
 }
 
-.uploadCSVForm{
+.uploadCSVForm {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: repeat(3, 1fr);
@@ -810,11 +830,11 @@ input[type=submit]:hover {
     border-width: 2px;
 }
 
-.uploadCSVDropDown select:hover{
+.uploadCSVDropDown select:hover {
     border-color: #8d93a7;
 }
 
-.uploadCSVDropDown ::placeholder{
+.uploadCSVDropDown ::placeholder {
     color: #27405a;
 }
 
@@ -823,14 +843,19 @@ input[type=submit]:hover {
     outline-color: red;
 } */
 
-.uploadCSVDropDown select[disabled]{
+.uploadCSVDropDown select[disabled] {
     color: #27405a;
     border-color: #b2bad6;
     opacity: 1;
     cursor: context-menu;
 }
 
-.classOverwriteWarning{
+#CSVUploadForms span {
+    color: red;
+    margin-left: 2px;
+}
+
+.classOverwriteWarning {
     /* min-width: 1000px; */
     text-align: left;
     /* margin-right: 250px; */
@@ -838,20 +863,19 @@ input[type=submit]:hover {
     width: 800px;
     /* height: 50px; */
     margin-top: 0px;
-    float: right;   
+    float: right;
     justify-content: center;
 }
-.classOverwriteWarning h4{
+.classOverwriteWarning h4 {
     padding: 0px;
     margin: 0px;
     padding-top: 30px;
-    color: rgb(219, 147, 53) ;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: rgb(219, 147, 53);
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
     visibility: hidden;
 }
 
-
-.uploadCSVDropDown input[type=text]{
+.uploadCSVDropDown input[type="text"] {
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
     background-color: #fff;
     color: #27405a;
@@ -951,8 +975,8 @@ input[type=submit]:hover {
     color: #fff;
 }
 
-.successfulUpload{
+.successfulUpload {
     font-size: 20px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
     color: #27405a;
 }
