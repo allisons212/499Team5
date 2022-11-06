@@ -49,7 +49,7 @@
             </a>
         </div>
 
-        <div class="main">
+        <div class="main" id="CSVUploadForms">
             <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif">
                 
                 <!-- <h2 class="uploadCSVFormTitle" style="font-size:30px; margin-top:50px; margin-bottom: 50px;">OR</h2>
@@ -60,11 +60,11 @@
                 <form action="" method="post" enctype="multipart/form-data">
                     <div class="uploadCSVFile">
                         <div class="individualFileUpload">
-                            <label for="uploadCSV">Upload Courses:</label>
+                            <label for="uploadCSV">Upload Courses:<span>*</span></label>
                             <input type="file" name="courses" id="uploadCSV" accept="text/csv" required />
                         </div>
                         <div class="individualFileUpload">
-                            <label for="uploadRooms">Upload Rooms:</label>
+                            <label for="uploadRooms">Upload Rooms:<span>*</span></label>
                             <input type="file" name="rooms" id="uploadRooms" accept="text/csv" required />
                         </div>
                     </div>
@@ -87,7 +87,7 @@
                 <form action="" method="post">
                     <div class="uploadCSVForm">
                         <div class="uploadCSVDropDown">
-                            <label for="department">Choose a department:</label>
+                            <label for="department">Choose a department:<span>*</span></label>
 
                             <select id="department" name="dept" required>
                                 <option value="CS">CS</option>
@@ -97,7 +97,7 @@
                         </div>
 
                         <div class="uploadCSVDropDown">
-                            <label for="class">Choose a class:</label>
+                            <label for="class">Choose a class:<span>*</span></label>
 
                             <input
                                 type="number"
@@ -110,17 +110,17 @@
                         </div>
 
                         <div class="uploadCSVDropDown">
-                            <label for="prof">Choose a faculty member:</label>
+                            <label for="prof">Choose a faculty member:<span>*</span></label>
                             <select id="prof" name="faculty"></select>
                         </div>
                         <div class="uploadCSVDropDown">
-                            <label for="room">Choose a room:</label>
+                            <label for="room">Choose a room:<span>*</span></label>
 
                             <select id="room" name="room"></select>
                         </div>
 
                         <div class="uploadCSVDropDown">
-                            <label for="day">Choose a day:</label>
+                            <label for="day">Choose a day:<span>*</span></label>
 
                             <select id="day" name="day" required>
                                 <option value="MW">Monday/Wednesday</option>
@@ -128,7 +128,7 @@
                             </select>
                         </div>
                         <div class="uploadCSVDropDown">
-                            <label for="time">Choose a time:</label>
+                            <label for="time">Choose a time:<span>*</span></label>
                             <select id="time" name="time" required>
                                 <option value="A">A: 8:00 - 9:20 AM</option>
                                 <option value="B">B: 9:40 - 11:00 AM</option>

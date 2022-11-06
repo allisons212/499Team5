@@ -31,6 +31,7 @@ import ky from "https://cdn.skypack.dev/ky";
 import { Conflict } from "./Conflict.js";
 // import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-analytics.js";
 import { getConflictSolutions } from "./setConflicts.js";
+const delay = ms => new Promise(res => setTimeout(res, ms));
 // // TODO: Add SDKs for Firebase products that you want to use
 // // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -59,7 +60,10 @@ import { getConflictSolutions } from "./setConflicts.js";
 // };
 
 // Store the information that was gotten from the database in the table
-function renderDayAssignment(dayAssignments, courseData) {
+async function renderDayAssignment(dayAssignments, courseData) {
+    clearTable(dayAssignments, courseData);
+    await delay(100)
+    console.log("Hello")
     for (const [day, times] of Object.entries(dayAssignments)) {
         for (const [time, classes] of Object.entries(times)) {
             var data = "";
@@ -84,6 +88,17 @@ function renderDayAssignment(dayAssignments, courseData) {
     }
 }
 
+function clearTable(dayAssignments, courseData){
+    console.log("Clearing table");
+    for (const [day, times] of Object.entries(dayAssignments)) {
+        for (const [time, classes] of Object.entries(times)) {
+            var id = day + time + "0";
+            document.getElementById(id).innerHTML = "";
+            id = day + time + "1";
+            document.getElementById(id).innerHTML = ""
+        }
+    }
+}
 // Get the data stored in local storage if it is there so when page is loaded it contains all the data.
 if (localStorage.hasOwnProperty("dayAssignments") && localStorage.hasOwnProperty("courseData")) {
     document.querySelectorAll(".class").forEach((c) => c.remove());
@@ -194,7 +209,7 @@ getData.addEventListener("click", async (e) => {
 
     // Store the given classes in their corresponding days and times
     for (const [courseName, course] of Object.entries(courseData)) {
-        console.log(courseName, course);
+        // console.log(courseName, course);
 
         const currentDay = course["Day Assignment"];
 

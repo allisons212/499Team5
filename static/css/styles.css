@@ -200,7 +200,8 @@ input[type="password"] {
     float:left;
     font-size: 15px;
     margin-top: 20px;
-    color:red
+    color:red;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .generateEditors {
@@ -757,13 +758,18 @@ input[type=submit]:hover {
     font-size: 50px;
 }
 
+#CSVUploadForms span {
+        color: red;
+        margin-left: 2px;
+}
+
 .uploadCSVForm{
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: repeat(3, 1fr);
     grid-column-gap: 10%;
     grid-row-gap: 0px;
-    max-width: 850px;
+    max-width: 870px;
 }
 
 .uploadCSVDropDown {

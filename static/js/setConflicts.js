@@ -28,7 +28,6 @@ const updateGenerateButton = document.getElementById("updateGenerateButton");
 
 updateGenerateButton.style.visibility = "hidden";
 
-
 // Get the empty rooms from the getEmptyRooms() python function
 const getSelectedRooms = async (reset = false) => {
     if (reset || _selectedRooms === null) _selectedRooms = await ky.get(`/empty/rooms?department=${department}`).json();
@@ -164,9 +163,11 @@ async function appendConflicts(conflictSolutions) {
                 conflict.dayTimeDropDown.disabled = true;
             }
 
-            classConflictsContainer.removeChild(className);
-            classConflictsContainer.removeChild(conflictTeacher);
-            classConflictsContainer.removeChild(ConflictDropDown);
+            
+            if(classConflictsContainer.contains(className)) {classConflictsContainer.removeChild(className);}
+            if(classConflictsContainer.contains(conflictTeacher)){classConflictsContainer.removeChild(conflictTeacher);}
+            if(classConflictsContainer.contains(ConflictDropDown)){ classConflictsContainer.removeChild(ConflictDropDown);}
+            
 
             conflict.roomDayTimeWarning.style.display = "none";
         };
@@ -260,8 +261,8 @@ const handleSubmit = async () => {
             // TODO: call python function used to update database with conflict solutions
             submitWarning.style.display = "none";
             console.log("submitted");
-            for(const conflict of conflictSolutions){
-                await ky.put("/update/solution/assignments", { json: conflict.toLocal() })
+            for (const conflict of conflictSolutions) {
+                await ky.put("/update/solution/assignments", { json: conflict.toLocal() });
                 // classConflictsContainer.removeChild(className);
                 // classConflictsContainer.removeChild(conflictTeacher);
                 // classConflictsContainer.removeChild(ConflictDropDown);
@@ -270,14 +271,13 @@ const handleSubmit = async () => {
 
             //     classConflictsContainer.removeChild(classConflictsContainer.firstChild);
             // }
-            classConflictsContainer.innerHTML = ""
+            classConflictsContainer.innerHTML = "";
             localStorage.removeItem("conflictSolutions");
-            conflictSolutions = null
+            conflictSolutions = null;
             noConflicts.style.display = "inline";
             submitButton.style.display = "none";
             conflictNums.style.display = "none";
             updateGenerateButton.style.visibility = "visible";
-            
         }
     }
 };

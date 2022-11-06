@@ -50,12 +50,17 @@ const uploadCSV = document.getElementById("uploadCSV");
 const uploadRooms = document.getElementById("uploadRooms");
 let fileUploadSuccess = ""
 
+// const updateGenerateButton = document.getElementById("updateGenerateButton");
+
+// updateGenerateButton.style.visibility = "hidden";
+
 // uploadCSVSuccessMessage.style.display = "none";
 
 uploadCSVSubmitButton.addEventListener("click", async (e) => {
     console.log("Hello");
     if(uploadCSV.value != "" && uploadRooms.value != ""){
         localStorage.clear();
+        // updateGenerateButton.style.visibility = "visible"
     }
 
 
