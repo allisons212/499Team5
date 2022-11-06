@@ -181,6 +181,10 @@ def upload_csv():
                 error += "Incorrect faculty formatting, It must be 40 characters or less using only letters, periods, apostrophes, and spaces."
 
             if errorCount > 0:
+                if(errorCount == 1 and error.find('\n')):
+                    error = error.replace('\n','')
+                print(error)
+                    
                 error = error.split('\n')
                 return render_template('uploadCSV.html', department=user.getUser(), departmentManual=departmentManual, rooms=rooms, error=error)
             
