@@ -86,7 +86,7 @@
                 <h3 class="manualSuccess"><strong>Success: </strong> {{success}}</h3>
                 {% endif %} {% if error %} {% for i in error %}
                 <h3 class="manualError">
-                    <i class="fa fa-exclamation-circle"></i> <strong>Error:</strong> {{ i }}
+                    <i class="fa fa-exclamation-circle"></i> {{ i }}
                     <i class="fa fa-exclamation-circle"></i>
                 </h3>
                 {% endfor %} {% endif %}
@@ -110,7 +110,7 @@
                         <div class="uploadCSVDropDown">
                             <label for="class">Choose a class:<span>*</span></label>
 
-                            <input name="class" type="text" placeholder="Class" id="classTextBox" />
+                            <input name="class" type="text" placeholder="Ex. 100-01" id="classTextBox" />
                         </div>
 
                         <div class="uploadCSVDropDown">

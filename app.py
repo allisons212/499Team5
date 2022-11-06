@@ -172,13 +172,13 @@ def upload_csv():
             match = re.findall(r"^[0-9]{3}[-][0-9]{2}$", str(userClass))
             if not match:
                 errorCount += 1
-                error += "Incorrect class formatting, It must be in the format '[3-digit integer]-[2-digit integer]' EX. 102-01 where 01 indicates the section number\n"
+                error += "CLASS ERROR: Incorrect CLASS formatting. Format: '[3-digit integer]-[2-digit integer]' EX. 102-01 where 01 indicates the section number.\n"
             
             # Check faculty for proper formatting
             match = re.findall(r"^[A-Za-z.' ]{1,40}$", str(faculty))
             if not match:
                 errorCount += 1
-                error += "Incorrect faculty formatting, It must be 40 characters or less using only letters, periods, apostrophes, and spaces."
+                error += "FACULTY ERROR: Incorrect FACULTY formatting. Format: 40 characters or less using only letters, periods, apostrophes, and spaces."
 
             if errorCount > 0:
                 if(errorCount == 1 and error.find('\n')):
@@ -188,9 +188,13 @@ def upload_csv():
                 return render_template('uploadCSV.html', department=user.getUser(), departmentManual=departmentManual, rooms=rooms, error=error)
             
             # Enter the data into the database
-            db.manualEntryAssignment(department, userClass, faculty, room, day, time)
+            inDatabase = db.manualEntryAssignment(user.getUser(), userClass, faculty, room, day, time)
 
-            success = "The entry is now in the database"
+            if(not inDatabase):
+                success = "Entry is now in the database."
+            else:
+                success = "Entry in database has been OVERWRITTEN"
+            
             return render_template('uploadCSV.html', department=user.getUser(), departmentManual=departmentManual, rooms=rooms, success=success)
 
     elif request.method == 'GET':

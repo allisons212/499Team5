@@ -428,6 +428,8 @@ class DataOperation:
 
         # Check department_dict to see if the course_key is already in database if so increment course_section
         if course_key not in department_dict:
+
+            inDatabase = False
             # We need this or else we get a key error
             department_dict[course_key] = {}
 
@@ -441,17 +443,23 @@ class DataOperation:
             department_dict[course_key][ColumnHeaders.TIME_ASS.value] = ""
             department_dict[course_key][ColumnHeaders.TIME_PREF.value] = time
         else:
-            print("Class already in database")
-            
-        
-       
-
-        for key, value in department_dict.items():
-            print(key, value)
+            inDatabase = True
+            department_dict[course_key][ColumnHeaders.ROOM_ASS.value] = ""
+            department_dict[course_key][ColumnHeaders.DAY_ASS.value] = ""
+            department_dict[course_key][ColumnHeaders.DAY_PREF.value] = day
+            department_dict[course_key][ColumnHeaders.FAC_ASSIGN.value] = faculty
+            department_dict[course_key][ColumnHeaders.ROOM_PREF.value] = room 
+            department_dict[course_key][ColumnHeaders.SEATS_OPEN.value] = ""
+            department_dict[course_key][ColumnHeaders.TIME_ASS.value] = ""
+            department_dict[course_key][ColumnHeaders.TIME_PREF.value] = time
+            print("Overwriting")
 
 
         # Update the Department Courses in the database
         self.updateDB(department_dict, f"/{DatabaseHeaders.COURSES.value}/{department}")
+
+        # Check to see if entry was in databse for our user output on html page
+        return inDatabase
 
         
 
