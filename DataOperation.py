@@ -417,7 +417,50 @@ class DataOperation:
             raise ImproperDBPathError()
         
     # End of update DB
-    
+
+    def manualEntryAssignment(self, department, course_number, faculty, room, day, time):
+        # Get the departments dict from database
+        department_dict = self.getDB(f"/{DatabaseHeaders.COURSES.value}/{department}")
+        courseInDatabase = False
+
+        # Append department and course_number. We do this because this is how it is stored in the database
+        course_key = department + course_number
+
+        # Check department_dict to see if the course_key is already in database if so increment course_section
+        if course_key not in department_dict:
+            # We need this or else we get a key error
+            department_dict[course_key] = {}
+
+            # Append All of the information into the department_dict
+            department_dict[course_key][ColumnHeaders.ROOM_ASS.value] = ""
+            department_dict[course_key][ColumnHeaders.DAY_ASS.value] = ""
+            department_dict[course_key][ColumnHeaders.DAY_PREF.value] = day
+            department_dict[course_key][ColumnHeaders.FAC_ASSIGN.value] = faculty
+            department_dict[course_key][ColumnHeaders.ROOM_PREF.value] = room 
+            department_dict[course_key][ColumnHeaders.SEATS_OPEN.value] = ""
+            department_dict[course_key][ColumnHeaders.TIME_ASS.value] = ""
+            department_dict[course_key][ColumnHeaders.TIME_PREF.value] = time
+        else:
+            print("Class already in database")
+            
+        
+       
+
+        for key, value in department_dict.items():
+            print(key, value)
+
+
+        # Update the Department Courses in the database
+        self.updateDB(department_dict, f"/{DatabaseHeaders.COURSES.value}/{department}")
+
+        
+
+        
+
+
+
+
+        
     def updateSolutionAssignments(self, department, course_number, day, time, room_number):
         """ Function takes in a course_number, day, time, and a room_number and updates the course number
             in Department Courses, and changes the fields Classroom Assignment, Day Assignment, Time Assignment 
@@ -471,7 +514,7 @@ class DataOperation:
             room_tables_entry_dict[counter] = i
             counter = counter + 1
         
-         # Update the Department Courses in database
+        # Update the Department Courses in database
         self.updateDB(course_dict, f"/{DatabaseHeaders.COURSES.value}/{department}/{course_number}")
         
         # Update the room_tables in database
@@ -636,7 +679,28 @@ class DataOperation:
         except KeyError: # account's 'department' field is nonexistent
             raise KeyError("Account information incomplete, please contact your administrator.")
     # End of getAccount
-    
+
+    def getEmptyRoomsOnly(self, department):
+        """
+        Compiles a dictionary from getEmptyRooms() in the specificed department.
+        Where the keys are the room numbers and value is day and time
+
+        This function is only concerned with returning the Rooms in a list.
+        We dont care about the times
+
+        Args:
+            department (string): department acronym (e.g., "CS", "ECE")
+        
+        Returns:
+            List: Returns the keys of the dict that is obtained from getEmptyRooms()
+        """
+        roomsdict = self.getEmptyRooms(department)
+        roomsOnly = []
+
+        for key, values in roomsdict.items():
+            roomsOnly.append(key)
+
+        return roomsOnly    
     
     def getEmptyRooms(self, department):
         """
@@ -645,7 +709,7 @@ class DataOperation:
         Values are lists of empty periods i.e., [ 'MW - A', 'MW - B', etc. ]
 
         Args:
-            department (string): department acronym (e.g., "OKT", "ENG")
+            department (string): department acronym (e.g., "CS", "ECE")
 
         Returns:
             dict: Keys are the room numbers, Values are lists of empty periods

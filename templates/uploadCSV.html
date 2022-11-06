@@ -84,39 +84,56 @@
 
             <div>
                 <h2 class="uploadCSVFormTitle">Manual Entry</h2>
+                {% if success %}
+                    <h3 class="manualSuccess"><strong>Success: </strong> {{success}}</h3>
+                {% endif %}
+
+                {% if error %}
+                    <h3 class="manualError"><strong>Error:</strong> {{error}} </h3>
+                {% endif %}
+
                 <form action="" method="post">
                     <div class="uploadCSVForm">
                         <div class="uploadCSVDropDown">
                             <label for="department">Choose a department:</label>
 
                             <select id="department" name="dept" required>
-                                <option value="CS">CS</option>
-                                <option value="ECE">ECE</option>
-                                <option value="CPE">CPE</option>
+                                <option value="{{ departmentManual }}">{{ departmentManual }}</option>
                             </select>
+                        </div>
+
+                        <div class="uploadCSVDropDown">
+                            <label for="room">Choose a room:</label>
+
+                            <select id="room" name="room">
+                                {% for room in rooms %} 
+                                    <option value="{{ room }}"> {{ room }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="uploadCSVDropDown">
+                            <label for="prof">Choose a faculty member:</label>
+                            <input
+                                id="faculty"
+                                name="faculty"
+                                type="text"
+                                placeholder="Faculty Member"
+                                style="height: 32px; font-size:12pt;"
+                            />
+                            
                         </div>
 
                         <div class="uploadCSVDropDown">
                             <label for="class">Choose a class:</label>
 
                             <input
-                                type="number"
+                                name ="class"
+                                type = "text"
                                 placeholder="Class"
-                                maxlength="3"
-                                minlength="3"
-                                class
-                                value="{{ request.form.classNum }}"
+                                style="height: 32px; font-size:12pt;"
+                               
                             />
-                        </div>
-
-                        <div class="uploadCSVDropDown">
-                            <label for="prof">Choose a faculty member:</label>
-                            <select id="prof" name="faculty"></select>
-                        </div>
-                        <div class="uploadCSVDropDown">
-                            <label for="room">Choose a room:</label>
-
-                            <select id="room" name="room"></select>
                         </div>
 
                         <div class="uploadCSVDropDown">
@@ -142,9 +159,6 @@
                     </div>
                     <input class="uploadCSVSubmit" type="submit" name="submit_button" value="Submit Manual Input" />
                 </form>
-                {% if error == 1 %}
-                <p class="successfulUpload"><strong>Error:</strong> Invalid class number.</p>
-                {% endif %}
             </div>
             
         </div>

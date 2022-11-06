@@ -33,6 +33,7 @@ from DataOperationException import *
 from DataOperation import DataOperation
 from werkzeug.utils import secure_filename
 import os
+import re
 
 
 class User:
@@ -121,8 +122,13 @@ def settings():
 @app.route('/uploadCSV', methods=['POST', 'GET'])
 def upload_csv():
     fileUploadSuccess = None
-    fileError = None
-    error = 0
+    error = None
+    success=  None
+
+    # Manual box entrys that are dynamic
+    departmentManual = user.getUser()
+    rooms = db.getEmptyRoomsOnly(user.getUser())
+
     if request.method == 'POST':
         
         if request.form['submit_button'] == 'Submit CSV':
@@ -143,18 +149,48 @@ def upload_csv():
 
             # CourseFile RoomsFile
             CourseFile = CourseFile.filename
-            RoomsFile = RoomsFile.filename
+            RoomsFile = RoomsFile.filename\
 
             # Call the database to call the CourseFile
             db.importCSV(f"static/upload/{CourseFile}", f"static/upload/{RoomsFile}", user.getUser())
             fileUploadSuccess = "File Uploaded Successfully!"
 
             # Render the template with updated text on screen
-            return render_template('uploadCSV.html', department=user.getUser(), fileUploadSuccess=fileUploadSuccess)
+            return render_template('uploadCSV.html', department=user.getUser(), fileUploadSuccess=fileUploadSuccess, departmentManual=departmentManual, rooms=rooms)
+        elif request.form['submit_button'] == "Submit Manual Input":
+
+            # Get each piece of information from the HTML
+            department = request.form.get("dept")
+            userClass = request.form.get("class")
+            faculty = request.form.get("faculty")
+            room = request.form.get("room")
+            day = request.form.get("day")
+            time = request.form.get("time")
+
+            # Check userClass for proper formatting
+            match = re.findall(r"^[0-9]{3}[-][0-9]{2}$", str(userClass))
+            if not match:
+                error = "Incorrect class formatting, It must be in the format '[3-digit integer]-[2-digit integer]' EX. 102-01 where 01 indicates the section number"
+                return render_template('uploadCSV.html', department=user.getUser(), departmentManual=departmentManual, rooms=rooms, error=error)
             
+            # Check faculty for proper formatting
+            match = re.findall(r"^[A-Za-z.' ]{1,40}$", str(faculty))
+            if not match:
+                error = "Incorrect faculty formatting, It must be 40 characters or less using only letters, periods, apostrophes, and spaces."
+                return render_template('uploadCSV.html', department=user.getUser(), departmentManual=departmentManual, rooms=rooms, error=error)
+            
+            # Enter the data into the database
+
+
+            success = "The entry is now in the database"
+
+            db.manualEntryAssignment(department, userClass, faculty, room, day, time)
+
+            return render_template('uploadCSV.html', department=user.getUser(), departmentManual=departmentManual, rooms=rooms, success=success)
+
     elif request.method == 'GET':
-        return render_template('uploadCSV.html', department=user.getUser())
-        
+        return render_template('uploadCSV.html', department=user.getUser(), departmentManual=departmentManual, rooms=rooms)
+    
     return render_template('uploadCSV.html', department=user.getUser(), error=error)
 
 @app.post('/assignments/generate')
