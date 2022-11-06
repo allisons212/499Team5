@@ -89,7 +89,7 @@
                 {% endif %}
 
                 {% if error %}
-                    <h3 class="manualError"><strong>Error:</strong> {{error}} </h3>
+                    <h3 class="manualError"><i class="fa fa-exclamation-circle"></i> <strong>Error:</strong> {{error}} <i class="fa fa-exclamation-circle"></i></h3>
                 {% endif %}
 
                 <form action="" method="post">
@@ -103,6 +103,30 @@
                         </div>
 
                         <div class="uploadCSVDropDown">
+                            <label for="class">Choose a class:</label>
+
+                            <input
+                                name ="class"
+                                type = "text"
+                                placeholder="Class"
+                                
+                               
+                            />
+                        </div>
+
+                        
+                        <div class="uploadCSVDropDown">
+                            <label for="prof">Choose a faculty member:</label>
+                            <input
+                                id="faculty"
+                                name="faculty"
+                                type="text"
+                                placeholder="Faculty Member"
+                            />
+                            
+                        </div>
+
+                        <div class="uploadCSVDropDown">
                             <label for="room">Choose a room:</label>
 
                             <select id="room" name="room">
@@ -112,29 +136,7 @@
                             </select>
                         </div>
 
-                        <div class="uploadCSVDropDown">
-                            <label for="prof">Choose a faculty member:</label>
-                            <input
-                                id="faculty"
-                                name="faculty"
-                                type="text"
-                                placeholder="Faculty Member"
-                                style="height: 32px; font-size:12pt;"
-                            />
-                            
-                        </div>
-
-                        <div class="uploadCSVDropDown">
-                            <label for="class">Choose a class:</label>
-
-                            <input
-                                name ="class"
-                                type = "text"
-                                placeholder="Class"
-                                style="height: 32px; font-size:12pt;"
-                               
-                            />
-                        </div>
+                        
 
                         <div class="uploadCSVDropDown">
                             <label for="day">Choose a day:</label>
