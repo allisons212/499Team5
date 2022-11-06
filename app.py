@@ -122,7 +122,8 @@ def settings():
 @app.route('/uploadCSV', methods=['POST', 'GET'])
 def upload_csv():
     fileUploadSuccess = None
-    error = None
+    error = ""
+    errorCount = 0
     success=  None
 
     # Manual box entrys that are dynamic
@@ -170,22 +171,23 @@ def upload_csv():
             # Check userClass for proper formatting
             match = re.findall(r"^[0-9]{3}[-][0-9]{2}$", str(userClass))
             if not match:
-                error = "Incorrect class formatting, It must be in the format '[3-digit integer]-[2-digit integer]' EX. 102-01 where 01 indicates the section number"
-                return render_template('uploadCSV.html', department=user.getUser(), departmentManual=departmentManual, rooms=rooms, error=error)
+                errorCount += 1
+                error += "Incorrect class formatting, It must be in the format '[3-digit integer]-[2-digit integer]' EX. 102-01 where 01 indicates the section number\n"
             
             # Check faculty for proper formatting
             match = re.findall(r"^[A-Za-z.' ]{1,40}$", str(faculty))
             if not match:
-                error = "Incorrect faculty formatting, It must be 40 characters or less using only letters, periods, apostrophes, and spaces."
+                errorCount += 1
+                error += "Incorrect faculty formatting, It must be 40 characters or less using only letters, periods, apostrophes, and spaces."
+
+            if errorCount > 0:
+                error = error.split('\n')
                 return render_template('uploadCSV.html', department=user.getUser(), departmentManual=departmentManual, rooms=rooms, error=error)
             
             # Enter the data into the database
-
-
-            success = "The entry is now in the database"
-
             db.manualEntryAssignment(department, userClass, faculty, room, day, time)
 
+            success = "The entry is now in the database"
             return render_template('uploadCSV.html', department=user.getUser(), departmentManual=departmentManual, rooms=rooms, success=success)
 
     elif request.method == 'GET':

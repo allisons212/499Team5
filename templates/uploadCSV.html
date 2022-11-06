@@ -89,7 +89,9 @@
                 {% endif %}
 
                 {% if error %}
-                    <h3 class="manualError"><i class="fa fa-exclamation-circle"></i> <strong>Error:</strong> {{error}} <i class="fa fa-exclamation-circle"></i></h3>
+                    {% for i in error %}
+                        <h3 class="manualError"><i class="fa fa-exclamation-circle"></i> <strong>Error:</strong> {{ i }} <i class="fa fa-exclamation-circle"></i></h3>
+                    {% endfor %}
                 {% endif %}
 
                 <form action="" method="post">

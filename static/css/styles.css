@@ -751,6 +751,9 @@ input[type=submit]:hover {
     color: red;
     font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-size: 18px;
+    padding: 0px;
+    margin: 0px;
+    padding-bottom: 10px;
 }
 
 .manualSuccess{
