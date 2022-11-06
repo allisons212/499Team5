@@ -51,7 +51,6 @@
 
         <div class="main">
             <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif">
-                
                 <!-- <h2 class="uploadCSVFormTitle" style="font-size:30px; margin-top:50px; margin-bottom: 50px;">OR</h2>
                 <hr> -->
                 <h2 class="uploadCSVFormTitle">CSV Upload</h2>
@@ -72,27 +71,33 @@
                 </form>
 
                 {% if fileUploadSuccess %}
-                <p class="successfulUpload"><strong>Success:</strong> {{fileUploadSuccess}} Generate schedule on Create Schedule page.</p>
+                <p class="successfulUpload">
+                    <strong>Success:</strong> {{fileUploadSuccess}} Generate schedule on Create Schedule page.
+                </p>
                 {% endif %}
             </div>
             <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif">
                 <hr style="margin-top: 50px" />
                 <!-- <h2 class="uploadCSVFormTitle" style="font-size:30px; margin-top:50px; margin-bottom: 50px;">OR</h2>
                 <hr> -->
-               
             </div>
 
             <div>
                 <h2 class="uploadCSVFormTitle">Manual Entry</h2>
                 {% if success %}
-                    <h3 class="manualSuccess"><strong>Success: </strong> {{success}}</h3>
-                {% endif %}
-
-                {% if error %}
-                    {% for i in error %}
-                        <h3 class="manualError"><i class="fa fa-exclamation-circle"></i> <strong>Error:</strong> {{ i }} <i class="fa fa-exclamation-circle"></i></h3>
-                    {% endfor %}
-                {% endif %}
+                <h3 class="manualSuccess"><strong>Success: </strong> {{success}}</h3>
+                {% endif %} {% if error %} {% for i in error %}
+                <h3 class="manualError">
+                    <i class="fa fa-exclamation-circle"></i> <strong>Error:</strong> {{ i }}
+                    <i class="fa fa-exclamation-circle"></i>
+                </h3>
+                {% endfor %} {% endif %}
+                <div class="classOverwriteWarning">
+                    <h4 id="classOverwriteWarning">
+                        <i class="fa fa-exclamation-circle"></i> Warning! Class already in database. Are you sure you
+                        want to overwrite it?
+                    </h4>
+                </div>
 
                 <form action="" method="post">
                     <div class="uploadCSVForm">
@@ -107,38 +112,23 @@
                         <div class="uploadCSVDropDown">
                             <label for="class">Choose a class:</label>
 
-                            <input
-                                name ="class"
-                                type = "text"
-                                placeholder="Class"
-                                
-                               
-                            />
+                            <input name="class" type="text" placeholder="Class" id="classTextBox" />
                         </div>
 
-                        
                         <div class="uploadCSVDropDown">
                             <label for="prof">Choose a faculty member:</label>
-                            <input
-                                id="faculty"
-                                name="faculty"
-                                type="text"
-                                placeholder="Faculty Member"
-                            />
-                            
+                            <input id="faculty" name="faculty" type="text" placeholder="Faculty Member" />
                         </div>
 
                         <div class="uploadCSVDropDown">
                             <label for="room">Choose a room:</label>
 
                             <select id="room" name="room">
-                                {% for room in rooms %} 
-                                    <option value="{{ room }}"> {{ room }}</option>
+                                {% for room in rooms %}
+                                <option value="{{ room }}">{{ room }}</option>
                                 {% endfor %}
                             </select>
                         </div>
-
-                        
 
                         <div class="uploadCSVDropDown">
                             <label for="day">Choose a day:</label>
@@ -164,9 +154,7 @@
                     <input class="uploadCSVSubmit" type="submit" name="submit_button" value="Submit Manual Input" />
                 </form>
             </div>
-            
         </div>
-        <!--<script defer type="module" src="../static/js/uploadCSVjs.js"></script> -->
-
+        <script defer type="module" src="../static/js/uploadCSVjs.js"></script>
     </body>
 </html>
