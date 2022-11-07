@@ -44,47 +44,61 @@
 
 import ky from "https://cdn.skypack.dev/ky";
 
-
 const classTextBox = document.getElementById("classTextBox");
-const getDBData = await ky.get("/get/DB").json()
+const facultyTextBox = document.getElementById("faculty");
+const getDBData = await ky.get("/get/DB").json();
 const classOverwriteWarning = document.getElementById("classOverwriteWarning");
 const department = document.getElementById("department");
-
 const uploadCSVSubmitButton = document.getElementById("uploadCSVSubmitButton");
-const uploadCSVSuccessMessage = document.getElementById("uploadCSVSuccessMessage");
 const uploadCSV = document.getElementById("uploadCSV");
 const uploadRooms = document.getElementById("uploadRooms");
-let fileUploadSuccess = ""
+const manualSuccess = document.getElementById("manualSuccess");
+const manualSubmitButton = document.getElementById("manualSubmitButton");
+// export let addGenerateWarning;
 
-classTextBox.addEventListener("input", async (e) => {
-
-    let realClassName = department.value + classTextBox.value;
-    for(const className of Object.keys(getDBData)){
-        
-        if(realClassName === className){
-            classOverwriteWarning.style.visibility = "visible";
-            break;
+console.log("HELLO THERE");
+if (classTextBox != null) {
+    classTextBox.addEventListener("input", async (e) => {
+        let realClassName = department.value + classTextBox.value;
+        for (const className of Object.keys(getDBData)) {
+            if (realClassName === className) {
+                classOverwriteWarning.style.visibility = "visible";
+                break;
+            } else {
+                classOverwriteWarning.style.visibility = "hidden";
+            }
         }
-        else{
-            classOverwriteWarning.style.visibility = "hidden";
-        }
-    }
-});
-
-if(department.options.length === 1 ){
-    department.style.appearance = "none";
-    department.disabled = true
+    });
 }
-uploadCSVSubmitButton.addEventListener("click", async (e) => {
-    console.log("Hello");
-    if(uploadCSV.value != "" && uploadRooms.value != ""){
-        localStorage.clear();
-        // updateGenerateButton.style.visibility = "visible"
+
+if (department != null) {
+    if (department.options.length === 1) {
+        department.style.appearance = "none";
+        department.disabled = true;
     }
+}
+if (uploadCSVSubmitButton != null) {
+    uploadCSVSubmitButton.addEventListener("click", async (e) => {
+        if (uploadCSV.value != "" && uploadRooms.value != "") {
+            localStorage.clear();
+            // updateGenerateButton.style.visibility = "visible"
+            localStorage.setItem("updateGenerateButton", true)
+            console.log("Hello")
+        }
+        // else{
+        //     addGenerateWarning = false;
+        //     console.log("There");
+        // }
+    });
+}
 
-
-
-
-
-
-});
+if (manualSubmitButton != null) {
+    manualSubmitButton.addEventListener("click", async (e) => {
+        if (/^[0-9]{3}[-][0-9]{2}$/.test(classTextBox.value) && /^[A-Za-z.' ]{1,40}$/.test(facultyTextBox.value)) {
+            localStorage.clear();
+            // addGenerateWarning = true;
+            localStorage.setItem("updateGenerateButton", true)
+            console.log("General")
+        }
+    });
+}

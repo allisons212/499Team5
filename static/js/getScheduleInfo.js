@@ -28,9 +28,9 @@ import ky from "https://cdn.skypack.dev/ky";
 //     onValue as _onValue,
 //     child,
 // } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-database.js";
-import { Conflict } from "./Conflict.js";
 // import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.10.0/firebase-analytics.js";
 import { getConflictSolutions } from "./setConflicts.js";
+// import { addGenerateWarning } from "./uploadCSVjs.js";
 const delay = ms => new Promise(res => setTimeout(res, ms));
 // // TODO: Add SDKs for Firebase products that you want to use
 // // https://firebase.google.com/docs/web/setup#available-libraries
@@ -119,6 +119,10 @@ if (localStorage.hasOwnProperty("conflictSolutions")) {
     // console.log("There")
 }
 
+if(localStorage.hasOwnProperty("updateGenerateButton") && localStorage.getItem("updateGenerateButton")){
+    updateGenerateButton.style.visibility = "visible";
+}
+
 // Initialize Firebase
 // const app = initializeApp(firebaseConfig);
 // const analytics = getAnalytics(app);
@@ -126,6 +130,7 @@ if (localStorage.hasOwnProperty("conflictSolutions")) {
 
 // Event that occurs when generate button is pressed
 getData.addEventListener("click", async (e) => {
+    localStorage.removeItem("updateGenerateButton");
     updateGenerateButton.style.visibility = "hidden";
     const conflicts = await ky.post("/assignments/generate", { json: { department: "CS" } }).json(); // run generate_assignments and store the conflicts
     const getDBData = await ky.get("/get/DB").json()

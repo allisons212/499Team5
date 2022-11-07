@@ -91,7 +91,7 @@
             <div>
                 <h2 class="uploadCSVFormTitle">Manual Entry</h2>
                 {% if success %}
-                <h3 class="manualSuccess"><strong>Success: </strong> {{success}}</h3>
+                <h3 class="manualSuccess" id="manualSuccess"><strong>Success: </strong> {{success}}</h3>
                 {% endif %} {% if error %} {% for i in error %}
                 <h3 class="manualError">
                     <i class="fa fa-exclamation-circle"></i> {{ i }}
@@ -99,8 +99,6 @@
                 </h3>
                 {% endfor %} {% endif %}
                 <div class="UploadCSVFormAndWarning">
-                    
-
                     <form action="" method="post">
                         <div class="uploadCSVForm">
                             <div class="uploadCSVDropDown">
@@ -153,7 +151,13 @@
                                 </select>
                             </div>
                         </div>
-                        <input class="uploadCSVSubmit" type="submit" name="submit_button" value="Submit Manual Input" />
+                        <input
+                            class="uploadCSVSubmit"
+                            type="submit"
+                            name="submit_button"
+                            value="Submit Manual Input"
+                            id="manualSubmitButton"
+                        />
                     </form>
 
                     <div class="classOverwriteWarning">

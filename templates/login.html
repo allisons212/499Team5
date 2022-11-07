@@ -12,28 +12,29 @@
     <body class="loginPage">
         <div class="topnav" style="margin:0px; width:100%;"></div>
 
+            <div class="loginWrapper">
                 <p class="uahImage"></p>
-            <div class="loginForm">
-                
-                <!-- <div> -->
-                    <img src="../static/Pictures/logo.png">
+                <div class="loginForm">
+                    
                     <!-- <div> -->
-                        
-                <form action="" method="post" style="margin: auto; width: 50%">
+                        <img src="../static/Pictures/logo.png">
+                        <!-- <div> -->
+                            
+                    <form action="" method="post" style="margin: auto; width: 50%">
+                        <div>
+                        <input type="text" placeholder="Username" name="username" value="">
+                    </div>
                     <div>
-                    <input type="text" placeholder="Username" name="username" value="">
+                        <input type="password" placeholder="Password" name="password" value="">
+                    </div>
+                        <input class="btn btn-default" type="submit" value="Login">
+                    </form>
+                    {% if error %}
+                    <p class="error"><strong>Error:</strong> {{error}}</p>
+                    {% endif %}
+                    <!-- </div> -->
                 </div>
-                <div>
-                    <input type="password" placeholder="Password" name="password" value="">
-                </div>
-                    <input class="btn btn-default" type="submit" value="Login">
-                </form>
-                {% if error %}
-                <p class="error"><strong>Error:</strong> {{error}}</p>
-                {% endif %}
-                <!-- </div> -->
             </div>
-            
 
     </body>
 

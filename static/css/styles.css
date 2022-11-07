@@ -54,6 +54,15 @@ footer {
     overflow-x: hidden;
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
     margin-bottom: 0px;
+    height: 100vh;
+    min-height: 800px;
+}
+
+.loginWrapper {
+    display: flex;
+    flex-direction: row;
+    min-height: calc(100vh - 150px);
+    justify-content: space-around;
 }
 
 .loginPage .uahImage {
@@ -70,7 +79,6 @@ footer {
     width: 50%;
     float: left;
     /* height: 100%; */
-    height: 100vh;
     /* position: fixed; */
 }
 
@@ -78,9 +86,7 @@ footer {
     text-align: center;
     padding: 20px;
     margin-top: 10%;
-    margin-left: 50%;
-    width: auto;
-    height: auto;
+    flex-grow: 1;
 }
 .loginForm img {
     border-radius: 8px;
