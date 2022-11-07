@@ -67,11 +67,19 @@
                             <input type="file" name="rooms" id="uploadRooms" accept="text/csv" required />
                         </div>
                     </div>
-                    <input class="uploadCSVSubmit" type="submit" name="submit_button" value="Submit CSV" id="uploadCSVSubmitButton" />
+                    <input
+                        class="uploadCSVSubmit"
+                        type="submit"
+                        name="submit_button"
+                        value="Submit CSV"
+                        id="uploadCSVSubmitButton"
+                    />
                 </form>
 
                 {% if fileUploadSuccess %}
-                <p class="successfulUpload" id="uploadCSVSuccessMessage"><strong>Success:</strong> {{fileUploadSuccess}} Generate schedule on Create Schedule page.</p>
+                <p class="successfulUpload" id="uploadCSVSuccessMessage">
+                    <strong>Success:</strong> {{fileUploadSuccess}} Generate schedule on Create Schedule page.
+                </p>
                 {% endif %}
             </div>
             <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif">
@@ -90,67 +98,71 @@
                     <i class="fa fa-exclamation-circle"></i>
                 </h3>
                 {% endfor %} {% endif %}
-                <div class="classOverwriteWarning">
-                    <h4 id="classOverwriteWarning">
-                        <i class="fa fa-exclamation-circle"></i> Warning! Class already in database. Are you sure you
-                        want to overwrite it?
-                    </h4>
-                </div>
+                <div class="UploadCSVFormAndWarning">
+                    
 
-                <form action="" method="post">
-                    <div class="uploadCSVForm">
-                        <div class="uploadCSVDropDown">
-                            <label for="department">Choose a department:<span>*</span></label>
+                    <form action="" method="post">
+                        <div class="uploadCSVForm">
+                            <div class="uploadCSVDropDown">
+                                <label for="department">Choose a department:<span>*</span></label>
 
-                            <select id="department" name="dept"  required>
-                                <option value="{{ departmentManual }}">{{ departmentManual }}</option>
-                            </select>
+                                <select id="department" name="dept" required>
+                                    <option value="{{ departmentManual }}">{{ departmentManual }}</option>
+                                </select>
+                            </div>
+
+                            <div class="uploadCSVDropDown">
+                                <label for="class">Choose a class:<span>*</span></label>
+
+                                <input name="class" type="text" placeholder="Ex. 100-01" id="classTextBox" />
+                            </div>
+
+                            <div class="uploadCSVDropDown">
+                                <label for="prof">Choose a faculty member:<span>*</span></label>
+                                <input id="faculty" name="faculty" type="text" placeholder="Faculty Member" />
+                            </div>
+
+                            <div class="uploadCSVDropDown">
+                                <label for="room">Choose a room:<span>*</span></label>
+
+                                <select id="room" name="room">
+                                    {% for room in rooms %}
+                                    <option value="{{ room }}">{{ room }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="uploadCSVDropDown">
+                                <label for="day">Choose a day:<span>*</span></label>
+
+                                <select id="day" name="day" required>
+                                    <option value="MW">Monday/Wednesday</option>
+                                    <option value="TR">Tuesday/Thursday</option>
+                                </select>
+                            </div>
+                            <div class="uploadCSVDropDown">
+                                <label for="time">Choose a time:<span>*</span></label>
+                                <select id="time" name="time" required>
+                                    <option value="A">A: 8:00 - 9:20 AM</option>
+                                    <option value="B">B: 9:40 - 11:00 AM</option>
+                                    <option value="C">C: 11:20 AM - 12:40 PM</option>
+                                    <option value="D">D: 1:00 - 2:20 PM</option>
+                                    <option value="E">E: 2:40 - 4:00 PM</option>
+                                    <option value="F">F: 4:20 - 5:40 PM</option>
+                                    <option value="G">G: 6:00 - 7:20 PM</option>
+                                </select>
+                            </div>
                         </div>
+                        <input class="uploadCSVSubmit" type="submit" name="submit_button" value="Submit Manual Input" />
+                    </form>
 
-                        <div class="uploadCSVDropDown">
-                            <label for="class">Choose a class:<span>*</span></label>
-
-                            <input name="class" type="text" placeholder="Ex. 100-01" id="classTextBox" />
-                        </div>
-
-                        <div class="uploadCSVDropDown">
-                            <label for="prof">Choose a faculty member:<span>*</span></label>
-                            <input id="faculty" name="faculty" type="text" placeholder="Faculty Member" />
-                        </div>
-
-                        <div class="uploadCSVDropDown">
-                            <label for="room">Choose a room:<span>*</span></label>
-
-                            <select id="room" name="room">
-                                {% for room in rooms %}
-                                <option value="{{ room }}">{{ room }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-
-                        <div class="uploadCSVDropDown">
-                            <label for="day">Choose a day:<span>*</span></label>
-
-                            <select id="day" name="day" required>
-                                <option value="MW">Monday/Wednesday</option>
-                                <option value="TR">Tuesday/Thursday</option>
-                            </select>
-                        </div>
-                        <div class="uploadCSVDropDown">
-                            <label for="time">Choose a time:<span>*</span></label>
-                            <select id="time" name="time" required>
-                                <option value="A">A: 8:00 - 9:20 AM</option>
-                                <option value="B">B: 9:40 - 11:00 AM</option>
-                                <option value="C">C: 11:20 AM - 12:40 PM</option>
-                                <option value="D">D: 1:00 - 2:20 PM</option>
-                                <option value="E">E: 2:40 - 4:00 PM</option>
-                                <option value="F">F: 4:20 - 5:40 PM</option>
-                                <option value="G">G: 6:00 - 7:20 PM</option>
-                            </select>
-                        </div>
+                    <div class="classOverwriteWarning">
+                        <h4 id="classOverwriteWarning">
+                            <i class="fa fa-exclamation-circle"></i> Warning! Class already in database. Are you sure
+                            you want to overwrite it?
+                        </h4>
                     </div>
-                    <input class="uploadCSVSubmit" type="submit" name="submit_button" value="Submit Manual Input" />
-                </form>
+                </div>
             </div>
         </div>
         <script defer type="module" src="../static/js/uploadCSVjs.js"></script>

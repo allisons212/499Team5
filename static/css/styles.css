@@ -94,6 +94,7 @@ footer {
     display: inline;
     width: 25%;
     height: 25%;
+
 }
 
 .loginForm input[type="text"],
@@ -802,6 +803,11 @@ input[type=submit]:hover {
     max-width: 870px;
 }
 
+.UploadCSVFormAndWarning form{
+    min-width: 870px;
+    /* min-height:25% */
+}
+
 .uploadCSVDropDown {
     display: flex;
     align-items: center;
@@ -856,21 +862,24 @@ input[type=submit]:hover {
     margin-left: 2px;
 }
 
+.UploadCSVFormAndWarning{
+    display: grid;
+  grid-template-columns: 870px 600px;
+}
+
 .classOverwriteWarning {
-    /* min-width: 1000px; */
     text-align: left;
-    /* margin-right: 250px; */
-    padding-top: 0px;
-    width: 800px;
-    /* height: 50px; */
+    padding-top: 25px;
+
+    margin-right: 0px;
     margin-top: 0px;
-    float: right;
     justify-content: center;
+
+    
 }
 .classOverwriteWarning h4 {
     padding: 0px;
     margin: 0px;
-    padding-top: 30px;
     color: rgb(219, 147, 53);
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
     visibility: hidden;
