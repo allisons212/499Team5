@@ -88,8 +88,11 @@ class DataOperation:
             FileNotFoundError: If filename does not get resolved to a csv file.
             ImportFormatError: If imported CSV file does not adhere to specified formatting guidelines.
         """
-        self._importRoomCSV(room_csv_path, department)
-        self._importCourseCSV(course_csv_path, department)
+        try:
+            self._importRoomCSV(room_csv_path, department)
+            self._importCourseCSV(course_csv_path, department)
+        except ImportFormatError as ife:
+            raise ImportFormatError(str(ife))
     # End of importCSV
     
     def _importRoomCSV(self, filename, department):
@@ -116,7 +119,7 @@ class DataOperation:
         format_error_count = 0
         
         # Cumulative string to store all exception/error messages for each wrongly formatted entry
-        format_error_msg = "" 
+        format_error_msg = ""
         
         # Set f equal to filename and open the csv file as read_obj
         f = filename
@@ -137,7 +140,7 @@ class DataOperation:
                     format_error_count += 1
                     format_error_msg += (f"Row {row_number} in {filename} is formatted incorrectly.\n" +
                                             f"Please follow the following format for {ColumnHeaders.BUILD.value}:\n" +
-                                            "[3 Capital Letters]\n\n")
+                                            "[3 Capital Letters]\n")
                 
                 # ERROR CHECKING (ROOM NUMBER)
                 room_number = row[ColumnHeaders.ROOM_NUM.value]
@@ -146,7 +149,7 @@ class DataOperation:
                     format_error_count += 1
                     format_error_msg += (f"Row {row_number} in {filename} is formatted incorrectly.\n" +
                                             f"Please follow the following format for {ColumnHeaders.ROOM_NUM.value}:\n" +
-                                            "[3-digit integer]\n\n")
+                                            "[3-digit integer]\n")
                 
                 # No need to do the rest of the row operations if a format error is found
                 if format_error_count > 0:
@@ -218,7 +221,7 @@ class DataOperation:
                     format_error_count += 1
                     format_error_msg += (f"Row {row_num} in {filename} is formatted incorrectly.\n" +
                                             f"Please follow the following format for {ColumnHeaders.COURSE_SEC.value}:\n" +
-                                            "[2-3 Capital Letters][3-digit integer]-[2-digit integer]\n\n")
+                                            "[2-3 Capital Letters][3-digit integer]-[2-digit integer]\n")
                 
                                                     
                 # Check faculty assignment
@@ -228,7 +231,7 @@ class DataOperation:
                     format_error_count += 1
                     format_error_msg += (f"Row {row_num} in {filename} is formatted incorrectly.\n" +
                                             f"Please follow the following format for {ColumnHeaders.FAC_ASSIGN.value}:\n" +
-                                            "40 characters or less using only letters, periods, apostrophes, and spaces.\n\n")
+                                            "40 characters or less using only letters, periods, apostrophes, and spaces.\n")
 
                 
                 # Check building code and room number
@@ -238,7 +241,7 @@ class DataOperation:
                     format_error_count += 1
                     format_error_msg += (f"Row {row_num} in {filename} is formatted incorrectly.\n" +
                                             f"Please follow the following format for {ColumnHeaders.ROOM_PREF.value}:\n" +
-                                            "[3 Capital Letters][Optional: 3-digit integer]\n\n")
+                                            "[3 Capital Letters][Optional: 3-digit integer]\n")
                     
                 else:  # Checks to ensure room preference exists in imported rooms
                     if len(room_pref) > 3: # Checks if there is a number in the preference
@@ -257,7 +260,7 @@ class DataOperation:
                             format_error_count += 1
                             format_error_msg += (f"Row {row_num} in {filename} contains an error.\n" +
                                                  f"The building \"{room_pref}\" in {os.path.split(filename)[1]} does not exist.\n" + 
-                                                 f"Please add room numbers from {room_pref} to the rooms import csv file or change it to another building.\n\n")
+                                                 f"Please add room numbers from {room_pref} to the rooms import csv file or change it to another building.\n")
                         
                         # Checks to see if the room exists in the database
                         room_found = False
@@ -267,7 +270,7 @@ class DataOperation:
                             format_error_count += 1
                             format_error_msg += (f"Row {row_num} in {filename} contains an error.\n" +
                                                  f"The room preference \"{room_pref}\" in {os.path.split(filename)[1]} does not exist.\n" + 
-                                                 f"Please add the room number to the rooms import csv file or remove it from the \"{ColumnHeaders.ROOM_PREF.value}\" column.\n\n")
+                                                 f"Please add the room number to the rooms import csv file or remove it from the \"{ColumnHeaders.ROOM_PREF.value}\" column.\n")
                     
                     else: # Else, there is only an acronym, so we must check if the acronym exists in the database
                         buildings_list = list(self.getDB(f"{DatabaseHeaders.ROOMS.value}/{department_abbr}").keys())
@@ -275,7 +278,7 @@ class DataOperation:
                             format_error_count += 1
                             format_error_msg += (f"Row {row_num} in {filename} contains an error.\n" +
                                                  f"The building \"{room_pref}\" in {os.path.split(filename)[1]} does not exist.\n" + 
-                                                 f"Please add room numbers from {room_pref} to the rooms import csv file or change it to another building.\n\n")
+                                                 f"Please add room numbers from {room_pref} to the rooms import csv file or change it to another building.\n")
                     # End of if len(room_pref)
                 # End of room preference check
                                 
@@ -288,7 +291,7 @@ class DataOperation:
                     format_error_count += 1
                     format_error_msg += (f"Row {row_num} in {filename} is formatted incorrectly.\n" +
                                             f"Please follow the following format for {ColumnHeaders.TIME_PREF.value}:\n" +
-                                            "Capital [A-G], used at most once each, in alphabetical order\n\n")
+                                            "Capital [A-G], used at most once each, in alphabetical order\n")
                 
                 
                 # Check day preferences
@@ -298,7 +301,7 @@ class DataOperation:
                     format_error_count += 1
                     format_error_msg += (f"Row {row_num} in {filename} is formatted incorrectly.\n" +
                                             f"Please follow the following format for {ColumnHeaders.DAY_PREF.value}:\n" +
-                                            "Choose one: MW, TR, MWTR\n\n")
+                                            "Choose one: MW, TR, MWTR\n")
                 
                 
                 # Check seats open
@@ -308,7 +311,7 @@ class DataOperation:
                     format_error_count += 1
                     format_error_msg += (f"Row {row_num} in {filename} is formatted incorrectly.\n" +
                                             f"Please follow the following format for {ColumnHeaders.SEATS_OPEN.value}:\n" +
-                                            "An integer value\n\n")
+                                            "An integer value\n")
                 
                 # No need to do the rest of the row operations if a format error is found
                 if format_error_count > 0:

@@ -5,3 +5,5 @@ Databasing/__pycache__/*
 test.txt
 test.py
 virtual
+ExportCSData.csv
+ExportECEData.csv

@@ -153,8 +153,13 @@ def upload_csv():
             RoomsFile = RoomsFile.filename\
 
             # Call the database to call the CourseFile
-            db.importCSV(f"static/upload/{CourseFile}", f"static/upload/{RoomsFile}", user.getUser())
-            fileUploadSuccess = "File Uploaded Successfully!"
+            try:
+                db.importCSV(f"static/upload/{CourseFile}", f"static/upload/{RoomsFile}", user.getUser())
+                fileUploadSuccess = "File Uploaded Successfully!"
+            except ImportFormatError as ife:
+                exceptionMessage = str(ife)
+                formatErrorList = exceptionMessage.split('\n')
+                fileUploadSuccess = "File Upload Failed!"
 
             # Render the template with updated text on screen
             return render_template('uploadCSV.html', department=user.getUser(), fileUploadSuccess=fileUploadSuccess, departmentManual=departmentManual, rooms=rooms)
