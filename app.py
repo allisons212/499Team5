@@ -125,6 +125,7 @@ def upload_csv():
     error = ""
     errorCount = 0
     success=  None
+    formatErrorList = []
 
     # Manual box entrys that are dynamic
     departmentManual = user.getUser()
@@ -155,14 +156,16 @@ def upload_csv():
             # Call the database to call the CourseFile
             try:
                 db.importCSV(f"static/upload/{CourseFile}", f"static/upload/{RoomsFile}", user.getUser())
-                fileUploadSuccess = "File Uploaded Successfully!"
+                fileUploadSuccess = "File Uploaded Successfully! Generate schedule on Create Schedule page."
             except ImportFormatError as ife:
+                print("TEST")
                 exceptionMessage = str(ife)
                 formatErrorList = exceptionMessage.split('\n')
-                fileUploadSuccess = "File Upload Failed!"
+                fileUploadSuccess = "File Upload Failed! Fix errors and try uploading again."
 
             # Render the template with updated text on screen
-            return render_template('uploadCSV.html', department=user.getUser(), fileUploadSuccess=fileUploadSuccess, departmentManual=departmentManual, rooms=rooms)
+            return render_template('uploadCSV.html', department=user.getUser(), fileUploadSuccess=fileUploadSuccess, departmentManual=departmentManual,
+                                   rooms=rooms, formatErrorList=formatErrorList)
         elif request.form['submit_button'] == "Submit Manual Input":
 
             # Get each piece of information from the HTML

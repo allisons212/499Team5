@@ -66,6 +66,7 @@
                             <label for="uploadRooms">Upload Rooms:<span>*</span></label>
                             <input type="file" name="rooms" id="uploadRooms" accept="text/csv" required />
                         </div>
+
                     </div>
                     <input
                         class="uploadCSVSubmit"
@@ -74,11 +75,14 @@
                         value="Submit CSV"
                         id="uploadCSVSubmitButton"
                     />
+                    {% for i in formatErrorList %}
+                        <p>{{ i }} </p>
+                    {% endfor %}
                 </form>
 
                 {% if fileUploadSuccess %}
                 <p class="successfulUpload" id="uploadCSVSuccessMessage">
-                    <strong>Success:</strong> {{fileUploadSuccess}} Generate schedule on Create Schedule page.
+                    <strong>Success:</strong> {{fileUploadSuccess}}
                 </p>
                 {% endif %}
             </div>
