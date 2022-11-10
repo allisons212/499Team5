@@ -166,7 +166,7 @@ class DataOperation:
            
         # If errors are found, raise the exception
         if format_error_count > 0:
-            raise ImportFormatError(f"{format_error_count} errors have been found:\n"
+            raise ImportFormatError(f"{format_error_count} errors \n"
                                     + format_error_msg)
         
         
@@ -335,7 +335,7 @@ class DataOperation:
         
         # If errors are found, raise the exception
         if format_error_count > 0:
-            raise ImportFormatError(f"{format_error_count} errors have been found:\n"
+            raise ImportFormatError(f"{format_error_count} ERRORS: \n"
                                     + format_error_msg)
         
         

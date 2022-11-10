@@ -122,10 +122,12 @@ def settings():
 @app.route('/uploadCSV', methods=['POST', 'GET'])
 def upload_csv():
     fileUploadSuccess = None
+    fileUploadFailure = None
     error = ""
     errorCount = 0
     success=  None
     formatErrorList = []
+    headingErrorList = ""
 
     # Manual box entrys that are dynamic
     departmentManual = user.getUser()
@@ -151,21 +153,31 @@ def upload_csv():
 
             # CourseFile RoomsFile
             CourseFile = CourseFile.filename
-            RoomsFile = RoomsFile.filename\
+            RoomsFile = RoomsFile.filename
 
             # Call the database to call the CourseFile
             try:
                 db.importCSV(f"static/upload/{CourseFile}", f"static/upload/{RoomsFile}", user.getUser())
                 fileUploadSuccess = "File Uploaded Successfully! Generate schedule on Create Schedule page."
             except ImportFormatError as ife:
-                print("TEST")
                 exceptionMessage = str(ife)
+
+                # Split the exception by \n character
                 formatErrorList = exceptionMessage.split('\n')
-                fileUploadSuccess = "File Upload Failed! Fix errors and try uploading again."
+
+                # We have an extra empty elment at end of list so we need to remove it
+                formatErrorList.pop()
+
+                # pop the first element and store it in headingErrorList to send to HTML
+                headingErrorList = formatErrorList.pop(0)
+
+                # Let the user know that the upload has failed
+                fileUploadFailure = "File Upload Failed! Fix errors and try uploading again."
 
             # Render the template with updated text on screen
             return render_template('uploadCSV.html', department=user.getUser(), fileUploadSuccess=fileUploadSuccess, departmentManual=departmentManual,
-                                   rooms=rooms, formatErrorList=formatErrorList)
+            formatErrorList=formatErrorList, rooms=rooms, fileUploadFailure=fileUploadFailure,headingErrorList=headingErrorList)
+
         elif request.form['submit_button'] == "Submit Manual Input":
 
             # Get each piece of information from the HTML
@@ -201,7 +213,7 @@ def upload_csv():
             if(not inDatabase):
                 success = "Entry is now in the database."
             else:
-                success = "Entry in database has been OVERWRITTEN"
+                success = "Entry in database has been OVERWRITTEN!"
             
             return render_template('uploadCSV.html', department=user.getUser(), departmentManual=departmentManual, rooms=rooms, success=success)
 

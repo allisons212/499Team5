@@ -994,5 +994,21 @@ input[type=submit]:hover {
 .successfulUpload {
     font-size: 20px;
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-    color: #27405a;
+    color: green;
+}
+
+.failUpload {
+    font-size: 20px;
+    font-family: "Segoe UI", Tahoma, Generva, Verdana, sans-serif;
+    color: red;
+}
+
+.formatErrorList {
+    font-size: 16px;
+    font-family: "Segoe UI", Tahoma, Generva, Verdana, sans-serif;
+    color: #283c52;
+}
+
+.formatErrorListFirst {
+    color: red;
 }

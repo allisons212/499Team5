@@ -75,8 +75,33 @@
                         value="Submit CSV"
                         id="uploadCSVSubmitButton"
                     />
+
+                {% if fileUploadFailure %}
+                    <p class="failUpload" id="uploadCSVfailMessage">
+                        <strong>Failure:</strong> {{fileUploadFailure}}
+                    </p>
+                {% endif %}
+
+                    <h3 class=formatErrorListFirst>
+                        {{ headingErrorList }}
+                    </h3>
+
                     {% for i in formatErrorList %}
-                        <p>{{ i }} </p>
+                        <p class="formatErrorList">
+
+                            {% if loop.index % 3 == 1 %}
+                                <i class="fa fa-exclamation-circle"></i>
+                            {% endif %}
+
+                            {{ i }}
+
+                            {% if loop.index % 3 == 0 %}
+                            <i class="fa fa-exclamation-circle"></i>
+                                <p><br></p>
+                            {% endif %}
+                            
+
+                        </p>
                     {% endfor %}
                 </form>
 
