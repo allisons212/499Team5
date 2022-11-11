@@ -600,6 +600,12 @@ h4 {
     border: 1px solid #b2bad6;
 }
 
+#contactUs{
+    margin-top: 50px;
+    text-align: center;
+    /* font-size: 18px; */
+}
+
 .aboutMembers {
     /* display: flex; */
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
@@ -1024,3 +1030,5 @@ input[type=submit]:hover {
     text-align: center;
     font-size: 20px;
 }
+
+
