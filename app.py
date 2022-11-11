@@ -121,50 +121,67 @@ def settings():
 # POST View for uploadCSV
 @app.route('/uploadCSV', methods=['POST', 'GET'])
 def upload_csv():
+
+    # If fileUploadSuccess is successful then it is filled with a string, but by default it is None
     fileUploadSuccess = None
+
+    # If manualUploadSuccess is successful then it is filled with a string, but by default it is None
+    manualUploadSuccess =  None
+
+    # If fileUploadFailure is not None, then it is filled with a string denoting failure
     fileUploadFailure = None
-    error = ""
-    errorCount = 0
-    success=  None
+
+    # regexError will only be filled with a string if there is improper formatting
+    # from the fields Faculty, and Class in the ManualUpload. regexErrorCount is just the number of errors
+    regexError = ""
+    regexErrorCount = 0
+
+    # TemporaryList is a 2D list that is used to format the Exception errors
     temporaryList = [[]]
+
+    # FormatErrorList is the error List that is originally used to format Exception errors if the user uploads a CSV with the wrong format.
     formatErrorList = []
+
+    # FormatErrorList is filled with a header of how many errors were found. We want to pop this off and put
+    # into headingErrorList for easier formatting in the HTML
     headingErrorList = ""
-    counter = 0
 
     # Manual box entrys that are dynamic
     departmentManual = user.getUser()
+
+    # To fill the Manual rooms box we need to getEmptyRooms from database
     rooms = db.getEmptyRoomsOnly(user.getUser())
 
+    # IF the page detects a post
     if request.method == 'POST':
         
+        # If the post originated from the Submit CSV button
         if request.form['submit_button'] == 'Submit CSV':
 
-            # Request each file
+            # Put the File object from the 'courses' and 'rooms' files into CourseFile and RoomsFile
             CourseFile = request.files['courses']
             RoomsFile = request.files['rooms']
 
-            # Create a list and append the files to it
-            Files = []
-            Files.append(CourseFile)
-            Files.append(RoomsFile)
+            # Get the secure_filename and store in CourseFileName, then save the filename to the UPLOAD_FOLDER    
+            CourseFileName = secure_filename(CourseFile.filename)
+            CourseFile.save(app.config['UPLOAD_FOLDER'] + CourseFileName)
 
-            # iterate over the list and add them to the upload folder
-            for file in Files:
-                
-                filename = secure_filename(file.filename)
-                file.save(app.config['UPLOAD_FOLDER'] + filename)
-            
-
-
-            # CourseFile RoomsFile
-            CourseFile = CourseFile.filename
-            RoomsFile = RoomsFile.filename
+            # Get the secure_filename and store in RoomsFileName, then save the filename to the UPLOAD_FOLDER
+            RoomsFileName = secure_filename(RoomsFile.filename)
+            RoomsFile.save(app.config['UPLOAD_FOLDER'] + RoomsFileName)
 
             # Call the database to call the CourseFile
             try:
-                db.importCSV(f"static/upload/{CourseFile}", f"static/upload/{RoomsFile}", user.getUser())
+                db.importCSV(f"static/upload/{CourseFile.filename}", f"static/upload/{RoomsFile.filename}", user.getUser())
                 fileUploadSuccess = "File Uploaded Successfully! Generate schedule on Create Schedule page."
+
+                # Must clear temporaryList if it was a success. I think because of how it was initalized above it thinks theres at least 
+                # 1 element in the List and outputs it to the frontend
+                temporaryList = []
+            # If the Database causes an exception for ImportFormatError
             except ImportFormatError as ife:
+
+                # Get the exceptionMessage as 1 long string
                 exceptionMessage = str(ife)
 
                 # Split the exception by \n character
@@ -176,13 +193,7 @@ def upload_csv():
                 # pop the first element and store it in headingErrorList to send to HTML
                 headingErrorList = formatErrorList.pop(0)
 
-                # for i in range(0, len(formatErrorList)):
-                #     if (i + 1) % 3 == 0:
-                       
-                #         print(i)
-                #         print("Counter: ", counter)
-                #         counter = counter + 1
-
+                # Fill the temporaryList as a 2D List
                 temporaryList = [formatErrorList[i:i+3] for i in range(0, len(formatErrorList), 3)]
 
                 # Let the user know that the upload has failed
@@ -191,7 +202,9 @@ def upload_csv():
             # Render the template with updated text on screen
             return render_template('uploadCSV.html', department=user.getUser(), fileUploadSuccess=fileUploadSuccess, departmentManual=departmentManual,
             formatErrorList=temporaryList, rooms=rooms, fileUploadFailure=fileUploadFailure,headingErrorList=headingErrorList)
+        # END SUBMIT CSV IF
 
+        # If the user selects the Submit Manual Input button 
         elif request.form['submit_button'] == "Submit Manual Input":
 
             # Get each piece of information from the HTML
@@ -205,36 +218,45 @@ def upload_csv():
             # Check userClass for proper formatting
             match = re.findall(r"^[0-9]{3}[-][0-9]{2}$", str(userClass))
             if not match:
-                errorCount += 1
-                error += "CLASS ERROR: Incorrect CLASS formatting. Format: '[3-digit integer]-[2-digit integer]' EX. 102-01 where 01 indicates the section number.\n"
+                regexErrorCount += 1
+                regexError += "CLASS ERROR: Incorrect CLASS formatting. Format: '[3-digit integer]-[2-digit integer]' EX. 102-01 where 01 indicates the section number.\n"
             
             # Check faculty for proper formatting
             match = re.findall(r"^[A-Za-z.' ]{1,40}$", str(faculty))
             if not match:
-                errorCount += 1
-                error += "FACULTY ERROR: Incorrect FACULTY formatting. Format: 40 characters or less using only letters, periods, apostrophes, and spaces."
-
-            if errorCount > 0:
-                if(errorCount == 1 and error.find('\n')):
-                    error = error.replace('\n','')
-                    
-                error = error.split('\n')
-                return render_template('uploadCSV.html', department=user.getUser(), departmentManual=departmentManual, rooms=rooms, error=error)
+                regexErrorCount += 1
+                regexError += "FACULTY ERROR: Incorrect FACULTY formatting. Format: 40 characters or less using only letters, periods, apostrophes, and spaces."
             
-            # Enter the data into the database
+            # This can be Re-Written to be better ------REMINDER
+            if regexErrorCount > 0:
+                if(regexErrorCount == 1 and regexError.find('\n')):
+                    regexError = regexError.replace('\n','')
+
+                regexError = regexError.split('\n')
+
+                # IF there were errors then return the render_template to reflect that to the user
+                return render_template('uploadCSV.html', department=user.getUser(), departmentManual=departmentManual, rooms=rooms, regexError=regexError)
+            
+            # Enter the data into the database.
+            # Returns a boolean to determine if the class was already in the database or not.
             inDatabase = db.manualEntryAssignment(user.getUser(), userClass, faculty, room, day, time)
-
-            if(not inDatabase):
-                success = "Entry is now in the database."
-            else:
-                success = "Entry in database has been OVERWRITTEN!"
             
-            return render_template('uploadCSV.html', department=user.getUser(), departmentManual=departmentManual, rooms=rooms, success=success)
+            # IF the item was not in the database
+            if(not inDatabase):
+                manualUploadSuccess = "Entry is now in the database."
+            # ELSE the item was in the database
+            else:
+                manualUploadSuccess = "Entry in database has been OVERWRITTEN!"
 
+            # Return the template with the updated information if it was successful 
+            return render_template('uploadCSV.html', department=user.getUser(), departmentManual=departmentManual, rooms=rooms, manualUploadSuccess=manualUploadSuccess)
+    # END POST IF
+
+    # IF there is a GET then just return the template for user
     elif request.method == 'GET':
         return render_template('uploadCSV.html', department=user.getUser(), departmentManual=departmentManual, rooms=rooms)
     
-    return render_template('uploadCSV.html', department=user.getUser(), error=error)
+    return render_template('uploadCSV.html', department=user.getUser(), regexError=regexError)
 
 
 @app.post('/assignments/generate')

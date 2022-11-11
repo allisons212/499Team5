@@ -87,22 +87,24 @@
                     </h3>
                     
                     <div style="width: 50%;">
+                        <!-- The outer for loop will print the Error Number and display it in the middle of the screen -->
                     {% for i in formatErrorList %}
+                        
                         <h3 class="errorNumber">{{loop.index}}</h3>
+
                         <p class="formatErrorList">
-
                             <i class="fa fa-exclamation-circle"></i>
+                            <!-- The inner for loop will print out each error Message and display it on the screen -->
                             {% for j in i %}
-
+                                 <!-- j denotes the actual error message in i--> 
                                 {{j}}
 
+                                <!-- Skip lines between each error -->
                                 {% if loop.index != 3 %}
                                     <br>
                                 {% endif %}
                             {% endfor %}
-                        
-
-
+                            
                             <i class="fa fa-exclamation-circle"></i>
                                 <p><br></p>
                             
