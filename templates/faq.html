@@ -7,30 +7,22 @@
             href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
         />
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+        <title>FAQ | Schedule Planner</title>
     </head>
 
     <body>
         <div class="topnav">
-            <a href="#html1" style="margin-top: 0px">
-                <i class="fa fa-bell-o" style="font-size: 25px"></i>
-            </a>
+            <h1 class="departmentTitle">{{department}} Department Schedule Builder</h1>
             <div class="account">
-                <a href="{{ url_for('account') }}" class="accountIcon">
-                    <i class="fa fa-user" style="font-size: 50px"></i>
-                </a>
-                <div class="accountDropdownContent">
-                    <a href="{{ url_for('account') }}">
-                        <i class="fa fa-user"></i>
-                        View Account
-                    </a>
-                    <a href="#">Link 2</a>
+
                     <a href="{{ url_for('login') }}">
-                        <i class="fa fa-sign-out"></i>
-                        Log Out
+                        <i class="fa fa-sign-out" id="logoutIcon" ></i>
                     </a>
-                </div>
+                    
+                    <div class="logOutText">Log Out</div>  
             </div>
         </div>
+
 
         <div class="sidenav">
             <a href="{{ url_for('generate_schedule') }}">
@@ -44,10 +36,10 @@
                 <i class="fa fa-upload"></i>
                 Upload CSV
             </a>
-            <a href="{{ url_for('settings') }}">
+            <!-- <a href="{{ url_for('settings') }}">
                 <i class="fa fa-gear"></i>
                 Settings
-            </a>
+            </a> -->
             <a href="{{ url_for('faq') }}" class="currentPage">
                 <i class="fa fa-question-circle"></i>
                 FAQs
@@ -58,18 +50,101 @@
             </a>
         </div>
 
+<!--
+    Questions to be answered:
+    How do you upload a CSV (link to the CSV format FAQ maybe?)?
+    How do you generate a schedule?
+    How do you resolve conflicts?
+-->
+
         <div class="main" id="faqs">
             <h1>Frequently Asked Questions</h1>
             <div class="listOfFAQs">
             <ul>
+                <li><a href="#acronyms">What does everything stand for?</a>
+                    <ul>
+                        <li><a href="#timeAcronyms">Time Acronyms</a></li>
+                        <li><a href="#dayAcronyms">Day Acronyms</a></li>
+                    </ul>
+                </li>
+                <li><a href="#csvUpload">How do you upload a CSV?</a></li>
+                    <ul>
+                        <li><a href="#CSV Upload">CSV Upload</a></li>
+                        <li><a href="#Manual Upload">Manual Upload</a></li>
+                    </ul>
                 <li><a href="#csvFormatting">How are the CSVs formatted?</a>
                     <ul>
                         <li><a href="#departmentClassDataCSV">How is the Department Class Data CSV formatted?</a></li>
                         <li><a href="#availableRoomsCSV">How is the Avaliable Room CSV formatted?</a></li>
                     </ul>
                 </li>
+                <li><a href="#howToGenerateSchedule">How do you generate a schedule?</a></li>
+                <li><a href="#resolveConflicts">How do you resolve conflicts?</a></li>
             </ul>
         </div>
+
+        <div id="#acronyms">
+            <h2>What does everything stand for?</h2>
+            
+            <div id = "timeAcronyms">
+            <h3>Time Acronyms:</h3>
+            <p>
+                A: 8:00 - 9:20 AM <br>
+                B: 9:40 - 11:00 AM <br>
+                C: 11:20 AM - 12:40 PM <br>
+                D: 1:00 - 2:20 PM <br>
+                E: 2:40 - 4:00 PM <br>
+                F: 4:20 - 5:40 PM <br>
+                G: 6:00 - 7:20 PM 
+            </p>
+        </div>
+        <div id="dayAcronyms">
+            <h3> Day Acronyms:</h3>
+            <p>
+                MW: Monday and Wednesday <br>
+                TR: Tuesday and Thursday
+            </p>
+        </div>
+    </div>
+
+
+    <div id="csvUpload">
+        <h2>How do you upload a CSV?</h2>
+        <div id ="CSV Upload">
+            <h3>CSV Upload</h3>
+            <p>
+            When uploading CSVs on the Upload CSV page you must choose two files: <a href="#availableRoomsCSV">AvailableRoomsCSV</a> and
+             <a href="#departmentClassDataCSV">DepartmentClassData</a> CSV 
+
+            If you do not choose two files and try to Submit the CSVs then it will give you an error message. 
+            Once you give two files and they are in the <a href="#csvFormatting">correct CSV format</a>, then it will notify you that it has successfully upload the files.
+            After successfully uploading both files, go to Create Schedule and <a href="#howToGenerateSchedule">generate the newly updated schedule</a>.
+            </p>
+            <div class="faqExampleImage">
+                <h4>Example of CSV Upload:</h4>
+                <img src="../static/Pictures/CSVUpload.PNG" />
+                <br>
+            </div>
+        </div>
+        <div id ="Manual Upload">
+            <h3>Manual Upload</h3>
+            <p>
+                The manual upload function is specifically for adding courses that you forgot after you have used the CSV function. 
+                There will be six fields that are required to fill out. These fields are Department, Class, Faculty Member, Room, Day, and Time.
+                The Class must follow this format: [3-digit integer]-[2-digit integer]' EX. 102-01 where 01 indicates the section number.
+                With the manual entry, you will also be allowed to rewrite already existing classes. If this is occuring a warning will pop up.
+                The Faculty Member must follow this format: 40 characters or less using only letters, periods, apostrophes, and spaces.
+                Once all fields are filled out, hit the Submit Manual Entry to add class to database.
+                After submitting, go to Create Schedule and <a href="#howToGenerateSchedule">generate the newly updated schedule</a>.
+                
+            </p>
+            <div class="faqExampleImage">
+                <h4>Example of Manual Upload Fields:</h4>
+                <img src="../static/Pictures/manualUpload.PNG" />
+                <br>
+            </div>
+
+    </div>
 
 
             <div id="csvFormatting">
@@ -117,6 +192,52 @@
                     </a>
                 </div>
             </div>
+        </div>
+
+        <div id="howToGenerateSchedule">
+            <h2>How do you generate a schedule?</h2>
+            <p>
+                After the <a href="#csvUpload">correct CSVs have been uploaded</a>,  Click the generate button on the create schedule page. 
+                This will generate a schedule from the CSVs. The schedule table will then be filled out with the created schedule. 
+                <div class="faqExampleImage">
+                    <h4 style="margin-top:0px;">Example of how the schedule will look:</h4>
+                    <img src="../static/Pictures/ScheduleGUIExample.PNG" style="width: 1000px; height:600px; margin-bottom: 20px">
+                </div>
+                If there were conflicts that need to be resolved for some classes, a notification will show up on th conflicts icon.
+                These conflicts must be resolved so the classes that all the classes in the CSV can be put into the schedule.
+                For more information on how to resolve conflicts go <a href="#resolveConflicts">here</a>.
+                <div class="faqExampleImage">
+                    <h4 style="margin-top:0px;">Example of how the conflict notification will look:</h4>
+                    <img src="../static/Pictures/ConflictsExample.PNG" style="width: 100px; border:0px; margin-bottom: 20px">
+                </div>
+                After all conflicts have been resolved, you can then download the schedule in CSV format. To do this, click on the download icon
+                and the file will be immediately downloaded to your downloads folder.
+
+            </p>
+        </div>
+
+        <div id="resolveConflicts">
+            <h2>How do you resolve conflicts?</h2>
+            <p>
+                Once a <a href="#howToGenerateSchedule">schedule has been generated</a>, any conflicts that are created must be resolved. To solve conflicts,
+                click on the conflict icon to see the conflict resolution window.
+                <div class="faqExampleImage">
+                    <h4 style="margin-top:0px;">Conflict Resolution page:</h4>
+                    <img src="../static/Pictures/conflictPage.PNG" style="height: 550px; margin-bottom: 20px">
+                </div>
+                Once in this window, you will see all the classes with conflicts. These classes need to be assigned a classroom and day and time. To start resolving
+                the conflict click on the Classroom Selection dropdown for a given class and select a classroom. Once a classroom is selected, you can see all the avaliable
+                days and times for the given classroom in the Day and Time dropdown. Select a day and time for the class. Once you have selected a classroom and a day and time,
+                you will then click the save button to lock this selection in place. Once the save button is successfuly pressed, you cannot edit that given selection. If you wish 
+                to change the selection, click on the edit icon that has appeared next to the save button. Once pressed, the selection that you have previously made will no longer
+                be saved until you click the save icon again. Once you have selected and saved all conflict solutions, click the submit button at the bottom of the conflict page.
+                This will save and send all the conflict solutions that you have completed. Once the conflicts have been submitted, you must 
+                <a href="#howToGenerateSchedule">generate the schedule again</a> with the new changes that you have completed. If you decide to exit the conflicts page before you have
+                submitted all your conflicts, only the conflicts that you have saved will be preserved, so make sure you save all the conflicts you wish to keep before closing out of the 
+                conflict resolution window.
+
+                
+            </p>
         </div>
     </body>
 </html>

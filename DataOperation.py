@@ -22,6 +22,7 @@
 
 
 import csv
+import io
 import re
 import os.path
 
@@ -36,7 +37,6 @@ from RoomTable import *
 from DataOperationException import * # Custom exceptions
 from DataOperationEnums import * # Custom enums
 
-
 class DataOperation:
     """
     This class holds all the methods that are necessary for database operations
@@ -47,6 +47,7 @@ class DataOperation:
         Authenticates credentials so access to the database is established.
         """
         self._authenticate_credentials()
+
     # End of init        
 
 
@@ -58,7 +59,7 @@ class DataOperation:
         """
 
         # Loads config file
-        conf_file = '../credentials/firebase-auth.ini'
+        conf_file = 'credentials/firebase-auth.ini'
         config = ConfigParser()
         config.read(conf_file)
 
@@ -87,8 +88,11 @@ class DataOperation:
             FileNotFoundError: If filename does not get resolved to a csv file.
             ImportFormatError: If imported CSV file does not adhere to specified formatting guidelines.
         """
-        self._importRoomCSV(room_csv_path, department)
-        self._importCourseCSV(course_csv_path, department)
+        try:
+            self._importRoomCSV(room_csv_path, department)
+            self._importCourseCSV(course_csv_path, department)
+        except ImportFormatError as ife:
+            raise ImportFormatError(str(ife))
     # End of importCSV
     
     def _importRoomCSV(self, filename, department):
@@ -115,7 +119,7 @@ class DataOperation:
         format_error_count = 0
         
         # Cumulative string to store all exception/error messages for each wrongly formatted entry
-        format_error_msg = "" 
+        format_error_msg = ""
         
         # Set f equal to filename and open the csv file as read_obj
         f = filename
@@ -136,7 +140,7 @@ class DataOperation:
                     format_error_count += 1
                     format_error_msg += (f"Row {row_number} in {filename} is formatted incorrectly.\n" +
                                             f"Please follow the following format for {ColumnHeaders.BUILD.value}:\n" +
-                                            "[3 Capital Letters]\n\n")
+                                            "[3 Capital Letters]\n")
                 
                 # ERROR CHECKING (ROOM NUMBER)
                 room_number = row[ColumnHeaders.ROOM_NUM.value]
@@ -145,7 +149,7 @@ class DataOperation:
                     format_error_count += 1
                     format_error_msg += (f"Row {row_number} in {filename} is formatted incorrectly.\n" +
                                             f"Please follow the following format for {ColumnHeaders.ROOM_NUM.value}:\n" +
-                                            "[3-digit integer]\n\n")
+                                            "[3-digit integer]\n")
                 
                 # No need to do the rest of the row operations if a format error is found
                 if format_error_count > 0:
@@ -162,7 +166,7 @@ class DataOperation:
            
         # If errors are found, raise the exception
         if format_error_count > 0:
-            raise ImportFormatError(f"{format_error_count} errors have been found:\n"
+            raise ImportFormatError(f"{format_error_count} errors \n"
                                     + format_error_msg)
         
         
@@ -217,7 +221,7 @@ class DataOperation:
                     format_error_count += 1
                     format_error_msg += (f"Row {row_num} in {filename} is formatted incorrectly.\n" +
                                             f"Please follow the following format for {ColumnHeaders.COURSE_SEC.value}:\n" +
-                                            "[2-3 Capital Letters][3-digit integer]-[2-digit integer]\n\n")
+                                            "[2-3 Capital Letters][3-digit integer]-[2-digit integer]\n")
                 
                                                     
                 # Check faculty assignment
@@ -227,7 +231,7 @@ class DataOperation:
                     format_error_count += 1
                     format_error_msg += (f"Row {row_num} in {filename} is formatted incorrectly.\n" +
                                             f"Please follow the following format for {ColumnHeaders.FAC_ASSIGN.value}:\n" +
-                                            "40 characters or less using only letters, periods, apostrophes, and spaces.\n\n")
+                                            "40 characters or less using only letters, periods, apostrophes, and spaces.\n")
 
                 
                 # Check building code and room number
@@ -237,7 +241,7 @@ class DataOperation:
                     format_error_count += 1
                     format_error_msg += (f"Row {row_num} in {filename} is formatted incorrectly.\n" +
                                             f"Please follow the following format for {ColumnHeaders.ROOM_PREF.value}:\n" +
-                                            "[3 Capital Letters][Optional: 3-digit integer]\n\n")
+                                            "[3 Capital Letters][Optional: 3-digit integer]\n")
                     
                 else:  # Checks to ensure room preference exists in imported rooms
                     if len(room_pref) > 3: # Checks if there is a number in the preference
@@ -256,7 +260,7 @@ class DataOperation:
                             format_error_count += 1
                             format_error_msg += (f"Row {row_num} in {filename} contains an error.\n" +
                                                  f"The building \"{room_pref}\" in {os.path.split(filename)[1]} does not exist.\n" + 
-                                                 f"Please add room numbers from {room_pref} to the rooms import csv file or change it to another building.\n\n")
+                                                 f"Please add room numbers from {room_pref} to the rooms import csv file or change it to another building.\n")
                         
                         # Checks to see if the room exists in the database
                         room_found = False
@@ -266,7 +270,7 @@ class DataOperation:
                             format_error_count += 1
                             format_error_msg += (f"Row {row_num} in {filename} contains an error.\n" +
                                                  f"The room preference \"{room_pref}\" in {os.path.split(filename)[1]} does not exist.\n" + 
-                                                 f"Please add the room number to the rooms import csv file or remove it from the \"{ColumnHeaders.ROOM_PREF.value}\" column.\n\n")
+                                                 f"Please add the room number to the rooms import csv file or remove it from the \"{ColumnHeaders.ROOM_PREF.value}\" column.\n")
                     
                     else: # Else, there is only an acronym, so we must check if the acronym exists in the database
                         buildings_list = list(self.getDB(f"{DatabaseHeaders.ROOMS.value}/{department_abbr}").keys())
@@ -274,7 +278,7 @@ class DataOperation:
                             format_error_count += 1
                             format_error_msg += (f"Row {row_num} in {filename} contains an error.\n" +
                                                  f"The building \"{room_pref}\" in {os.path.split(filename)[1]} does not exist.\n" + 
-                                                 f"Please add room numbers from {room_pref} to the rooms import csv file or change it to another building.\n\n")
+                                                 f"Please add room numbers from {room_pref} to the rooms import csv file or change it to another building.\n")
                     # End of if len(room_pref)
                 # End of room preference check
                                 
@@ -287,7 +291,7 @@ class DataOperation:
                     format_error_count += 1
                     format_error_msg += (f"Row {row_num} in {filename} is formatted incorrectly.\n" +
                                             f"Please follow the following format for {ColumnHeaders.TIME_PREF.value}:\n" +
-                                            "Capital [A-G], used at most once each, in alphabetical order\n\n")
+                                            "Capital [A-G], used at most once each, in alphabetical order\n")
                 
                 
                 # Check day preferences
@@ -297,7 +301,7 @@ class DataOperation:
                     format_error_count += 1
                     format_error_msg += (f"Row {row_num} in {filename} is formatted incorrectly.\n" +
                                             f"Please follow the following format for {ColumnHeaders.DAY_PREF.value}:\n" +
-                                            "Choose one: MW, TR, MWTR\n\n")
+                                            "Choose one: MW, TR, MWTR\n")
                 
                 
                 # Check seats open
@@ -307,7 +311,7 @@ class DataOperation:
                     format_error_count += 1
                     format_error_msg += (f"Row {row_num} in {filename} is formatted incorrectly.\n" +
                                             f"Please follow the following format for {ColumnHeaders.SEATS_OPEN.value}:\n" +
-                                            "An integer value\n\n")
+                                            "An integer value\n")
                 
                 # No need to do the rest of the row operations if a format error is found
                 if format_error_count > 0:
@@ -331,7 +335,7 @@ class DataOperation:
         
         # If errors are found, raise the exception
         if format_error_count > 0:
-            raise ImportFormatError(f"{format_error_count} errors have been found:\n"
+            raise ImportFormatError(f"{format_error_count} ERRORS: \n"
                                     + format_error_msg)
         
         
@@ -416,7 +420,58 @@ class DataOperation:
             raise ImproperDBPathError()
         
     # End of update DB
-    
+
+    def manualEntryAssignment(self, department, course_number, faculty, room, day, time):
+        # Get the departments dict from database
+        department_dict = self.getDB(f"/{DatabaseHeaders.COURSES.value}/{department}")
+        courseInDatabase = False
+
+        # Append department and course_number. We do this because this is how it is stored in the database
+        course_key = department + course_number
+
+        # Check department_dict to see if the course_key is already in database if so increment course_section
+        if course_key not in department_dict:
+
+            inDatabase = False
+            # We need this or else we get a key error
+            department_dict[course_key] = {}
+
+            # Append All of the information into the department_dict
+            department_dict[course_key][ColumnHeaders.ROOM_ASS.value] = ""
+            department_dict[course_key][ColumnHeaders.DAY_ASS.value] = ""
+            department_dict[course_key][ColumnHeaders.DAY_PREF.value] = day
+            department_dict[course_key][ColumnHeaders.FAC_ASSIGN.value] = faculty
+            department_dict[course_key][ColumnHeaders.ROOM_PREF.value] = room 
+            department_dict[course_key][ColumnHeaders.SEATS_OPEN.value] = ""
+            department_dict[course_key][ColumnHeaders.TIME_ASS.value] = ""
+            department_dict[course_key][ColumnHeaders.TIME_PREF.value] = time
+        else:
+            inDatabase = True
+            department_dict[course_key][ColumnHeaders.ROOM_ASS.value] = ""
+            department_dict[course_key][ColumnHeaders.DAY_ASS.value] = ""
+            department_dict[course_key][ColumnHeaders.DAY_PREF.value] = day
+            department_dict[course_key][ColumnHeaders.FAC_ASSIGN.value] = faculty
+            department_dict[course_key][ColumnHeaders.ROOM_PREF.value] = room 
+            department_dict[course_key][ColumnHeaders.SEATS_OPEN.value] = ""
+            department_dict[course_key][ColumnHeaders.TIME_ASS.value] = ""
+            department_dict[course_key][ColumnHeaders.TIME_PREF.value] = time
+            print("Overwriting")
+
+
+        # Update the Department Courses in the database
+        self.updateDB(department_dict, f"/{DatabaseHeaders.COURSES.value}/{department}")
+
+        # Check to see if entry was in databse for our user output on html page
+        return inDatabase
+
+        
+
+        
+
+
+
+
+        
     def updateSolutionAssignments(self, department, course_number, day, time, room_number):
         """ Function takes in a course_number, day, time, and a room_number and updates the course number
             in Department Courses, and changes the fields Classroom Assignment, Day Assignment, Time Assignment 
@@ -443,9 +498,9 @@ class DataOperation:
         # 3. Time Assignment
         
         # Create a new dictionary with the key:value that we want to change.
-        room_value = {ColumnHeaders.ROOM_ASS.value:room_number}
-        day_value = {ColumnHeaders.DAY_ASS.value: day}
-        time_value = {ColumnHeaders.TIME_ASS.value: time}
+        room_value = {ColumnHeaders.ROOM_PREF.value:room_number}
+        day_value = {ColumnHeaders.DAY_PREF.value: day}
+        time_value = {ColumnHeaders.TIME_PREF.value: time}
         
         # Update the course_dict with the new dictionary values.
         course_dict.update(room_value)
@@ -470,7 +525,7 @@ class DataOperation:
             room_tables_entry_dict[counter] = i
             counter = counter + 1
         
-         # Update the Department Courses in database
+        # Update the Department Courses in database
         self.updateDB(course_dict, f"/{DatabaseHeaders.COURSES.value}/{department}/{course_number}")
         
         # Update the room_tables in database
@@ -489,6 +544,8 @@ class DataOperation:
                 department_abbr = ECE
             outfile (string): File path and name of the output csv. Default is "Export{department_abbr}Data.csv"
                 in current directory
+                
+        Return: fileString (string): Data from file in one long string
         
         Raises:
             QueryNotFoundError: database_path doesn't return data
@@ -507,24 +564,39 @@ class DataOperation:
                        ColumnHeaders.DAY_PREF.value, ColumnHeaders.TIME_PREF.value, ColumnHeaders.SEATS_OPEN.value ]
         
         # Now lets open a CSV file to write to
-        with open(outfile, 'w', encoding='utf-8-sig') as csvfile:
+        # with open(outfile, 'w', encoding='utf-8-sig') as csvfile:
+        csvfile = io.StringIO()
             
-            # Create a writer that has fieldnames equal to column_information. 
-            # Line Terminator must be set to \n or it will skip lines in the export CSV
-            writer = csv.DictWriter(csvfile, fieldnames = fieldnames, lineterminator = '\n')
-            writer.writeheader()
+        # Create a writer that has fieldnames equal to column_information. 
+        # Line Terminator must be set to \n or it will skip lines in the export CSV
+        writer = csv.DictWriter(csvfile, fieldnames = fieldnames, lineterminator = '\n')
+        writer.writeheader()
 
+    
+        # Iterate through the first part of the dictionary department_dict and get the section
+        # Append section info to a dict with the section name and write out to CSV
+        for section_name, section_info in department_dict.items():
+            new_row = { ColumnHeaders.COURSE_SEC.value : section_name }
+            
+            # section_info already has all the dictionary info we need, so we can just append it to new_row with .update()
+            # .update() takes key-value pairs from section_info and puts them into new_row, overwriting the values of any existing keys in new_row
+            new_row.update(section_info)
+            
+            writer.writerow(new_row)
         
-            # Iterate through the first part of the dictionary department_dict and get the section
-            # Append section info to a dict with the section name and write out to CSV
-            for section_name, section_info in department_dict.items():
-                new_row = { ColumnHeaders.COURSE_SEC.value : section_name }
-                
-                # section_info already has all the dictionary info we need, so we can just append it to new_row with .update()
-                # .update() takes key-value pairs from section_info and puts them into new_row, overwriting the values of any existing keys in new_row
-                new_row.update(section_info)
-                
-                writer.writerow(new_row)
+        # Get data from outfile and put it into a long string variable
+        # tempFile = open(outfile, 'r')
+        # fileString = ""
+        # fileString = tempFile.read()
+
+        fileString = csvfile.getvalue()
+        csvfile.close()
+        
+        # print("print", fileString)
+        
+        # tempFile.close()
+        
+        return fileString
                 
     # End of exportCSV
     
@@ -618,7 +690,28 @@ class DataOperation:
         except KeyError: # account's 'department' field is nonexistent
             raise KeyError("Account information incomplete, please contact your administrator.")
     # End of getAccount
-    
+
+    def getEmptyRoomsOnly(self, department):
+        """
+        Compiles a dictionary from getEmptyRooms() in the specificed department.
+        Where the keys are the room numbers and value is day and time
+
+        This function is only concerned with returning the Rooms in a list.
+        We dont care about the times
+
+        Args:
+            department (string): department acronym (e.g., "CS", "ECE")
+        
+        Returns:
+            List: Returns the keys of the dict that is obtained from getEmptyRooms()
+        """
+        roomsdict = self.getEmptyRooms(department)
+        roomsOnly = []
+
+        for key, values in roomsdict.items():
+            roomsOnly.append(key)
+
+        return roomsOnly    
     
     def getEmptyRooms(self, department):
         """
@@ -627,7 +720,7 @@ class DataOperation:
         Values are lists of empty periods i.e., [ 'MW - A', 'MW - B', etc. ]
 
         Args:
-            department (string): department acronym (e.g., "OKT", "ENG")
+            department (string): department acronym (e.g., "CS", "ECE")
 
         Returns:
             dict: Keys are the room numbers, Values are lists of empty periods
@@ -715,6 +808,9 @@ class DataOperation:
         
         Args:
             user_department: Department that the account belongs to (e.g., "CS", "ECE")
+        
+        Returns:
+            dict: Dictionary with all the unassigned courses
         """
         
         # Generates schedule tables for specified department
@@ -764,12 +860,10 @@ class DataOperation:
                         department_courses[course_in_cell][ColumnHeaders.DAY_ASS.value] = day
                         department_courses[course_in_cell][ColumnHeaders.TIME_ASS.value] = time
         
-        
-        # @TODO conflicts_dict contains all the unassigned courses
-        print(f"{user_department} Conflicts: {list(conflicts_dict.keys())}") # @DEBUG Prints conflicting courses
-        
         # Update database
         self.updateDB(department_courses, f"/{DatabaseHeaders.COURSES.value}/{user_department}")
+        
+        return conflicts_dict
 
     # End of generate_assignments
     
@@ -1001,22 +1095,5 @@ class DataOperation:
         return room_tables, conflicts_dict
     # End of _assign_with_room_pref
     
-    
-    ######################################
-    #
-    # @DEBUG Methods
-    # @TODO DELETE THESE METHODS BEFORE PUSHING TO PRODUCTION
-    #
-    ######################################
-    
-    def print_room_tables(self, room_tables, building):
-        with open("test.txt",'w') as w:
-            for room, table in room_tables.items():
-                string = f"{building}{room}:{table}"
-                w.write(string+"\n\n")
-
-    def print_one_table(self, room_table, room, building):
-        print(f"{building}{room}:{room_table}")
-            
     
 # End of DataOperation

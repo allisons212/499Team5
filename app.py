@@ -1,17 +1,61 @@
+########################################################################
+# Project Title:    Course Scheduling System
+# Class:            CS 499-01 - Sr. Project Design
+# Term:             FA 22
+# 
+# Team Number:      5
+# Team Members:     Devin Patel
+#                   Allison Sanders
+#                   Faith Grimmeisen
+#                   Harrison Matthews
+########################################################################
+# Filename:     app.py
+# Purpose:      To initialize and run the flask server that drives
+#               all frontend and backend operations.
+#
+#
+# Editors of this file:     Allison Sanders
+#                           Faith Grimmeisen
+#                           Devin Patel
+#                           Harrison Matthews
+# 
+# NOTES:
+#
+########################################################################
+
 
 from flask import Flask, render_template, redirect, url_for, request
 from flask_navigation import Navigation #pip install flask_navigation
-import firebase_admin #pip install firebase_admin
-from Databasing.RoomTable import *
-from Databasing.DataOperationEnums import *
-from Databasing.DataOperationException import *
+from numpy import empty # pip install numpy
+from RoomTable import *
+from DataOperationEnums import *
+from DataOperationException import *
+from DataOperation import DataOperation
+from werkzeug.utils import secure_filename
+import os
+import re
 
-# connect to firebase
-cred_obj = firebase_admin.credentials.Certificate('static/coursescheduler499-firebase-adminsdk-bzx0b-bfaba8ef2f.json') #input path to file here
-default_app = firebase_admin.initialize_app(cred_obj)
+
+class User:
+    user_account = ""
+    
+    def __init__(self):
+        pass
+    
+    def setUser(self, newUser):
+        self.user_account = newUser
+    
+    def getUser(self):
+        return self.user_account
+
 
 app = Flask(__name__)
+app.config["UPLOAD_FOLDER"] = "static/upload/"
 nav = Navigation(app)
+db = DataOperation()
+user = User()
+
+
 
 # initializes navigations, add each url here
 nav.Bar('top', [
@@ -31,10 +75,17 @@ nav.Bar('top', [
 def login():
     error = None
     if request.method == 'POST':
-        if request.form['username'] != 'admin' or request.form['password'] != 'admin':
+        # If the username or password field is blank, then collect error message
+        if request.form['username'] == "" or request.form['password'] == "":
+            error = "No Username or password typed in. Please try again."
+        # If the fields are just wrong, then collect the error message
+        elif not db.checkUserPass(request.form['username'], request.form['password']):
             error = 'Invalid Credentials. Please try again.'
+        # IF the credentials are correct then redirect to homepage and set the user acronym to the users department.
         else:
+            user.setUser(db.getAccountDepartment(request.form['username']))
             return redirect(url_for('generate_schedule'))
+    # IF we get to this point then we need to render the error to the user
     return render_template('login.html', error=error)
 
 
@@ -45,7 +96,7 @@ def home():
 
 @app.route('/aboutUs') # make each of these for each html
 def about_us():
-    return render_template('aboutUs.html')
+    return render_template('aboutUs.html', department=user.getUser())
 
 
 @app.route('/account')
@@ -55,28 +106,170 @@ def account():
 
 @app.route('/faq')
 def faq():
-    return render_template('faq.html')
+    return render_template('faq.html', department=user.getUser())
 
 
 @app.route('/generate_schedule')
 def generate_schedule():
-    return render_template('generateSchedule.html')
+    return render_template('generateSchedule.html', department=user.getUser())
 
 
 @app.route('/settings')
 def settings():
     return render_template('settings.html')
 
-@app.route('/uploadCSV', methods=['GET', 'POST'])
+# POST View for uploadCSV
+@app.route('/uploadCSV', methods=['POST', 'GET'])
 def upload_csv():
-    error = 0
+    fileUploadSuccess = None
+    fileUploadFailure = None
+    error = ""
+    errorCount = 0
+    success=  None
+    formatErrorList = []
+    headingErrorList = ""
+
+    # Manual box entrys that are dynamic
+    departmentManual = user.getUser()
+    rooms = db.getEmptyRoomsOnly(user.getUser())
+
     if request.method == 'POST':
-        if request.form['classNum'] > 999 or request.form['classNum'] < 100:
-            error = 1
-        else:
-            error = 0
-    return render_template('uploadCSV.html', error=error)
+        
+        if request.form['submit_button'] == 'Submit CSV':
+
+            # Request each file
+            CourseFile = request.files['courses']
+            RoomsFile = request.files['rooms']
+
+            # Create a list and append the files to it
+            Files = []
+            Files.append(CourseFile)
+            Files.append(RoomsFile)
+
+            # iterate over the list and add them to the upload folder
+            for file in Files:
+                filename = secure_filename(file.filename)
+                file.save(app.config['UPLOAD_FOLDER'] + filename)
+
+            # CourseFile RoomsFile
+            CourseFile = CourseFile.filename
+            RoomsFile = RoomsFile.filename
+
+            # Call the database to call the CourseFile
+            try:
+                db.importCSV(f"static/upload/{CourseFile}", f"static/upload/{RoomsFile}", user.getUser())
+                fileUploadSuccess = "File Uploaded Successfully! Generate schedule on Create Schedule page."
+            except ImportFormatError as ife:
+                exceptionMessage = str(ife)
+
+                # Split the exception by \n character
+                formatErrorList = exceptionMessage.split('\n')
+
+                # We have an extra empty elment at end of list so we need to remove it
+                formatErrorList.pop()
+
+                # pop the first element and store it in headingErrorList to send to HTML
+                headingErrorList = formatErrorList.pop(0)
+
+                # Let the user know that the upload has failed
+                fileUploadFailure = "File Upload Failed! Fix errors and try uploading again."
+
+            # Render the template with updated text on screen
+            return render_template('uploadCSV.html', department=user.getUser(), fileUploadSuccess=fileUploadSuccess, departmentManual=departmentManual,
+            formatErrorList=formatErrorList, rooms=rooms, fileUploadFailure=fileUploadFailure,headingErrorList=headingErrorList)
+
+        elif request.form['submit_button'] == "Submit Manual Input":
+
+            # Get each piece of information from the HTML
+            department = request.form.get("dept")
+            userClass = request.form.get("class")
+            faculty = request.form.get("faculty")
+            room = request.form.get("room")
+            day = request.form.get("day")
+            time = request.form.get("time")
+
+            # Check userClass for proper formatting
+            match = re.findall(r"^[0-9]{3}[-][0-9]{2}$", str(userClass))
+            if not match:
+                errorCount += 1
+                error += "CLASS ERROR: Incorrect CLASS formatting. Format: '[3-digit integer]-[2-digit integer]' EX. 102-01 where 01 indicates the section number.\n"
+            
+            # Check faculty for proper formatting
+            match = re.findall(r"^[A-Za-z.' ]{1,40}$", str(faculty))
+            if not match:
+                errorCount += 1
+                error += "FACULTY ERROR: Incorrect FACULTY formatting. Format: 40 characters or less using only letters, periods, apostrophes, and spaces."
+
+            if errorCount > 0:
+                if(errorCount == 1 and error.find('\n')):
+                    error = error.replace('\n','')
+                    
+                error = error.split('\n')
+                return render_template('uploadCSV.html', department=user.getUser(), departmentManual=departmentManual, rooms=rooms, error=error)
+            
+            # Enter the data into the database
+            inDatabase = db.manualEntryAssignment(user.getUser(), userClass, faculty, room, day, time)
+
+            if(not inDatabase):
+                success = "Entry is now in the database."
+            else:
+                success = "Entry in database has been OVERWRITTEN!"
+            
+            return render_template('uploadCSV.html', department=user.getUser(), departmentManual=departmentManual, rooms=rooms, success=success)
+
+    elif request.method == 'GET':
+        return render_template('uploadCSV.html', department=user.getUser(), departmentManual=departmentManual, rooms=rooms)
+    
+    return render_template('uploadCSV.html', department=user.getUser(), error=error)
+
+
+@app.post('/assignments/generate')
+def generate_assignments():
+    conflicts = db.generate_assignments(user.getUser())
+
+    return conflicts
+
+# @app.get('/assignments/<class_id>')
+# def get_url_params(class_id):
+#     return {"class_id": class_id}
+
+
+# @app.get('/assignments/anything')
+# def get_query_params():
+#     class_id = request.args["class_id"]
+#     return {"class_id": class_id}
+
+@app.get('/csv/export')
+def export_csv():
+    exportFile = db.exportCSV(user.getUser())
+
+    return exportFile
+
+@app.get('/empty/rooms')
+def get_empty_rooms():
+    emptyRooms = db.getEmptyRooms(user.getUser())
+    return emptyRooms
+
+@app.get('/get/DB')
+def get_DB():
+    print("test")
+    department_path = "Department Courses/" + user.getUser()
+    print(department_path)
+    return db.getDB(department_path)
+
+@app.put('/update/solution/assignments')
+def update_solution_assignments():
+    # department, course_number, day, time, room_number
+    department = user.getUser()
+    body = request.get_json()
+    print(body)
+    course_number = body["className"]
+    dayAndTime = body["dayAndTime"]
+    day, time = dayAndTime.split(" - ")
+    room_number = body["room"]
+    db.updateSolutionAssignments(department, course_number, day, time, room_number)
+    return { "success": True }
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug = True)

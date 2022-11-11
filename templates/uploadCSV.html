@@ -1,43 +1,31 @@
 <!DOCTYPE html>
 <html>
+    <head>
+        <link rel="stylesheet" href="../static/css/styles.css" />
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+        />
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
 
-<head>
-    <link rel="stylesheet" href="../static/css/styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <title>Upload CSV | Schedule Planner</title>
+    </head>
 
-
-</head>
-
-<body>
+    <body>
         <div class="topnav">
-            <a href="#html1" style="margin-top: 0px;">
-                <i class="fa fa-bell-o" style="font-size: 25px;"></i>
-            </a>
+            <h1 class="departmentTitle">{{department}} Department Schedule Builder</h1>
             <div class="account">
-                <a href="{{ url_for('account') }}" class="accountIcon">
-                    <i class="fa fa-user" style="font-size: 50px;"></i>
+                <a href="{{ url_for('login') }}">
+                    <i class="fa fa-sign-out" id="logoutIcon"></i>
                 </a>
-                <div class="accountDropdownContent">
-                    <a href="{{ url_for('account') }}">
-                        <i class="fa fa-user"></i>
-                        View Account
-                    </a>
-                    <a href="#">Link 2</a>
-                    <a href="{{ url_for('login') }}">
-                        <i class="fa fa-sign-out"></i>
-                        Log Out
-                    </a>
-                </div>
+
+                <div class="logOutText">Log Out</div>
             </div>
-
-
         </div>
-
 
         <div class="sidenav">
             <a href="{{ url_for('generate_schedule') }}">
-                <img src="../static/Pictures/logo.png" alt="logo">
+                <img src="../static/Pictures/logo.png" alt="logo" />
             </a>
             <a href="{{ url_for('generate_schedule') }}">
                 <i class="fa fa-table"></i>
@@ -47,10 +35,10 @@
                 <i class="fa fa-upload"></i>
                 Upload CSV
             </a>
-            <a href="{{ url_for('settings') }}">
+            <!-- <a href="{{ url_for('settings') }}">
                 <i class="fa fa-gear"></i>
                 Settings
-            </a>
+            </a> -->
             <a href="{{ url_for('faq') }}">
                 <i class="fa fa-question-circle"></i>
                 FAQs
@@ -61,61 +49,155 @@
             </a>
         </div>
 
+        <div class="main" id="CSVUploadForms">
+            <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif">
+                <!-- <h2 class="uploadCSVFormTitle" style="font-size:30px; margin-top:50px; margin-bottom: 50px;">OR</h2>
+                <hr> -->
+                <h2 class="uploadCSVFormTitle">CSV Upload</h2>
+            </div>
+            <div>
+                <form action="" method="post" enctype="multipart/form-data">
+                    <div class="uploadCSVFile">
+                        <div class="individualFileUpload">
+                            <label for="uploadCSV">Upload Courses:<span>*</span></label>
+                            <input type="file" name="courses" id="uploadCSV" accept="text/csv" required />
+                        </div>
+                        <div class="individualFileUpload">
+                            <label for="uploadRooms">Upload Rooms:<span>*</span></label>
+                            <input type="file" name="rooms" id="uploadRooms" accept="text/csv" required />
+                        </div>
 
-<div class="main" align="center">
-    <div>
-        <form action="" method="post">
+                    </div>
+                    <input
+                        class="uploadCSVSubmit"
+                        type="submit"
+                        name="submit_button"
+                        value="Submit CSV"
+                        id="uploadCSVSubmitButton"
+                    />
 
-            <label for="department">Choose a department:</label>
-            <select id="department" name="dept" required>
-                <option value="CS">CS</option>
-                <option value="ECE">ECE</option>
-                <option value="CPE">CPE</option>
-            </select>
+                {% if fileUploadFailure %}
+                    <p class="failUpload" id="uploadCSVfailMessage">
+                        <strong>Failure:</strong> {{fileUploadFailure}}
+                    </p>
+                {% endif %}
 
-            <label for ="class">Choose a class:</label>
-            <input type="text" placeholder="Class" name="class" value="{{ request.form.classNum }}">
-            <label for="day">Choose a day:</label>
-            <select id = "day" name="day" required>
-                <option value="MW">Monday/Wednesday</option>
-                <option value="TR">Tuesday/Thursday</option>
-            </select>
+                    <h3 class=formatErrorListFirst>
+                        {{ headingErrorList }}
+                    </h3>
 
+                    {% for i in formatErrorList %}
+                        <p class="formatErrorList">
 
-            <label for="time">Choose a time:</label>
-            <select id = "time" name="time" required>
-                <option value="A">A: 8:00 - 9:20 AM</option>
-                <option value="B">B: 9:40 - 11:00 AM</option>
-                <option value="C">C: 11:20 AM - 12:40 PM</option>
-                <option value="D">D: 1:00 - 2:20 PM</option>
-                <option value="E">E: 2:40 - 4:00 PM</option>
-                <option value="F">F: 4:20 - 5:40 PM</option>
-                <option value="G">G: 6:00 - 7:20 PM</option>
-            </select>
-            <label for="room">Choose a room:</label>
-            <select id="room" name="room" required>
+                            {% if loop.index % 3 == 1 %}
+                                <i class="fa fa-exclamation-circle"></i>
+                            {% endif %}
 
-            </select>
-            <label for="prof">Choose a faculty member:</label>
-            <select id="prof" name="faculty" required>
-            </select>
-            <input type="submit" value="Submit Manual Input"/>
-        </form>
-        {% if error == 1 %}
-                <p class="error"><strong>Error:</strong> Invalid class number. </p>
-        {% endif %}
-    </div>
-    <div>
-        <p>OR</p>
-    </div>
-    <div>
-        <form action="" method="post">
-            <input type="file" id="uploadCSV" accept="text/csv" required/>
-            <input type="submit" value="Submit CSV"/>
-        </form>
-    </div>
-</div>
-<script defer type="module" src="../static/js/uploadCSVjs.js"></script>
-</body>
+                            {{ i }}
 
+                            {% if loop.index % 3 == 0 %}
+                            <i class="fa fa-exclamation-circle"></i>
+                                <p><br></p>
+                            {% endif %}
+                            
+
+                        </p>
+                    {% endfor %}
+                </form>
+
+                {% if fileUploadSuccess %}
+                <p class="successfulUpload" id="uploadCSVSuccessMessage">
+                    <strong>Success:</strong> {{fileUploadSuccess}}
+                </p>
+                {% endif %}
+            </div>
+            <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif">
+                <hr style="margin-top: 50px" />
+                <!-- <h2 class="uploadCSVFormTitle" style="font-size:30px; margin-top:50px; margin-bottom: 50px;">OR</h2>
+                <hr> -->
+            </div>
+
+            <div>
+                <h2 class="uploadCSVFormTitle">Manual Entry</h2>
+                {% if success %}
+                <h3 class="manualSuccess" id="manualSuccess"><strong>Success: </strong> {{success}}</h3>
+                {% endif %} {% if error %} {% for i in error %}
+                <h3 class="manualError">
+                    <i class="fa fa-exclamation-circle"></i> {{ i }}
+                    <i class="fa fa-exclamation-circle"></i>
+                </h3>
+                {% endfor %} {% endif %}
+                <div class="UploadCSVFormAndWarning">
+                    <form action="" method="post">
+                        <div class="uploadCSVForm">
+                            <div class="uploadCSVDropDown">
+                                <label for="department">Choose a department:<span>*</span></label>
+
+                                <select id="department" name="dept" required>
+                                    <option value="{{ departmentManual }}">{{ departmentManual }}</option>
+                                </select>
+                            </div>
+
+                            <div class="uploadCSVDropDown">
+                                <label for="class">Choose a class:<span>*</span></label>
+
+                                <input name="class" type="text" placeholder="Ex. 100-01" id="classTextBox" />
+                            </div>
+
+                            <div class="uploadCSVDropDown">
+                                <label for="prof">Choose a faculty member:<span>*</span></label>
+                                <input id="faculty" name="faculty" type="text" placeholder="Faculty Member" />
+                            </div>
+
+                            <div class="uploadCSVDropDown">
+                                <label for="room">Choose a room:<span>*</span></label>
+
+                                <select id="room" name="room">
+                                    {% for room in rooms %}
+                                    <option value="{{ room }}">{{ room }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="uploadCSVDropDown">
+                                <label for="day">Choose a day:<span>*</span></label>
+
+                                <select id="day" name="day" required>
+                                    <option value="MW">Monday/Wednesday</option>
+                                    <option value="TR">Tuesday/Thursday</option>
+                                </select>
+                            </div>
+                            <div class="uploadCSVDropDown">
+                                <label for="time">Choose a time:<span>*</span></label>
+                                <select id="time" name="time" required>
+                                    <option value="A">A: 8:00 - 9:20 AM</option>
+                                    <option value="B">B: 9:40 - 11:00 AM</option>
+                                    <option value="C">C: 11:20 AM - 12:40 PM</option>
+                                    <option value="D">D: 1:00 - 2:20 PM</option>
+                                    <option value="E">E: 2:40 - 4:00 PM</option>
+                                    <option value="F">F: 4:20 - 5:40 PM</option>
+                                    <option value="G">G: 6:00 - 7:20 PM</option>
+                                </select>
+                            </div>
+                        </div>
+                        <input
+                            class="uploadCSVSubmit"
+                            type="submit"
+                            name="submit_button"
+                            value="Submit Manual Input"
+                            id="manualSubmitButton"
+                        />
+                    </form>
+
+                    <div class="classOverwriteWarning">
+                        <h4 id="classOverwriteWarning">
+                            <i class="fa fa-exclamation-circle"></i> Warning! Class already in database. Are you sure
+                            you want to overwrite it?
+                        </h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script defer type="module" src="../static/js/uploadCSVjs.js"></script>
+    </body>
 </html>

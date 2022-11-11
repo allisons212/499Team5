@@ -6,14 +6,14 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
-
+    <title>Account | Schedule Planner</title>
 </head>
 
 <body>
         <div class="topnav">
-            <a href="#html1" style="margin-top: 0px;">
+            <!-- <a href="#html1" style="margin-top: 0px;">
                 <i class="fa fa-bell-o" style="font-size: 25px;"></i>
-            </a>
+            </a> -->
             <div class="account">
                 <a href="{{ url_for('account') }}" class="accountIcon">
                     <i class="fa fa-user" style="font-size: 50px;"></i>
@@ -23,7 +23,7 @@
                         <i class="fa fa-user"></i>
                         View Account
                     </a>
-                    <a href="#">Link 2</a>
+                    <!-- <a href="#">Link 2</a> -->
                     <a href="{{ url_for('login') }}">
                         <i class="fa fa-sign-out"></i>
                         Log Out
@@ -37,7 +37,7 @@
 
         <div class="sidenav">
             <a href="{{ url_for('generate_schedule') }}">
-                <img src=".../static/Pictures/logo.png" alt="logo">
+                <img src="../static/Pictures/logo.png" alt="logo">
             </a>
             <a href="{{ url_for('generate_schedule') }}">
                 <i class="fa fa-table"></i>
@@ -47,10 +47,10 @@
                 <i class="fa fa-upload"></i>
                 Upload CSV
             </a>
-            <a href="{{ url_for('settings') }}">
+            <!-- <a href="{{ url_for('settings') }}">
                 <i class="fa fa-gear"></i>
                 Settings
-            </a>
+            </a> -->
             <a href="{{ url_for('faq') }}">
                 <i class="fa fa-question-circle"></i>
                 FAQs

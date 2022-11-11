@@ -6,28 +6,18 @@
             rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
         />
+        <title>Generate Schedule | Schedule Planner</title>
     </head>
 
     <body>
         <div class="topnav">
-            <a href="#html1" style="margin-top: 0px">
-                <i class="fa fa-bell-o" style="font-size: 25px"></i>
-            </a>
+            <h1 class="departmentTitle">{{department}} Department Schedule Builder</h1>
             <div class="account">
-                <a href="{{ url_for('account') }}" class="accountIcon">
-                    <i class="fa fa-user" style="font-size: 50px"></i>
+                <a href="{{ url_for('login') }}">
+                    <i class="fa fa-sign-out" id="logoutIcon"></i>
                 </a>
-                <div class="accountDropdownContent">
-                    <a href="{{ url_for('account') }}">
-                        <i class="fa fa-user"></i>
-                        View Account
-                    </a>
-                    <a href="#">Link 2</a>
-                    <a href="{{ url_for('login') }}">
-                        <i class="fa fa-sign-out"></i>
-                        Log Out
-                    </a>
-                </div>
+
+                <div class="logOutText">Log Out</div>
             </div>
         </div>
 
@@ -43,10 +33,10 @@
                 <i class="fa fa-upload"></i>
                 Upload CSV
             </a>
-            <a href="{{ url_for('settings') }}">
+            <!-- <a href="{{ url_for('settings') }}">
                 <i class="fa fa-gear"></i>
                 Settings
-            </a>
+            </a> -->
             <a href="{{ url_for('faq') }}">
                 <i class="fa fa-question-circle"></i>
                 FAQs
@@ -59,49 +49,48 @@
 
         <div class="main">
             <div class="generateScheduleHeader">
-                <button class="generateButton" type="submit" id="getData">Generate</button>
+                <!-- <div> -->
+                <button class="generateButton" type="button" id="getData">Generate</button>
+                <h6 class="updateGenerateButton" id="updateGenerateButton" style="visibility: hidden;">
+                    <i class="fa fa-exclamation-circle" ></i>
+                    Changes have been made. Click Generate to update!
+                </h6>
+                <!-- </div> -->
                 <div class="generateEditors">
                     <div class="generateConflicts">
                         <i class="fa fa-warning" id="conflictsIcon"></i>
                         <span class="generateConflictsText">Conflicts</span>
-                        <span class="conflictNums">3</span>
+                        <span class="conflictNums" id="conflictNums" style="display: none;"></span>
                         <!-- The Modal -->
                         <div id="myModal" class="generateModal">
                             <!-- Modal content -->
                             <div class="modal-content">
                                 <span class="close">&times;</span>
                                 <h1>Conflicts</h1>
-                                <h6 class="conflictClassName">CS100-01</h6>
-                                <h6 class="conflictTeacherName">Dr. Mike</h6>
-                                <div class="conflictDropDown">
-                                    <label for="rooms" class="conflictDropDownLabel">Classroom selection</label>
-                                    <select name="rooms" class="conflictRooms" id="conflictRoomsDropDown">
-                                        <option class="conflictRoom" value="">--Select--</option>
-                                        <option class="conflictRoom" value="OKT 324">OKT 324</option>
-                                        <option class="conflictRoom" value="OKT 151">OKT 151</option>
-                                        <option class="conflictRoom" value="OKT 105">OKT 105</option>
-                                        <option class="conflictRoom" value="OKT 327">OKT 327</option>
-                                    </select>
-                                    <label for="dayAndTime" class="conflictDropDownLabel">Day and Time</label>
-                                    <select name="dayAndTime" class="conflictDaysTimes" id="conflictDaysTimesDropDown">
-                                        <option class="conflictDayTime" value="">--Select--</option>
-                                        <option class="conflictDayTime" value="MWA">MW - A</option>
-                                        <option class="conflictDayTime" value="MWB">MW - B</option>
-                                        <option class="conflictDayTime" value="TRC">TR - C</option>
-                                        <option class="conflictDayTime" value="TRD">TR - D</option>
-                                    </select>
+                                <div class="noConflicts" id="noConflicts">
+                                    <h6 class="noConflicts">No Conflicts To Resolve</h6>
+                                </div>
 
-                                    <button type="submit" class="conflictSave" id="conflictSave">Save</button>
-                                    <i class="fa fa-pencil" id="conflictEdit" style="font-size: 20px"></i>
-                                    <span class="roomDayTimeWarning" id="roomDayTimeWarning">
+                                <div id="classConflicts">
+                                    <!--Here is where all the information from setConflict is created-->
+                                </div>
+                                <div class="submitConflicts">
+                                    <h6 id="submitWarning" class="submitWarning">
                                         <i class="fa fa-exclamation-circle"></i>
-                                        Must have both room and day and time selected.
-                                    </span>
+                                        Must save all conflict changes before submitting!
+                                    </h6>
+                                    <button
+                                        type="submit"
+                                        id="submitConflictSolutions"
+                                        class="submitConflictSolutionsButton"
+                                    >
+                                        Submit
+                                    </button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="generateDownload">
+                    <div class="generateDownload" id="downloadButton">
                         <i class="fa fa-download"></i>
                         <span>Download</span>
                     </div>
@@ -123,13 +112,7 @@
                             A <br />
                             8:00 - 9:20
                         </th>
-                        <td id="MWA0">
-                            <div class="class">
-                                CS 101-01 <br />
-                                Dr. Mike <br />
-                                OKT 324
-                            </div>
-                        </td>
+                        <td id="MWA0"></td>
                         <td id="TRA0"></td>
                         <td id="MWA1"></td>
                         <td id="TRA1"></td>
@@ -206,6 +189,6 @@
         </div>
 
         <script defer type="module" src="../static/js/getScheduleInfo.js"></script>
-        <script defer src="../static/js/conflicts.js"></script>
+        <script defer type="module" src="../static/js/setConflicts.js"></script>
     </body>
 </html>
