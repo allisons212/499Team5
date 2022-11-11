@@ -86,24 +86,30 @@
                         {{ headingErrorList }}
                     </h3>
                     
+                    <div style="width: 50%;">
                     {% for i in formatErrorList %}
+                        <h3 class="errorNumber">{{loop.index}}</h3>
                         <p class="formatErrorList">
 
-                            {% if loop.index % 3 == 1 %}
-                                <i class="fa fa-exclamation-circle"></i>
+                            <i class="fa fa-exclamation-circle"></i>
+                            {% for j in i %}
 
-                            {% endif %}
+                                {{j}}
 
-                            {{ i }}
+                                {% if loop.index != 3 %}
+                                    <br>
+                                {% endif %}
+                            {% endfor %}
+                        
 
-                            {% if loop.index % 3 == 0 %}
+
                             <i class="fa fa-exclamation-circle"></i>
                                 <p><br></p>
-                            {% endif %}
                             
 
                         </p>
                     {% endfor %}
+                </div>
                 </form>
 
                 {% if fileUploadSuccess %}

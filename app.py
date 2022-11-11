@@ -183,12 +183,14 @@ def upload_csv():
                 #         print("Counter: ", counter)
                 #         counter = counter + 1
 
+                temporaryList = [formatErrorList[i:i+3] for i in range(0, len(formatErrorList), 3)]
+
                 # Let the user know that the upload has failed
                 fileUploadFailure = "File Upload Failed! Fix errors and try uploading again."
 
             # Render the template with updated text on screen
             return render_template('uploadCSV.html', department=user.getUser(), fileUploadSuccess=fileUploadSuccess, departmentManual=departmentManual,
-            formatErrorList=formatErrorList, rooms=rooms, fileUploadFailure=fileUploadFailure,headingErrorList=headingErrorList)
+            formatErrorList=temporaryList, rooms=rooms, fileUploadFailure=fileUploadFailure,headingErrorList=headingErrorList)
 
         elif request.form['submit_button'] == "Submit Manual Input":
 

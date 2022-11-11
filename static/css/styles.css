@@ -1017,3 +1017,10 @@ input[type=submit]:hover {
     color: red;
     font-family: "Segoe UI", Tahoma, Generva, Verdana, sans-serif;
 }
+
+.errorNumber{
+    color: #27405a;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-align: center;
+    font-size: 20px;
+}
