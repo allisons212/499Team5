@@ -85,12 +85,13 @@
                     <h3 class=formatErrorListFirst>
                         {{ headingErrorList }}
                     </h3>
-
+                    
                     {% for i in formatErrorList %}
                         <p class="formatErrorList">
 
                             {% if loop.index % 3 == 1 %}
                                 <i class="fa fa-exclamation-circle"></i>
+
                             {% endif %}
 
                             {{ i }}

@@ -1009,6 +1009,11 @@ input[type=submit]:hover {
     color: #283c52;
 }
 
+.formatErrorList i {
+    color: red
+}
+
 .formatErrorListFirst {
     color: red;
+    font-family: "Segoe UI", Tahoma, Generva, Verdana, sans-serif;
 }

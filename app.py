@@ -126,8 +126,10 @@ def upload_csv():
     error = ""
     errorCount = 0
     success=  None
+    temporaryList = [[]]
     formatErrorList = []
     headingErrorList = ""
+    counter = 0
 
     # Manual box entrys that are dynamic
     departmentManual = user.getUser()
@@ -148,8 +150,11 @@ def upload_csv():
 
             # iterate over the list and add them to the upload folder
             for file in Files:
+                
                 filename = secure_filename(file.filename)
                 file.save(app.config['UPLOAD_FOLDER'] + filename)
+            
+
 
             # CourseFile RoomsFile
             CourseFile = CourseFile.filename
@@ -170,6 +175,13 @@ def upload_csv():
 
                 # pop the first element and store it in headingErrorList to send to HTML
                 headingErrorList = formatErrorList.pop(0)
+
+                # for i in range(0, len(formatErrorList)):
+                #     if (i + 1) % 3 == 0:
+                       
+                #         print(i)
+                #         print("Counter: ", counter)
+                #         counter = counter + 1
 
                 # Let the user know that the upload has failed
                 fileUploadFailure = "File Upload Failed! Fix errors and try uploading again."

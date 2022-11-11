@@ -88,6 +88,7 @@ class DataOperation:
             FileNotFoundError: If filename does not get resolved to a csv file.
             ImportFormatError: If imported CSV file does not adhere to specified formatting guidelines.
         """
+        import time
         try:
             self._importRoomCSV(room_csv_path, department)
             self._importCourseCSV(course_csv_path, department)
@@ -162,7 +163,6 @@ class DataOperation:
                     building_dictionary[row[ColumnHeaders.BUILD.value]].append(row[ColumnHeaders.ROOM_NUM.value])
                 else:
                     building_dictionary[row[ColumnHeaders.BUILD.value]] = [row[ColumnHeaders.ROOM_NUM.value]]
-            
            
         # If errors are found, raise the exception
         if format_error_count > 0:
@@ -198,6 +198,9 @@ class DataOperation:
         # Each of these rows will be appended to the following list
         dict_of_course_dicts = {}
         
+        # Get building from the Database only Once
+        buildings_dict = self.getDB(f"{DatabaseHeaders.ROOMS.value}/{department_abbr}")
+        
         format_error_count = 0 # Counts all format errors before raising the exception
         format_error_msg = ""  # Cumulative string to store all exception/error messages for each wrongly formatted entry
         
@@ -222,7 +225,7 @@ class DataOperation:
                     format_error_msg += (f"Row {row_num} in {filename} is formatted incorrectly.\n" +
                                             f"Please follow the following format for {ColumnHeaders.COURSE_SEC.value}:\n" +
                                             "[2-3 Capital Letters][3-digit integer]-[2-digit integer]\n")
-                
+
                                                     
                 # Check faculty assignment
                 faculty_assignment = row[ColumnHeaders.FAC_ASSIGN.value] # e.g., Dr. Goober
@@ -242,7 +245,6 @@ class DataOperation:
                     format_error_msg += (f"Row {row_num} in {filename} is formatted incorrectly.\n" +
                                             f"Please follow the following format for {ColumnHeaders.ROOM_PREF.value}:\n" +
                                             "[3 Capital Letters][Optional: 3-digit integer]\n")
-                    
                 else:  # Checks to ensure room preference exists in imported rooms
                     if len(room_pref) > 3: # Checks if there is a number in the preference
                         
@@ -251,7 +253,7 @@ class DataOperation:
                         num_pref = room_pref[3:]
                         
                         # Fetches list of rooms for the specified building
-                        buildings_dict = self.getDB(f"{DatabaseHeaders.ROOMS.value}/{department_abbr}")
+                        room_found = False
                         buildings_list = list(buildings_dict.keys())
                         room_nums_list = buildings_dict[building_pref]
                         
@@ -263,7 +265,6 @@ class DataOperation:
                                                  f"Please add room numbers from {room_pref} to the rooms import csv file or change it to another building.\n")
                         
                         # Checks to see if the room exists in the database
-                        room_found = False
                         for room_num in room_nums_list:
                             if room_num == num_pref: room_found = True
                         if not room_found: # If room not found, append a new format error
@@ -273,7 +274,7 @@ class DataOperation:
                                                  f"Please add the room number to the rooms import csv file or remove it from the \"{ColumnHeaders.ROOM_PREF.value}\" column.\n")
                     
                     else: # Else, there is only an acronym, so we must check if the acronym exists in the database
-                        buildings_list = list(self.getDB(f"{DatabaseHeaders.ROOMS.value}/{department_abbr}").keys())
+                        buildings_list = list(buildings_dict.keys())
                         if not room_pref in buildings_list:
                             format_error_count += 1
                             format_error_msg += (f"Row {row_num} in {filename} contains an error.\n" +
@@ -281,7 +282,6 @@ class DataOperation:
                                                  f"Please add room numbers from {room_pref} to the rooms import csv file or change it to another building.\n")
                     # End of if len(room_pref)
                 # End of room preference check
-                                
                 
                 
                 # Check time block preferences
