@@ -1027,7 +1027,7 @@ input[type=submit]:hover {
 .errorNumber{
     color: #27405a;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    text-align: center;
+    text-align: left;
     font-size: 20px;
 }
 

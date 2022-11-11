@@ -104,7 +104,7 @@
                                     <br>
                                 {% endif %}
                             {% endfor %}
-                            
+
                             <i class="fa fa-exclamation-circle"></i>
                                 <p><br></p>
                             
@@ -128,14 +128,18 @@
 
             <div>
                 <h2 class="uploadCSVFormTitle">Manual Entry</h2>
-                {% if success %}
-                <h3 class="manualSuccess" id="manualSuccess"><strong>Success: </strong> {{success}}</h3>
-                {% endif %} {% if error %} {% for i in error %}
-                <h3 class="manualError">
-                    <i class="fa fa-exclamation-circle"></i> {{ i }}
-                    <i class="fa fa-exclamation-circle"></i>
-                </h3>
-                {% endfor %} {% endif %}
+                {% if manualUploadSuccess %}
+                <h3 class="manualSuccess" id="manualSuccess"><strong>Success: </strong> {{manualUploadSuccess}}</h3>
+                {% endif %} 
+                {% if manualError %} 
+                    {% for i in manualError %}
+                        <h3 class="manualError">
+                            <i class="fa fa-exclamation-circle"></i> 
+                            {{ i }}
+                            <i class="fa fa-exclamation-circle"></i>
+                        </h3>
+                    {% endfor %} 
+                {% endif %}
                 <div class="UploadCSVFormAndWarning">
                     <form action="" method="post">
                         <div class="uploadCSVForm">

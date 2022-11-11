@@ -36,6 +36,8 @@ import os
 import re
 
 
+
+# The user account is responsible for setting and getting the user_account so we know which department is logged into the system
 class User:
     user_account = ""
     
@@ -48,14 +50,14 @@ class User:
     def getUser(self):
         return self.user_account
 
-
+# Default Flask operations
 app = Flask(__name__)
-app.config["UPLOAD_FOLDER"] = "static/upload/"
 nav = Navigation(app)
 db = DataOperation()
 user = User()
 
-
+#  Defines where our upload folder is
+app.config["UPLOAD_FOLDER"] = "static/upload/"
 
 # initializes navigations, add each url here
 nav.Bar('top', [
@@ -131,10 +133,10 @@ def upload_csv():
     # If fileUploadFailure is not None, then it is filled with a string denoting failure
     fileUploadFailure = None
 
-    # regexError will only be filled with a string if there is improper formatting
-    # from the fields Faculty, and Class in the ManualUpload. regexErrorCount is just the number of errors
-    regexError = ""
-    regexErrorCount = 0
+    # manualError will only be filled with a string if there is improper formatting
+    # from the fields Faculty, and Class in the ManualUpload. manualErrorCount is just the number of errors
+    manualError = ""
+    manualErrorCount = 0
 
     # TemporaryList is a 2D list that is used to format the Exception errors
     temporaryList = [[]]
@@ -208,7 +210,6 @@ def upload_csv():
         elif request.form['submit_button'] == "Submit Manual Input":
 
             # Get each piece of information from the HTML
-            department = request.form.get("dept")
             userClass = request.form.get("class")
             faculty = request.form.get("faculty")
             room = request.form.get("room")
@@ -218,24 +219,25 @@ def upload_csv():
             # Check userClass for proper formatting
             match = re.findall(r"^[0-9]{3}[-][0-9]{2}$", str(userClass))
             if not match:
-                regexErrorCount += 1
-                regexError += "CLASS ERROR: Incorrect CLASS formatting. Format: '[3-digit integer]-[2-digit integer]' EX. 102-01 where 01 indicates the section number.\n"
+                manualErrorCount += 1
+                manualError += "CLASS ERROR: Incorrect CLASS formatting. Format: '[3-digit integer]-[2-digit integer]' EX. 102-01 where 01 indicates the section number.\n"
             
             # Check faculty for proper formatting
             match = re.findall(r"^[A-Za-z.' ]{1,40}$", str(faculty))
             if not match:
-                regexErrorCount += 1
-                regexError += "FACULTY ERROR: Incorrect FACULTY formatting. Format: 40 characters or less using only letters, periods, apostrophes, and spaces."
+                manualErrorCount += 1
+                manualError += "FACULTY ERROR: Incorrect FACULTY formatting. Format: 40 characters or less using only letters, periods, apostrophes, and spaces."
             
             # This can be Re-Written to be better ------REMINDER
-            if regexErrorCount > 0:
-                if(regexErrorCount == 1 and regexError.find('\n')):
-                    regexError = regexError.replace('\n','')
+            if manualErrorCount > 0:
+                if(manualErrorCount == 1 and manualError.find('\n')):
+                    manualError = manualError.replace('\n','')
 
-                regexError = regexError.split('\n')
+                manualError = manualError.split('\n')
+                print(manualError)
 
                 # IF there were errors then return the render_template to reflect that to the user
-                return render_template('uploadCSV.html', department=user.getUser(), departmentManual=departmentManual, rooms=rooms, regexError=regexError)
+                return render_template('uploadCSV.html', department=user.getUser(), departmentManual=departmentManual, rooms=rooms, manualError=manualError)
             
             # Enter the data into the database.
             # Returns a boolean to determine if the class was already in the database or not.
@@ -247,7 +249,8 @@ def upload_csv():
             # ELSE the item was in the database
             else:
                 manualUploadSuccess = "Entry in database has been OVERWRITTEN!"
-
+            
+            print(manualUploadSuccess)
             # Return the template with the updated information if it was successful 
             return render_template('uploadCSV.html', department=user.getUser(), departmentManual=departmentManual, rooms=rooms, manualUploadSuccess=manualUploadSuccess)
     # END POST IF
@@ -256,7 +259,7 @@ def upload_csv():
     elif request.method == 'GET':
         return render_template('uploadCSV.html', department=user.getUser(), departmentManual=departmentManual, rooms=rooms)
     
-    return render_template('uploadCSV.html', department=user.getUser(), regexError=regexError)
+    return render_template('uploadCSV.html', department=user.getUser(), manualError=manualError)
 
 
 @app.post('/assignments/generate')
