@@ -1,0 +1,230 @@
+
+/* Upload CSV Page */
+
+.uploadCSVFormTitle {
+    color: #27405a;
+    font-size: 50px;
+}
+.manualError {
+    color: red;
+    font-size: 18px;
+    padding: 0px;
+    margin: 0px;
+    padding-bottom: 10px;
+}
+
+.manualSuccess {
+    font-size: 18px;
+    color: green;
+}
+
+.uploadCSVForm {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    grid-column-gap: 10%;
+    grid-row-gap: 0px;
+    max-width: 870px;
+}
+
+.UploadCSVFormAndWarning form{
+    min-width: 870px;
+}
+
+.uploadCSVDropDown {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #fff;
+    color: #27405a;
+    border-color: #b2bad6;
+    border-radius: 5px;
+    padding: 8px;
+    font-size: 15px;
+}
+
+.uploadCSVDropDown select {
+    background-color: #fff;
+    color: #27405a;
+    border-color: #b2bad6;
+    outline-color: #8d93a7;
+    border-radius: 5px;
+    padding: 8px;
+    font-size: 15px;
+    min-width: 200px;
+    width: 25%;
+    margin: 10px;
+    cursor: pointer;
+    border-width: 2px;
+}
+
+.uploadCSVDropDown select:hover {
+    border-color: #8d93a7;
+}
+
+.uploadCSVDropDown ::placeholder {
+    color: #27405a;
+}
+
+.uploadCSVDropDown select[disabled] {
+    color: #27405a;
+    border-color: #b2bad6;
+    opacity: 1;
+    cursor: context-menu;
+}
+
+#CSVUploadForms span {
+    color: red;
+    margin-left: 2px;
+}
+
+.UploadCSVFormAndWarning{
+    display: grid;
+  grid-template-columns: 870px 600px;
+}
+
+.classOverwriteWarning {
+    text-align: left;
+    padding-top: 25px;
+
+    margin-right: 0px;
+    margin-top: 0px;
+    justify-content: center;
+
+    
+}
+.classOverwriteWarning h4 {
+    padding: 0px;
+    margin: 0px;
+    color: rgb(219, 147, 53);
+    visibility: hidden;
+}
+
+.uploadCSVDropDown input[type="text"] {
+    background-color: #fff;
+    color: #27405a;
+    border-radius: 5px;
+    border-color: #b2bad6;
+    outline-color: #8d93a7;
+    padding: 8px;
+    font-size: 15px;
+    min-width: 182px;
+    width: 25%;
+    margin: 10px;
+    cursor: text;
+    border-width: 2px;
+    border-style: solid;
+}
+
+.uploadCSVDropDown input[type="number"] {
+    background-color: #fff;
+    color: #27405a;
+    border-radius: 5px;
+    border-color: #b2bad6;
+    padding: 8px;
+    font-size: 15px;
+    min-width: 183px;
+    width: 25%;
+    margin: 10px;
+    cursor: text;
+}
+
+.uploadCSVSubmit {
+    background-color: #0078c8;
+    color: #fff;
+    border-radius: 5px;
+    border: none;
+    padding: 10px;
+    font-size: 15px;
+    cursor: pointer;
+    text-align: right;
+    margin-top: 30px;
+    margin-bottom: 10px;
+    display: inline-block;
+}
+
+.uploadCSVSubmit:hover {
+    background-color: #016bb3;
+    color: #e4e4e4;
+}
+
+.uploadCSVFile {
+    padding: 8px;
+    font-size: 15px;
+    display: flex;
+    padding-right: 0px;
+    width: 100%;
+}
+.uploadCSVFile .individualFileUpload {
+    margin: 10px;
+    min-width: 200px;
+    width: 25%;
+    border-radius: 5px;
+    padding: 10px;
+    padding-right: 0px;
+    margin-left: 0px;
+    padding-left: 0px;
+    position: relative;
+}
+
+.uploadCSVFile input[type="file"] {
+    font-size: 17px;
+    color: #b2bad6;
+}
+
+.uploadCSVFile label {
+    font-size: 20px;
+    color: #27405a;
+}
+
+.uploadCSVFile input[type="file"]::file-selector-button {
+    background-color: #27405a;
+    color: #e4e4e4;
+    border-radius: 5px;
+    border: none;
+    font-size: 15px;
+    cursor: pointer;
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 8px;
+    cursor: pointer;
+}
+
+.uploadCSVFile input[type="file"]::file-selector-button:hover {
+    background-color: #283c52;
+    color: #fff;
+}
+
+.successfulUpload {
+    font-size: 20px;
+    color: green;
+}
+
+.failUpload {
+    font-size: 20px;
+    font-family: "Segoe UI", Tahoma, Generva, Verdana, sans-serif;
+    color: red;
+}
+
+.formatErrorList {
+    font-size: 16px;
+    font-family: "Segoe UI", Tahoma, Generva, Verdana, sans-serif;
+    color: #283c52;
+}
+
+.formatErrorList i {
+    color: red
+}
+
+.formatErrorListFirst {
+    color: red;
+    font-family: "Segoe UI", Tahoma, Generva, Verdana, sans-serif;
+}
+
+.errorNumber{
+    color: #27405a;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-align: left;
+    font-size: 20px;
+}

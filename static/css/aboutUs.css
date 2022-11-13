@@ -1,0 +1,69 @@
+
+/* About Us Page */
+
+.aboutMembers {
+    text-align: center;
+}
+
+/* Title of about us page */
+.aboutTitle {
+    text-align: center;
+    color: #27405a;
+    text-shadow: 2px 2px #b2bad6;
+    padding-bottom: 20px;
+    font-size: 50px;
+}
+
+/* style of each member */
+.theMember {
+    width: 100%;
+}
+
+/* Style of everyone's pictures */
+.theMember img {
+    max-width: 200px;
+    max-height: 200px;
+    margin-right: auto;
+    margin-left: auto;
+    margin-bottom: 20px;
+    border-radius: 15px;
+}
+
+/* Style of description of everyone */
+.theMember h5 {
+    max-width: 50%;
+    margin-right: auto;
+    margin-left: auto;
+    color: #27405a;
+}
+
+/* Style of everyone's names */
+.theMember h3 {
+    margin-right: auto;
+    margin-left: auto;
+    color: #0078c8;
+    margin-bottom: 0px;
+}
+
+/* Style of everyone's roles */
+.theMember h4 {
+    color: #27405a;
+}
+
+.aboutMembers {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+}
+
+/* Formats everyone on the About Us Page */
+.aboutMembers > div {
+    display: flex;
+    flex-direction: column;
+}
+
+
+
+

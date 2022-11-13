@@ -1,0 +1,103 @@
+/* FAQ page */
+
+/* Style of entire FAQ */
+#faqs {
+    display: inline-block;
+    margin: 10px;
+    margin-left: 260px;
+}
+
+/* FAQ title */
+#faqs h1 {
+    font-size: 50px;
+    text-align: center;
+    color: #27405a;
+    margin-top: 0px;
+}
+
+/* Style of list of all questions asked in FAQ */
+#faqs .listOfFAQs {
+    align-items: center;
+}
+
+/* Style of links to questions in list */
+#faqs li a {
+    text-decoration: none;
+    color: #0078c8;
+    font-size: 20px;
+    padding: 10px;
+    margin-top: 10px;
+}
+
+/* Style of links when hovered over */
+#faqs li a:hover {
+    color: #3799da;
+}
+
+/* Style of question in list of questions */
+#faqs li {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+/* Style of subheadings and picture headings */
+#faqs h3,
+h4 {
+    padding-top: 20px;
+}
+
+/* Style of for each question */
+#faqs h2 {
+    font-size: 30px;
+    padding-top: 0px;
+    color: #27405a;
+}
+
+/* Style of links embedded in paragraph of questions*/
+#faqs a {
+    text-decoration: none;
+    color: #0078c8;
+    font-size: 15px;
+}
+
+/* Style of links embedded in paragraph of questions when hovered over */
+#faqs a:hover {
+    color: #3799da;
+}
+
+/* Style of div containing picture info for faq */
+#faqs .faqExampleImage {
+    text-align: center;
+    padding: 10px;
+    display: block;
+}
+
+/* Style of button for downloading CSVs */
+.faqExampleImage button {
+    background-color: #0078c8;
+    border-radius: 5px;
+    border-color: #0078c8;
+    padding: 10px;
+    color: #fff;
+    cursor: pointer;
+    font-size: 20px;
+    display: inline-block;
+    margin: 30px;
+}
+
+/* Style of button for downloading CSVs when hovered over */
+.faqExampleImage button:hover {
+    background-color: #016bb3;
+    color: #e4e4e4;
+}
+
+/* Style of picture inside image div */
+.faqExampleImage img {
+    border: 1px solid #b2bad6;
+}
+
+/* Style of contact us at end of FAQ */
+#contactUs {
+    margin-top: 50px;
+    text-align: center;
+}
