@@ -7,3 +7,4 @@ test.py
 virtual
 ExportCSData.csv
 ExportECEData.csv
+.idea/*
