@@ -1,6 +1,7 @@
 
 /* Upload CSV Page */
 
+
 .uploadCSVFormTitle {
     color: #27405a;
     font-size: 50px;
@@ -116,6 +117,7 @@
     border-style: solid;
 }
 
+/*  */
 .uploadCSVDropDown input[type="number"] {
     background-color: #fff;
     color: #27405a;
@@ -129,6 +131,7 @@
     cursor: text;
 }
 
+/* Formatting of the button Submit CSV */
 .uploadCSVSubmit {
     background-color: #0078c8;
     color: #fff;
@@ -143,11 +146,13 @@
     display: inline-block;
 }
 
+/* When hovering the uploadCSVSubmit button it changes color to show that you are hovering over it */
 .uploadCSVSubmit:hover {
     background-color: #016bb3;
     color: #e4e4e4;
 }
 
+/* Div containing the File Uploads */
 .uploadCSVFile {
     padding: 8px;
     font-size: 15px;
@@ -155,6 +160,8 @@
     padding-right: 0px;
     width: 100%;
 }
+
+/* Formats each individual File Upload for the Courses, and Rooms  */
 .uploadCSVFile .individualFileUpload {
     margin: 10px;
     min-width: 200px;
@@ -167,16 +174,19 @@
     position: relative;
 }
 
+/* Formats the 'No   */
 .uploadCSVFile input[type="file"] {
     font-size: 17px;
-    color: #b2bad6;
+     color: #b2bad6; 
 }
 
+/* Formats the text right above the Choose File input buttons. EX "Upload Courses:*" */
 .uploadCSVFile label {
     font-size: 20px;
     color: #27405a;
 }
 
+/* Formats the Choose File input buttons  */
 .uploadCSVFile input[type="file"]::file-selector-button {
     background-color: #27405a;
     color: #e4e4e4;
@@ -191,37 +201,44 @@
     cursor: pointer;
 }
 
+/* If the user hovers over Choose a File then it will change from a off white to white */
 .uploadCSVFile input[type="file"]::file-selector-button:hover {
     background-color: #283c52;
     color: #fff;
 }
 
+/* Formats a message that occurs if the file successfully uploads */
 .successfulUpload {
     font-size: 20px;
     color: green;
 }
 
+/* Formats a message that occurs if the file fails to upload */
 .failUpload {
     font-size: 20px;
     font-family: "Segoe UI", Tahoma, Generva, Verdana, sans-serif;
     color: red;
 }
 
+/* Formats the actual errors displayed by the formatErrorList */
 .formatErrorList {
     font-size: 16px;
     font-family: "Segoe UI", Tahoma, Generva, Verdana, sans-serif;
     color: #283c52;
 }
 
+/* Formats the exclamation marks that are displayed if there were formatting issues */
 .formatErrorList i {
-    color: red
+    color: red;
 }
 
+/* Displays the amount of errors that were detected if there wre formatting issues with an uploade CSV  */
 .formatErrorListFirst {
     color: red;
     font-family: "Segoe UI", Tahoma, Generva, Verdana, sans-serif;
 }
 
+/* Displays the number above each error if there were formatting issues with an uploaded CSV */
 .errorNumber{
     color: #27405a;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
