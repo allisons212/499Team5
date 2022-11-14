@@ -81,7 +81,7 @@ if (localStorage.hasOwnProperty("updateGenerateButton") && localStorage.getItem(
 getData.addEventListener("click", async (e) => {
     localStorage.removeItem("updateGenerateButton"); // Remove boolean stored in local storage that indicates if generate button needs to be updated or not
     updateGenerateButton.style.visibility = "hidden"; // Hide the update to schedule warning because button has been pressed
-    const conflicts = await ky.post("/assignments/generate", { json: { department: "CS" } }).json(); // run generate_assignments and store the conflicts
+    const conflicts = await ky.post("/assignments/generate").json(); // run generate_assignments and store the conflicts
     const getDBData = await ky.get("/get/DB").json(); // After all the info has been pushed to the database, get said info from the database
 
     // If there are conflicts store them in local storage and update the conflict page

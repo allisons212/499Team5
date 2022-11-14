@@ -1,7 +1,7 @@
 import ky from "https://cdn.skypack.dev/ky";
 import { Conflict } from "./Conflict.js";
 // Get the modal
-const modal = document.getElementById("myModal");
+const modal = document.getElementById("myModal"); // Class Conflict modal
 
 // Get the button that opens the modal
 const conflictIcon = document.getElementById("conflictsIcon");
@@ -13,24 +13,23 @@ const classConflictsContainer = document.getElementById("classConflicts"); // Th
 
 const submitWarning = document.getElementById("submitWarning"); // The warning attached to the submit button in generateSchedule.html
 
+submitWarning.style.display = "none"; // Set submit warning to none by default if there are no conflicts avaliable
+
 const submitButton = document.getElementById("submitConflictSolutions"); // The submit button in generateSchedule.html
 
-const department = "CS"; // TODO: Change this to be less hardcoded
+let _selectedRooms = null; // Holds all the empty rooms that are gotten from the emptyRooms() Function
 
-let _selectedRooms = null;
+const noConflicts = document.getElementById("noConflicts"); // The no conflicts text that appears when there are no conflicts
 
-submitWarning.style.display = "none";
-const noConflicts = document.getElementById("noConflicts");
+const conflictNums = document.getElementById("conflictNums"); // The number of conflicts that appears next to the conflict icon
 
-const conflictNums = document.getElementById("conflictNums");
+const updateGenerateButton = document.getElementById("updateGenerateButton"); // The warning that appears when changes have been made to the schedule and it needs to be updated
 
-const updateGenerateButton = document.getElementById("updateGenerateButton");
-
-updateGenerateButton.style.visibility = "hidden";
+updateGenerateButton.style.visibility = "hidden"; // Set this warning to hidden to start off with
 
 // Get the empty rooms from the getEmptyRooms() python function
 const getSelectedRooms = async (reset = false) => {
-    if (reset || _selectedRooms === null) _selectedRooms = await ky.get(`/empty/rooms?department=${department}`).json();
+    if (reset || _selectedRooms === null) _selectedRooms = await ky.get(`/empty/rooms`).json();
 
     return _selectedRooms;
 };
@@ -258,19 +257,11 @@ const handleSubmit = async () => {
         if (conflictSolutions.some((e) => !e.saved)) {
             submitWarning.style.display = "inline";
         } else {
-            // TODO: call python function used to update database with conflict solutions
             submitWarning.style.display = "none";
             console.log("submitted");
             for (const conflict of conflictSolutions) {
                 await ky.put("/update/solution/assignments", { json: conflict.toLocal() });
-                // classConflictsContainer.removeChild(className);
-                // classConflictsContainer.removeChild(conflictTeacher);
-                // classConflictsContainer.removeChild(ConflictDropDown);
             }
-            // while (classConflictsContainer.firstChild) {
-
-            //     classConflictsContainer.removeChild(classConflictsContainer.firstChild);
-            // }
             classConflictsContainer.innerHTML = "";
             localStorage.removeItem("conflictSolutions");
             conflictSolutions = null;
