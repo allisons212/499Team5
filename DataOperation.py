@@ -175,6 +175,23 @@ class DataOperation:
         self.updateDB(building_dictionary, f'/{DatabaseHeaders.ROOMS.value}/{department}')
         
     # End of importRoomCSV
+
+    def getFacultyList(self, department_abbr):
+        """
+        Gets a list of faculty members from the database
+
+        Args:
+            department_abbr (string): Abbreviation of the department (e.g., CS, ECE) classes to update
+        """
+
+        # Get the Department Dictionary
+        department_dictionary = self.getDB(f"{DatabaseHeaders.COURSES.value}/{department_abbr}")
+
+        print(department_dictionary)
+
+        
+
+
             
             
 
