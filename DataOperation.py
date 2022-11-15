@@ -66,7 +66,7 @@ class DataOperation:
 
         # Reads in path pointing to firebase key, url to Realtime Database
         credentials_path, database_url = config['firebase']['credentials_path'], config['firebase']['database_url']
-
+        
         # Sets up credentials and initializes realtime database URL
         cred = credentials.Certificate(credentials_path)
         firebase_admin.initialize_app(cred, {
