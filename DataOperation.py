@@ -33,6 +33,7 @@ from firebase_admin import db
 from configparser import ConfigParser
 
 from RoomTable import *
+from FacultyTable import *
 
 from DataOperationException import * # Custom exceptions
 from DataOperationEnums import * # Custom enums
@@ -797,7 +798,7 @@ class DataOperation:
     #
     ######################################
     
-    def _init_tables(self, department):
+    def _init_roomTables(self, department):
         """
         Initializes room tables for each room and stores them out to database.
         """
@@ -815,7 +816,25 @@ class DataOperation:
     
         return tables_dict
             
-    # End of init_tables
+    # End of init_roomTables
+
+    def _init_facultyTables(self, department):
+        """
+        Initializes faculty tables for each teacher and stores them out to database.
+        """
+
+        # Get all the teachers
+        faculty_dict = getFacultyList(department)
+        tables_dict = {}
+
+        # Creates new dictionary of all faculty, each teacher keying a dictionary to a FacultyTable object
+        for faculty in faculty_dict:
+            tables_dict[faculty] = FacultyTable()
+
+        return tables_dict
+    # End of init_facultyTables
+            
+                
     
     
     
@@ -831,7 +850,9 @@ class DataOperation:
         """
         
         # Generates schedule tables for specified department
-        department_room_tables = self._init_tables(user_department)
+        department_room_tables = self._init_roomTables(user_department)
+
+        department_faculty_tables = self._init_facultyTables(user_department)
         
         # Gets courses in the user's department
         department_courses = self.getDB(f"/{DatabaseHeaders.COURSES.value}/{user_department}")
@@ -967,7 +988,7 @@ class DataOperation:
     # End of _assign_rest_of_courses
     
     
-    def _assign_with_day_time_pref(self, courses_dict, room_tables, conflicts_dict):
+    def _assign_with_day_time_pref(self, courses_dict, room_tables, faculty_tables, conflicts_dict):
         """
         Private method to help generate_assignments in handling
         assignments for professors with specific day/time preferences.
