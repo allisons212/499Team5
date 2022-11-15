@@ -59,13 +59,16 @@ class DataOperation:
         """
 
         # Loads config file
-        conf_file = 'credentials/firebase-auth.ini'
-        config = ConfigParser()
-        config.read(conf_file)
+        #conf_file = 'credentials/firebase-auth.ini'
+        #config = ConfigParser()
+        #config.read(conf_file)
 
 
         # Reads in path pointing to firebase key, url to Realtime Database
-        credentials_path, database_url = config['firebase']['credentials_path'], config['firebase']['database_url']
+        #credentials_path, database_url = config['firebase']['credentials_path'], config['firebase']['database_url']
+        
+        credentials_path = "firebase-key.json"
+        database_url = "https://coursescheduler499-default-rtdb.firebaseio.com/"
         
         # Sets up credentials and initializes realtime database URL
         cred = credentials.Certificate(credentials_path)

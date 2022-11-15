@@ -7,4 +7,5 @@ test.py
 virtual
 ExportCSData.csv
 ExportECEData.csv
+firebase-key.json
 .idea/*
