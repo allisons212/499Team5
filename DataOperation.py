@@ -187,9 +187,27 @@ class DataOperation:
         # Get the Department Dictionary
         department_dictionary = self.getDB(f"{DatabaseHeaders.COURSES.value}/{department_abbr}")
 
-        print(department_dictionary)
+        # Create faculty list
+        faculty_list = []
+
+        # search through section_info and append the faculty name from the faculty field to the list
+        for section_info in department_dictionary.values():
+            if(section_info[ColumnHeaders.FAC_ASSIGN.value] and faculty_list.count(section_info[ColumnHeaders.FAC_ASSIGN.value]) == 0):
+                faculty_list.append(section_info[ColumnHeaders.FAC_ASSIGN.value])
+        
+        print(len(faculty_list))
+
+        for i in faculty_list:
+            print(i)
+
 
         
+
+
+            
+
+
+
 
 
             
