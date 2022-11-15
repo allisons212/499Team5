@@ -177,26 +177,7 @@ class DataOperation:
         
     # End of importRoomCSV
 
-    def getFacultyList(self, department_abbr):
-        """
-        Gets a list of faculty members from the database
-
-        Args:
-            department_abbr (string): Abbreviation of the department (e.g., CS, ECE) classes to update
-        """
-
-        # Get the Department Dictionary
-        department_dictionary = self.getDB(f"{DatabaseHeaders.COURSES.value}/{department_abbr}")
-
-        # Create faculty list
-        faculty_list = []
-
-        # search through section_info and append the faculty name from the faculty field to the list
-        for section_info in department_dictionary.values():
-            if(section_info[ColumnHeaders.FAC_ASSIGN.value] and faculty_list.count(section_info[ColumnHeaders.FAC_ASSIGN.value]) == 0):
-                faculty_list.append(section_info[ColumnHeaders.FAC_ASSIGN.value])
-        
-        return faculty_list
+    
 
         
     def _importCourseCSV(self, filename, department_abbr):
@@ -821,13 +802,34 @@ class DataOperation:
             
     # End of init_roomTables
 
+    def getFacultyList(self, department_abbr):
+        """
+        Gets a list of faculty members from the database
+
+        Args:
+            department_abbr (string): Abbreviation of the department (e.g., CS, ECE) classes to update
+        """
+
+        # Get the Department Dictionary
+        department_dictionary = self.getDB(f"{DatabaseHeaders.COURSES.value}/{department_abbr}")
+
+        # Create faculty list
+        faculty_list = []
+
+        # search through section_info and append the faculty name from the faculty field to the list
+        for section_info in department_dictionary.values():
+            if(section_info[ColumnHeaders.FAC_ASSIGN.value] and faculty_list.count(section_info[ColumnHeaders.FAC_ASSIGN.value]) == 0):
+                faculty_list.append(section_info[ColumnHeaders.FAC_ASSIGN.value])
+        
+        return faculty_list
+
     def _init_facultyTables(self, department):
         """
         Initializes faculty tables for each teacher and stores them out to database.
         """
 
         # Get all the teachers
-        faculty_dict = getFacultyList(department)
+        faculty_dict = self.getFacultyList(department)
         tables_dict = {}
 
         # Creates new dictionary of all faculty, each teacher keying a dictionary to a FacultyTable object
@@ -836,6 +838,8 @@ class DataOperation:
 
         return tables_dict
     # End of init_facultyTables
+
+
             
                 
     
