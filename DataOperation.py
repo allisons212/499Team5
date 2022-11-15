@@ -195,24 +195,9 @@ class DataOperation:
             if(section_info[ColumnHeaders.FAC_ASSIGN.value] and faculty_list.count(section_info[ColumnHeaders.FAC_ASSIGN.value]) == 0):
                 faculty_list.append(section_info[ColumnHeaders.FAC_ASSIGN.value])
         
-        print(len(faculty_list))
-
-        for i in faculty_list:
-            print(i)
-
+        return faculty_list
 
         
-
-
-            
-
-
-
-
-
-            
-            
-
     def _importCourseCSV(self, filename, department_abbr):
         """
         Reads CSV file with schedule data and checks for formatting.
