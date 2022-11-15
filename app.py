@@ -289,6 +289,12 @@ def get_empty_rooms():
     emptyRooms = db.getEmptyRooms(user.getUser())
     return emptyRooms
 
+@app.get('/empty/faculty')
+def get_empty_faculty():
+    emptyFaculty = db.getEmptyFaculty(user.getUser())
+    return emptyFaculty
+
+
 @app.get('/get/DB')
 def get_DB():
     print("test")

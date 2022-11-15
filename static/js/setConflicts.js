@@ -19,6 +19,8 @@ const submitButton = document.getElementById("submitConflictSolutions"); // The 
 
 let _selectedRooms = null; // Holds all the empty rooms that are gotten from the emptyRooms() Function
 
+let _selectedFaculty = null;
+
 const noConflicts = document.getElementById("noConflicts"); // The no conflicts text that appears when there are no conflicts
 
 const conflictNums = document.getElementById("conflictNums"); // The number of conflicts that appears next to the conflict icon
@@ -33,6 +35,13 @@ const getSelectedRooms = async (reset = false) => {
 
     return _selectedRooms;
 };
+
+const getSelectedFaculty = async (reset = false) => {
+    if (reset || _selectedFaculty === null) _selectedFaculty = await ky.get(`/empty/faculty`).json();
+
+    return _selectedFaculty;
+};
+
 
 // Get the conflicts that were generated from the generate_assignments() python function which is in local storage
 const updateConflictSolution = (conflict) => {
@@ -67,15 +76,32 @@ function saveConflict(conflictSolutions, conflict) {
     }
 }
 
+function getTrueDaysAndTimes(room, faculty){
+    let trueDaysAndTimes = []
+    for (const roomDayAndTime of room){
+        for(const facultyDayAndTime of faculty){
+            if(roomDayAndTime === facultyDayAndTime){
+                trueDaysAndTimes.push(roomDayAndTime)
+            }
+        }
+    }
+    return trueDaysAndTimes
+}
+
 async function appendConflicts(conflictSolutions) {
     const selectedRooms = await getSelectedRooms();
+
+    const selectedFaculty = await getSelectedFaculty();
+
+     console.log(selectedFaculty)
+
 
     for (const conflict of conflictSolutions) {
         // Put the rooms in the dropdown menus for each conflict
         await conflict.setRoomDropDown(selectedRooms);
         // If a room is selected, put the day and times for the selected room in the dropdown menus for each conflict
         if (conflict.room !== "") {
-            await conflict.setDayTimeDropDown(selectedRooms[conflict.room]);
+            await conflict.setDayTimeDropDown(getTrueDaysAndTimes(selectedRooms[conflict.room], selectedFaculty[conflict.teacher]));
 
             // If dayAndTime contain something save the values
             if (conflict.dayAndTime !== "") {
@@ -114,7 +140,8 @@ async function appendConflicts(conflictSolutions) {
             } else {
                 conflict.dayTimeDropDown.disabled = false;
                 conflict.dayTimeDropDown.style.cursor = "pointer";
-                conflict.setDayTimeDropDown(selectedRooms[conflict.roomsDropDown.value]);
+                console.log("There")
+                conflict.setDayTimeDropDown(getTrueDaysAndTimes(selectedRooms[conflict.roomsDropDown.value], selectedFaculty[conflict.teacher]));
             }
             if (conflict.roomsDropDown.value !== conflict.roomsValue) {
                 conflict.dayTimeDropDown.options[0].selected = "selected";
@@ -148,7 +175,7 @@ async function appendConflicts(conflictSolutions) {
             await conflict.setRoomDropDown(selectedRooms);
             // If a room is selected, put the day and times for the selected room in the dropdown menus for each conflict
             if (conflict.room !== "") {
-                await conflict.setDayTimeDropDown(selectedRooms[conflict.room]);
+                await conflict.setDayTimeDropDown(getTrueDaysAndTimes(selectedRooms[conflict.room], selectedFaculty[conflict.teacher]));
 
                 // If dayAndTime contain something save the values
                 if (conflict.dayAndTime !== "") {
@@ -207,7 +234,7 @@ async function removeDaysTimesRooms(conflictSolutions, room, dayAndTime) {
     for (const conflict of conflictSolutions) {
         if (conflict.saved !== true && conflict.roomsDropDown.value === room) {
             var tempValue = conflict.dayTimeDropDown.value;
-            await conflict.setDayTimeDropDown(selectedRooms[room]);
+            await conflict.setDayTimeDropDown(getTrueDaysAndTimes(selectedRooms[room], selectedFaculty[conflict.teacher]));
             conflict.dayTimeDropDown.value = tempValue;
         }
     }
@@ -232,7 +259,7 @@ async function addDayTimesRoomsBack(conflictSolutions, room, dayAndTime) {
     for (const conflict of conflictSolutions) {
         if (conflict.saved !== true && conflict.roomsDropDown.value === room) {
             var tempValue = conflict.dayTimeDropDown.value;
-            conflict.setDayTimeDropDown(selectedRooms[room]);
+            conflict.setDayTimeDropDown(getTrueDaysAndTimes(selectedRooms[room], selectedFaculty[conflict.teacher]));
             conflict.dayTimeDropDown.value = tempValue;
         }
     }
@@ -301,6 +328,7 @@ function hideModal() {
     closeIcon.removeEventListener("click", handleX);
     submitButton.removeEventListener("click", handleSubmit);
     getSelectedRooms(true);
+    getSelectedFaculty(true);
 }
 
 // Update the conflictSolutions with information stored in local storage

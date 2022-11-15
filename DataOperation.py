@@ -89,7 +89,6 @@ class DataOperation:
             FileNotFoundError: If filename does not get resolved to a csv file.
             ImportFormatError: If imported CSV file does not adhere to specified formatting guidelines.
         """
-        import time
         try:
             self._importRoomCSV(room_csv_path, department)
             self._importCourseCSV(course_csv_path, department)
@@ -736,7 +735,6 @@ class DataOperation:
         # Compiles all empty spots and places them into a dictionary
         for room_num, table in room_tables.items():
             if table.isFull(): continue # Skips room if it is full
-            
             empty_cells = [] # List of empty cells with format: [ 'MW - A', 'MW - B', etc. ]
             
             for day, day_index in TableIndex.DAY_REF.items():
@@ -750,7 +748,7 @@ class DataOperation:
         
         return empty_periods
     # End of getEmptyRooms
-    
+
     def _fetch_room_tables(self, department):
         """
         Fetches room tables from database and converts them to RoomTable objects
@@ -771,6 +769,61 @@ class DataOperation:
         
         return new_room_tables
     # End of fetch_room_tables
+
+    def getEmptyFaculty(self, department):
+        """
+        Compiles a dictionary of all the empty periods in the specified department.
+        Keys are the faculty names.
+        Values are lists of empty periods i.e., [ 'MW - A', 'MW - B', etc. ]
+
+        Args:
+            department (string): department acronym (e.g., "CS", "ECE")
+
+        Returns:
+            dict: Keys are the faculty names, Values are lists of empty periods
+        """
+        # Fetches faculty tables from database
+        faculty_tables = self._fetch_faculty_tables(department)
+        
+        empty_periods = {} # Will hold each empty spot. Keys = room number, Value = String of spot
+        
+        # Compiles all empty spots and places them into a dictionary
+        for faculty, table in faculty_tables.items():
+            if table.isFull(): continue # Skips room if it is full
+            empty_cells = [] # List of empty cells with format: [ 'MW - A', 'MW - B', etc. ]
+            
+            for day, day_index in TableIndex.DAY_REF.items():
+                for time, time_index in TableIndex.TIME_REF.items():
+                    if table.isEmptyCell(day_index, time_index): # If empty cell, then add to empty_cells
+                        empty_cells.append(f"{day} - {time}")
+            
+            # Appends empty cells to cumulative dictionary
+            empty_periods[faculty] = empty_cells
+        # End of room_tables for-loop
+        
+        return empty_periods
+    # End of getEmptyRooms
+
+    def _fetch_faculty_tables(self, department):
+        """
+        Fetches faculty tables from database and converts them to FacultyTable objects
+
+        Args:
+            department (string): department acronym (e.g., "CS", "ECE")
+
+        Returns:
+            dict: Dictionary of RoomTable objects keyed by room number
+        """
+        faculty_tables = self.getFacultyList(department)
+        new_faculty_tables = {}
+        
+        for faculty in faculty_tables:
+            new_table = FacultyTable()
+            new_faculty_tables[faculty] = new_table
+        
+        return new_faculty_tables
+    # End of fetch_room_tables
+
         
         
 
@@ -839,11 +892,6 @@ class DataOperation:
         return tables_dict
     # End of init_facultyTables
 
-
-            
-                
-    
-    
     
     def generate_assignments(self, user_department):
         """
@@ -885,9 +933,14 @@ class DataOperation:
         serialize_dict = {}
         for room_num, table in department_room_tables.items():
             serialize_dict[room_num] = table.getTable()
+
+        serialize_faculty_dict = {}
+        for faculty, table in department_faculty_tables.items():
+            serialize_faculty_dict[faculty] = table.getTable()
         
         # Updates Room Tables to Database
         self.updateDB(serialize_dict, f"/{DatabaseHeaders.TABLES.value}/{user_department}")
+        # self.updateDB(serialize_faculty_dict, f"/{DatabaseHeaders.FACULTYTABLES.value}/{user_department}")
         
         # Now that department_room_tables is done, loop through tables and update the database with the new assignments
         for room_num, room_table in department_room_tables.items():
