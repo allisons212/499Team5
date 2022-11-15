@@ -868,13 +868,13 @@ class DataOperation:
         conflicts_dict = {}
         
         # 1st - Assign courses with Room Preferences
-        department_room_tables, conflicts_dict = self._assign_with_room_pref(department_courses, department_room_tables, conflicts_dict)
+        department_room_tables, department_faculty_tables, conflicts_dict = self._assign_with_room_pref(department_courses, department_room_tables, department_faculty_tables, conflicts_dict)
         
         # 2nd - Assign courses with Day/Time Preferences
-        department_room_tables, conflicts_dict = self._assign_with_day_time_pref(department_courses, department_room_tables, conflicts_dict)
+        department_room_tables, department_faculty_tables, conflicts_dict = self._assign_with_day_time_pref(department_courses, department_room_tables, department_faculty_tables, conflicts_dict)
 
         # 3rd - Assign the rest of the courses
-        department_room_tables, conflicts_dict = self._assign_rest_of_courses(department_courses, department_room_tables, conflicts_dict)
+        department_room_tables, department_faculty_tables, conflicts_dict = self._assign_rest_of_courses(department_courses, department_room_tables, department_faculty_tables, conflicts_dict)
         
         
         # Converts room tables to serializable 2D lists
@@ -918,7 +918,7 @@ class DataOperation:
     #
     ######################################
     
-    def _assign_rest_of_courses(self, courses_dict, room_tables, conflicts_dict):
+    def _assign_rest_of_courses(self, courses_dict, room_tables, faculty_tables, conflicts_dict):
         """
         Private method to help generate_assignments in handling
         assignments for professors without preferences.
@@ -928,7 +928,12 @@ class DataOperation:
             # Checks if it has a room preference
             room_pref = course_info[ColumnHeaders.ROOM_PREF.value]
             
+            faculty_pref = course_info[ColumnHeaders.FAC_ASSIGN.value]
+
+            
             if len(room_pref) > 3: continue     # Would be > 3 characters if room preference is specified
+
+            selected_faculty_table = faculty_tables[faculty_pref]
             
             # Gets preferred building
             c_building_pref = course_info[ColumnHeaders.ROOM_PREF.value][:3]
@@ -965,8 +970,9 @@ class DataOperation:
                     for time in c_time_pref: # Will be a letter A-G
                         
                         # Checks if cell is empty, then sets the cell with the course name
-                        if table.isEmptyCell(TableIndex.DAY_REF[day], TableIndex.TIME_REF[time]):
+                        if table.isEmptyCell(TableIndex.DAY_REF[day], TableIndex.TIME_REF[time]) and selected_faculty_table.isEmptyCell(TableIndex.DAY_REF[day], TableIndex.TIME_REF[time]):
                             table.setCell(TableIndex.DAY_REF[day], TableIndex.TIME_REF[time], str=course_name)
+                            selected_faculty_table.setCell(TableIndex.DAY_REF[day], TableIndex.TIME_REF[time], str=course_name)
                             assignment_made = True
                             break
                         # If the cell is not empty, move on to the next preferred one
@@ -987,7 +993,7 @@ class DataOperation:
         # End of course_dict for loop
         
         
-        return room_tables, conflicts_dict
+        return room_tables, faculty_tables, conflicts_dict
     # End of _assign_rest_of_courses
     
     
@@ -1000,8 +1006,12 @@ class DataOperation:
         for course_name, course_info in courses_dict.items():
             # Checks if it has a room preference
             room_pref = course_info[ColumnHeaders.ROOM_PREF.value]
+
+            faculty_pref = course_info[ColumnHeaders.FAC_ASSIGN.value]
             
             if len(room_pref) > 3: continue     # Would be > 3 characters if room preference is specified
+
+            selected_faculty_table = faculty_tables[faculty_pref]
             
             # Gets preferred building
             c_building_pref = course_info[ColumnHeaders.ROOM_PREF.value][:3]
@@ -1041,8 +1051,9 @@ class DataOperation:
                     for time in c_time_pref: # Will be a letter A-G
                         
                         # Checks if cell is empty, then sets the cell with the course name
-                        if table.isEmptyCell(TableIndex.DAY_REF[day], TableIndex.TIME_REF[time]):
+                        if table.isEmptyCell(TableIndex.DAY_REF[day], TableIndex.TIME_REF[time]) and selected_faculty_table.isEmptyCell(TableIndex.DAY_REF[day], TableIndex.TIME_REF[time]):
                             table.setCell(TableIndex.DAY_REF[day], TableIndex.TIME_REF[time], str=course_name)
+                            selected_faculty_table.setCell(TableIndex.DAY_REF[day], TableIndex.TIME_REF[time], str=course_name)
                             assignment_made = True
                             break
                         # If the cell is not empty, move on to the next preferred one
@@ -1063,11 +1074,11 @@ class DataOperation:
         # End of course_dict for loop
         
         
-        return room_tables, conflicts_dict
+        return room_tables, faculty_tables, conflicts_dict
     # End of _assign_with_day_time_pref
     
     
-    def _assign_with_room_pref(self, courses_dict, room_tables, conflicts_dict):
+    def _assign_with_room_pref(self, courses_dict, room_tables, faculty_tables, conflicts_dict):
         """
         Private method to help generate_assignments in handling
         assignments for courses in specific rooms.
@@ -1076,10 +1087,13 @@ class DataOperation:
         for course_name, course_info in courses_dict.items():
             # Checks if it has a room preference
             room_pref = course_info[ColumnHeaders.ROOM_PREF.value]
+
+            faculty_pref = course_info[ColumnHeaders.FAC_ASSIGN.value]
             
             if len(room_pref) <= 3: continue     # Would be > 3 characters if room preference is specified
             # Gets room table
             selected_table = room_tables[room_pref]
+            selected_faculty_table = faculty_tables[faculty_pref]
             
             # Gets time/day fields
             c_time_pref = course_info[ColumnHeaders.TIME_PREF.value]
@@ -1114,8 +1128,9 @@ class DataOperation:
                 for time in c_time_pref: # Will be a letter A-G
                     
                     # Checks if cell is empty, then sets the cell with the course name
-                    if selected_table.isEmptyCell(TableIndex.DAY_REF[day], TableIndex.TIME_REF[time]):
+                    if selected_table.isEmptyCell(TableIndex.DAY_REF[day], TableIndex.TIME_REF[time]) and selected_faculty_table.isEmptyCell(TableIndex.DAY_REF[day], TableIndex.TIME_REF[time]):
                         selected_table.setCell(TableIndex.DAY_REF[day], TableIndex.TIME_REF[time], str=course_name)
+                        selected_faculty_table.setCell(TableIndex.DAY_REF[day], TableIndex.TIME_REF[time], str=course_name)
                         assignment_made = True
                         break
                     # If the cell is not empty, move on to the next preferred one
@@ -1133,7 +1148,7 @@ class DataOperation:
                 
         # End of courses_dict for-loop            
             
-        return room_tables, conflicts_dict
+        return room_tables, faculty_tables, conflicts_dict
     # End of _assign_with_room_pref
     
     
