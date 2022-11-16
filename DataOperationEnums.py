@@ -53,6 +53,7 @@ class DatabaseHeaders(Enum):
     COURSES = 'Department Courses'
     ROOMS = 'Available Classrooms'
     TABLES = 'Room Tables'
+    FACULTYTABLES = 'Faculty Tables'
     
 class AccountHeaders(Enum):
     """

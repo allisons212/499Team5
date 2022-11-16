@@ -1,0 +1,99 @@
+
+/* Login Page */
+
+/* Style of the whole login page */
+.loginPage {
+    display: inline;
+    overflow-x: hidden;
+    margin-bottom: 0px;
+    height: 100vh;
+    min-height: 800px;
+}
+
+/* Style of uah picture, logo, and login form */
+.loginWrapper {
+    display: flex;
+    flex-direction: row;
+    min-height: calc(100vh - 150px);
+    justify-content: space-around;
+}
+
+/* Style of UAH picture */
+.loginPage .uahImage {
+    display: compact;
+    background-image: url("/static/Pictures/campus-photos-carousel-12.jpg");
+    line-height: 0;
+    background-repeat: no-repeat;
+    font-size: 0;
+    background-attachment: fixed;
+    background-size: cover;
+    width: 50%;
+    float: left;
+}
+
+/* Style for logo and login form */
+.loginForm {
+    text-align: center;
+    padding: 20px;
+    margin-top: 10%;
+    flex-grow: 1;
+}
+
+/* Style for logo */
+.loginForm img {
+    border-radius: 8px;
+    width: 25%;
+    height: 25%;
+    min-width: 160px;
+    min-height: 100px;
+}
+
+/* Style for login form */
+.loginForm form {
+    display: inline;
+    width: 25%;
+    height: 25%;
+
+}
+
+/* Style for username and password text box */
+.loginForm input[type="text"],
+input[type="password"] {
+    padding: 10px;
+    margin: 10px;
+    border-color: #b2bad6;
+    border-radius: 5px;
+    width: 25%;
+    min-width: 100px;
+    background-color: #fff;
+    color: #27405a;
+    border-radius: 5px;
+    border-color: #b2bad6;
+    outline-color: #8d93a7;
+    cursor: text;
+    border-width: 2px;
+    border-style: solid;
+}
+
+/* Style for username and password text box when they are hovered over */
+.loginForm input[type="text"]:hover, input[type="password"]:hover{
+    border-color: #8d93a7;
+}
+
+/* Style for login button */
+.loginForm input[type="submit"] {
+    background-color: #0078c8;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    text-align: center;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+/* Style for login button when it is hovered over */
+.loginForm input[type="submit"]:hover {
+    background-color: #016bb3;
+    color: #e4e4e4;
+}

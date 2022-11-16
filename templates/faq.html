@@ -6,7 +6,7 @@
             rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
         />
-        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+        <link href="../static/css/faq.css" rel="stylesheet" />
         <title>FAQ | Schedule Planner</title>
     </head>
 
@@ -36,10 +36,6 @@
                 <i class="fa fa-upload"></i>
                 Upload CSV
             </a>
-            <!-- <a href="{{ url_for('settings') }}">
-                <i class="fa fa-gear"></i>
-                Settings
-            </a> -->
             <a href="{{ url_for('faq') }}" class="currentPage">
                 <i class="fa fa-question-circle"></i>
                 FAQs
@@ -49,13 +45,6 @@
                 About Us
             </a>
         </div>
-
-<!--
-    Questions to be answered:
-    How do you upload a CSV (link to the CSV format FAQ maybe?)?
-    How do you generate a schedule?
-    How do you resolve conflicts?
--->
 
         <div class="main" id="faqs">
             <h1>Frequently Asked Questions</h1>
@@ -80,6 +69,8 @@
                 </li>
                 <li><a href="#howToGenerateSchedule">How do you generate a schedule?</a></li>
                 <li><a href="#resolveConflicts">How do you resolve conflicts?</a></li>
+                <li><a href="#downloadSchedule">How do you download the generated schedule?</a></li>
+                <li><a href="#contactUs">Contact information</a></li>
             </ul>
         </div>
 
@@ -210,8 +201,6 @@
                     <h4 style="margin-top:0px;">Example of how the conflict notification will look:</h4>
                     <img src="../static/Pictures/ConflictsExample.PNG" style="width: 100px; border:0px; margin-bottom: 20px">
                 </div>
-                After all conflicts have been resolved, you can then download the schedule in CSV format. To do this, click on the download icon
-                and the file will be immediately downloaded to your downloads folder.
 
             </p>
         </div>
@@ -238,6 +227,27 @@
 
                 
             </p>
+
+            <div id="downloadSchedule">
+                <h2>How do you download the generated schedule?</h2>
+                <p>
+                    After the schedule has been generated and all the conflicts that have arisen have been resolved, 
+                    you can then download the schedule in CSV format. To do this, 
+                    click on the download icon and the file will be immediately downloaded to your downloads folder.
+                    <div class="faqExampleImage">
+                        <h4 style="margin-top:0px;">Download Icon:</h4>
+                        <img src="../static/Pictures/DownloadIcon.PNG" style="height: 100px; width: 80px; margin-bottom: 20px">
+                    </div>
+                    
+                </p>
+            </div>
+
+            <div id="contactUs">
+                <h3>If you have additional questions, feel free to email us at:</h3>
+                <p>
+                    UAHScheduleBuilder@uah.edu
+                </p>
+            </div>
         </div>
     </body>
 </html>

@@ -36,6 +36,8 @@ import os
 import re
 
 
+
+# The user account is responsible for setting and getting the user_account so we know which department is logged into the system
 class User:
     user_account = ""
     
@@ -48,14 +50,14 @@ class User:
     def getUser(self):
         return self.user_account
 
-
+# Default Flask operations
 app = Flask(__name__)
-app.config["UPLOAD_FOLDER"] = "static/upload/"
 nav = Navigation(app)
 db = DataOperation()
 user = User()
 
-
+#  Defines where our upload folder is
+app.config["UPLOAD_FOLDER"] = "static/upload/"
 
 # initializes navigations, add each url here
 nav.Bar('top', [
@@ -121,45 +123,67 @@ def settings():
 # POST View for uploadCSV
 @app.route('/uploadCSV', methods=['POST', 'GET'])
 def upload_csv():
+
+    # If fileUploadSuccess is successful then it is filled with a string, but by default it is None
     fileUploadSuccess = None
+
+    # If manualUploadSuccess is successful then it is filled with a string, but by default it is None
+    manualUploadSuccess =  None
+
+    # If fileUploadFailure is not None, then it is filled with a string denoting failure
     fileUploadFailure = None
-    error = ""
-    errorCount = 0
-    success=  None
+
+    # manualError will only be filled with a string if there is improper formatting
+    # from the fields Faculty, and Class in the ManualUpload. manualErrorCount is just the number of errors
+    manualError = ""
+    manualErrorCount = 0
+
+    # TemporaryList is a 2D list that is used to format the Exception errors
+    temporaryList = [[]]
+
+    # FormatErrorList is the error List that is originally used to format Exception errors if the user uploads a CSV with the wrong format.
     formatErrorList = []
+
+    # FormatErrorList is filled with a header of how many errors were found. We want to pop this off and put
+    # into headingErrorList for easier formatting in the HTML
     headingErrorList = ""
 
     # Manual box entrys that are dynamic
     departmentManual = user.getUser()
+
+    # To fill the Manual rooms box we need to getEmptyRooms from database
     rooms = db.getEmptyRoomsOnly(user.getUser())
 
+    # IF the page detects a post
     if request.method == 'POST':
         
+        # If the post originated from the Submit CSV button
         if request.form['submit_button'] == 'Submit CSV':
 
-            # Request each file
+            # Put the File object from the 'courses' and 'rooms' files into CourseFile and RoomsFile
             CourseFile = request.files['courses']
             RoomsFile = request.files['rooms']
 
-            # Create a list and append the files to it
-            Files = []
-            Files.append(CourseFile)
-            Files.append(RoomsFile)
+            # Get the secure_filename and store in CourseFileName, then save the filename to the UPLOAD_FOLDER    
+            CourseFileName = secure_filename(CourseFile.filename)
+            CourseFile.save(app.config['UPLOAD_FOLDER'] + CourseFileName)
 
-            # iterate over the list and add them to the upload folder
-            for file in Files:
-                filename = secure_filename(file.filename)
-                file.save(app.config['UPLOAD_FOLDER'] + filename)
-
-            # CourseFile RoomsFile
-            CourseFile = CourseFile.filename
-            RoomsFile = RoomsFile.filename
+            # Get the secure_filename and store in RoomsFileName, then save the filename to the UPLOAD_FOLDER
+            RoomsFileName = secure_filename(RoomsFile.filename)
+            RoomsFile.save(app.config['UPLOAD_FOLDER'] + RoomsFileName)
 
             # Call the database to call the CourseFile
             try:
-                db.importCSV(f"static/upload/{CourseFile}", f"static/upload/{RoomsFile}", user.getUser())
+                db.importCSV(f"static/upload/{CourseFile.filename}", f"static/upload/{RoomsFile.filename}", user.getUser())
                 fileUploadSuccess = "File Uploaded Successfully! Generate schedule on Create Schedule page."
+
+                # Must clear temporaryList if it was a success. I think because of how it was initalized above it thinks theres at least 
+                # 1 element in the List and outputs it to the frontend
+                temporaryList = []
+            # If the Database causes an exception for ImportFormatError
             except ImportFormatError as ife:
+
+                # Get the exceptionMessage as 1 long string
                 exceptionMessage = str(ife)
 
                 # Split the exception by \n character
@@ -171,17 +195,21 @@ def upload_csv():
                 # pop the first element and store it in headingErrorList to send to HTML
                 headingErrorList = formatErrorList.pop(0)
 
+                # Fill the temporaryList as a 2D List
+                temporaryList = [formatErrorList[i:i+3] for i in range(0, len(formatErrorList), 3)]
+
                 # Let the user know that the upload has failed
                 fileUploadFailure = "File Upload Failed! Fix errors and try uploading again."
 
             # Render the template with updated text on screen
             return render_template('uploadCSV.html', department=user.getUser(), fileUploadSuccess=fileUploadSuccess, departmentManual=departmentManual,
-            formatErrorList=formatErrorList, rooms=rooms, fileUploadFailure=fileUploadFailure,headingErrorList=headingErrorList)
+            formatErrorList=temporaryList, rooms=rooms, fileUploadFailure=fileUploadFailure,headingErrorList=headingErrorList)
+        # END SUBMIT CSV IF
 
+        # If the user selects the Submit Manual Input button 
         elif request.form['submit_button'] == "Submit Manual Input":
 
             # Get each piece of information from the HTML
-            department = request.form.get("dept")
             userClass = request.form.get("class")
             faculty = request.form.get("faculty")
             room = request.form.get("room")
@@ -191,36 +219,45 @@ def upload_csv():
             # Check userClass for proper formatting
             match = re.findall(r"^[0-9]{3}[-][0-9]{2}$", str(userClass))
             if not match:
-                errorCount += 1
-                error += "CLASS ERROR: Incorrect CLASS formatting. Format: '[3-digit integer]-[2-digit integer]' EX. 102-01 where 01 indicates the section number.\n"
+                manualErrorCount += 1
+                manualError += "CLASS ERROR: Incorrect CLASS formatting. Format: '[3-digit integer]-[2-digit integer]' EX. 102-01 where 01 indicates the section number.\n"
             
             # Check faculty for proper formatting
             match = re.findall(r"^[A-Za-z.' ]{1,40}$", str(faculty))
             if not match:
-                errorCount += 1
-                error += "FACULTY ERROR: Incorrect FACULTY formatting. Format: 40 characters or less using only letters, periods, apostrophes, and spaces."
-
-            if errorCount > 0:
-                if(errorCount == 1 and error.find('\n')):
-                    error = error.replace('\n','')
-                    
-                error = error.split('\n')
-                return render_template('uploadCSV.html', department=user.getUser(), departmentManual=departmentManual, rooms=rooms, error=error)
+                manualErrorCount += 1
+                manualError += "FACULTY ERROR: Incorrect FACULTY formatting. Format: 40 characters or less using only letters, periods, apostrophes, and spaces."
             
-            # Enter the data into the database
+            # This can be Re-Written to be better ------REMINDER
+            if manualErrorCount > 0:
+                if(manualErrorCount == 1 and manualError.find('\n')):
+                    manualError = manualError.replace('\n','')
+
+                manualError = manualError.split('\n')
+
+                # IF there were errors then return the render_template to reflect that to the user
+                return render_template('uploadCSV.html', department=user.getUser(), departmentManual=departmentManual, rooms=rooms, manualError=manualError)
+            
+            # Enter the data into the database.
+            # Returns a boolean to determine if the class was already in the database or not.
             inDatabase = db.manualEntryAssignment(user.getUser(), userClass, faculty, room, day, time)
-
-            if(not inDatabase):
-                success = "Entry is now in the database."
-            else:
-                success = "Entry in database has been OVERWRITTEN!"
             
-            return render_template('uploadCSV.html', department=user.getUser(), departmentManual=departmentManual, rooms=rooms, success=success)
+            # IF the item was not in the database
+            if(not inDatabase):
+                manualUploadSuccess = "Entry is now in the database."
+            # ELSE the item was in the database
+            else:
+                manualUploadSuccess = "Entry in database has been OVERWRITTEN!"
+            
+            # Return the template with the updated information if it was successful 
+            return render_template('uploadCSV.html', department=user.getUser(), departmentManual=departmentManual, rooms=rooms, manualUploadSuccess=manualUploadSuccess)
+    # END POST IF
 
+    # IF there is a GET then just return the template for user
     elif request.method == 'GET':
         return render_template('uploadCSV.html', department=user.getUser(), departmentManual=departmentManual, rooms=rooms)
     
-    return render_template('uploadCSV.html', department=user.getUser(), error=error)
+    return render_template('uploadCSV.html', department=user.getUser(), manualError=manualError)
 
 
 @app.post('/assignments/generate')
@@ -250,11 +287,15 @@ def get_empty_rooms():
     emptyRooms = db.getEmptyRooms(user.getUser())
     return emptyRooms
 
+@app.get('/empty/faculty')
+def get_empty_faculty():
+    emptyFaculty = db.getEmptyFaculty(user.getUser())
+    return emptyFaculty
+
+
 @app.get('/get/DB')
 def get_DB():
-    print("test")
     department_path = "Department Courses/" + user.getUser()
-    print(department_path)
     return db.getDB(department_path)
 
 @app.put('/update/solution/assignments')
@@ -262,7 +303,6 @@ def update_solution_assignments():
     # department, course_number, day, time, room_number
     department = user.getUser()
     body = request.get_json()
-    print(body)
     course_number = body["className"]
     dayAndTime = body["dayAndTime"]
     day, time = dayAndTime.split(" - ")

@@ -6,6 +6,7 @@
             rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
         />
+        <link rel="stylesheet" href="../static/css/generateSchedule.css" />
         <title>Generate Schedule | Schedule Planner</title>
     </head>
 
@@ -33,10 +34,6 @@
                 <i class="fa fa-upload"></i>
                 Upload CSV
             </a>
-            <!-- <a href="{{ url_for('settings') }}">
-                <i class="fa fa-gear"></i>
-                Settings
-            </a> -->
             <a href="{{ url_for('faq') }}">
                 <i class="fa fa-question-circle"></i>
                 FAQs
@@ -49,13 +46,11 @@
 
         <div class="main">
             <div class="generateScheduleHeader">
-                <!-- <div> -->
                 <button class="generateButton" type="button" id="getData">Generate</button>
                 <h6 class="updateGenerateButton" id="updateGenerateButton" style="visibility: hidden;">
                     <i class="fa fa-exclamation-circle" ></i>
                     Changes have been made. Click Generate to update!
                 </h6>
-                <!-- </div> -->
                 <div class="generateEditors">
                     <div class="generateConflicts">
                         <i class="fa fa-warning" id="conflictsIcon"></i>
@@ -64,7 +59,7 @@
                         <!-- The Modal -->
                         <div id="myModal" class="generateModal">
                             <!-- Modal content -->
-                            <div class="modal-content">
+                            <div class="conflict-modal-content">
                                 <span class="close">&times;</span>
                                 <h1>Conflicts</h1>
                                 <div class="noConflicts" id="noConflicts">

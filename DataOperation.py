@@ -33,6 +33,7 @@ from firebase_admin import db
 from configparser import ConfigParser
 
 from RoomTable import *
+from FacultyTable import *
 
 from DataOperationException import * # Custom exceptions
 from DataOperationEnums import * # Custom enums
@@ -162,7 +163,6 @@ class DataOperation:
                     building_dictionary[row[ColumnHeaders.BUILD.value]].append(row[ColumnHeaders.ROOM_NUM.value])
                 else:
                     building_dictionary[row[ColumnHeaders.BUILD.value]] = [row[ColumnHeaders.ROOM_NUM.value]]
-            
            
         # If errors are found, raise the exception
         if format_error_count > 0:
@@ -175,9 +175,10 @@ class DataOperation:
         self.updateDB(building_dictionary, f'/{DatabaseHeaders.ROOMS.value}/{department}')
         
     # End of importRoomCSV
-            
-            
 
+    
+
+        
     def _importCourseCSV(self, filename, department_abbr):
         """
         Reads CSV file with schedule data and checks for formatting.
@@ -197,6 +198,9 @@ class DataOperation:
         # of the csv row fields.
         # Each of these rows will be appended to the following list
         dict_of_course_dicts = {}
+        
+        # Get building from the Database only Once
+        buildings_dict = self.getDB(f"{DatabaseHeaders.ROOMS.value}/{department_abbr}")
         
         format_error_count = 0 # Counts all format errors before raising the exception
         format_error_msg = ""  # Cumulative string to store all exception/error messages for each wrongly formatted entry
@@ -222,7 +226,7 @@ class DataOperation:
                     format_error_msg += (f"Row {row_num} in {filename} is formatted incorrectly.\n" +
                                             f"Please follow the following format for {ColumnHeaders.COURSE_SEC.value}:\n" +
                                             "[2-3 Capital Letters][3-digit integer]-[2-digit integer]\n")
-                
+
                                                     
                 # Check faculty assignment
                 faculty_assignment = row[ColumnHeaders.FAC_ASSIGN.value] # e.g., Dr. Goober
@@ -242,7 +246,6 @@ class DataOperation:
                     format_error_msg += (f"Row {row_num} in {filename} is formatted incorrectly.\n" +
                                             f"Please follow the following format for {ColumnHeaders.ROOM_PREF.value}:\n" +
                                             "[3 Capital Letters][Optional: 3-digit integer]\n")
-                    
                 else:  # Checks to ensure room preference exists in imported rooms
                     if len(room_pref) > 3: # Checks if there is a number in the preference
                         
@@ -251,7 +254,7 @@ class DataOperation:
                         num_pref = room_pref[3:]
                         
                         # Fetches list of rooms for the specified building
-                        buildings_dict = self.getDB(f"{DatabaseHeaders.ROOMS.value}/{department_abbr}")
+                        room_found = False
                         buildings_list = list(buildings_dict.keys())
                         room_nums_list = buildings_dict[building_pref]
                         
@@ -263,7 +266,6 @@ class DataOperation:
                                                  f"Please add room numbers from {room_pref} to the rooms import csv file or change it to another building.\n")
                         
                         # Checks to see if the room exists in the database
-                        room_found = False
                         for room_num in room_nums_list:
                             if room_num == num_pref: room_found = True
                         if not room_found: # If room not found, append a new format error
@@ -273,7 +275,7 @@ class DataOperation:
                                                  f"Please add the room number to the rooms import csv file or remove it from the \"{ColumnHeaders.ROOM_PREF.value}\" column.\n")
                     
                     else: # Else, there is only an acronym, so we must check if the acronym exists in the database
-                        buildings_list = list(self.getDB(f"{DatabaseHeaders.ROOMS.value}/{department_abbr}").keys())
+                        buildings_list = list(buildings_dict.keys())
                         if not room_pref in buildings_list:
                             format_error_count += 1
                             format_error_msg += (f"Row {row_num} in {filename} contains an error.\n" +
@@ -281,7 +283,6 @@ class DataOperation:
                                                  f"Please add room numbers from {room_pref} to the rooms import csv file or change it to another building.\n")
                     # End of if len(room_pref)
                 # End of room preference check
-                                
                 
                 
                 # Check time block preferences
@@ -455,7 +456,6 @@ class DataOperation:
             department_dict[course_key][ColumnHeaders.SEATS_OPEN.value] = ""
             department_dict[course_key][ColumnHeaders.TIME_ASS.value] = ""
             department_dict[course_key][ColumnHeaders.TIME_PREF.value] = time
-            print("Overwriting")
 
 
         # Update the Department Courses in the database
@@ -592,7 +592,7 @@ class DataOperation:
         fileString = csvfile.getvalue()
         csvfile.close()
         
-        # print("print", fileString)
+
         
         # tempFile.close()
         
@@ -734,7 +734,6 @@ class DataOperation:
         # Compiles all empty spots and places them into a dictionary
         for room_num, table in room_tables.items():
             if table.isFull(): continue # Skips room if it is full
-            
             empty_cells = [] # List of empty cells with format: [ 'MW - A', 'MW - B', etc. ]
             
             for day, day_index in TableIndex.DAY_REF.items():
@@ -748,7 +747,7 @@ class DataOperation:
         
         return empty_periods
     # End of getEmptyRooms
-    
+
     def _fetch_room_tables(self, department):
         """
         Fetches room tables from database and converts them to RoomTable objects
@@ -769,6 +768,63 @@ class DataOperation:
         
         return new_room_tables
     # End of fetch_room_tables
+
+    def getEmptyFaculty(self, department):
+        """
+        Compiles a dictionary of all the empty periods in the specified department.
+        Keys are the faculty names.
+        Values are lists of empty periods i.e., [ 'MW - A', 'MW - B', etc. ]
+
+        Args:
+            department (string): department acronym (e.g., "CS", "ECE")
+
+        Returns:
+            dict: Keys are the faculty names, Values are lists of empty periods
+        """
+        # Fetches faculty tables from database
+        faculty_tables = self._fetch_faculty_tables(department)
+        
+        empty_periods = {} # Will hold each empty spot. Keys = room number, Value = String of spot
+        
+        # Compiles all empty spots and places them into a dictionary
+        for faculty, table in faculty_tables.items():
+            if table.isFull(): continue # Skips room if it is full
+            empty_cells = [] # List of empty cells with format: [ 'MW - A', 'MW - B', etc. ]
+            
+            for day, day_index in TableIndex.DAY_REF.items():
+                for time, time_index in TableIndex.TIME_REF.items():
+                    if table.isEmptyCell(day_index, time_index): # If empty cell, then add to empty_cells
+                        empty_cells.append(f"{day} - {time}")
+            
+            # Appends empty cells to cumulative dictionary
+            empty_periods[faculty] = empty_cells
+        # End of room_tables for-loop
+        
+        return empty_periods
+    # End of getEmptyRooms
+
+    def _fetch_faculty_tables(self, department):
+        """
+        Fetches faculty tables from database and converts them to FacultyTable objects
+
+        Args:
+            department (string): department acronym (e.g., "CS", "ECE")
+
+        Returns:
+            dict: Dictionary of RoomTable objects keyed by room number
+        """
+        faculty_tables = self.getDB(f"/{DatabaseHeaders.FACULTYTABLES.value}/{department}")
+        new_faculty_tables = {}
+        
+        for faculty, table in faculty_tables.items():
+            faculty = faculty.replace(',', '.')
+            new_table = FacultyTable()
+            new_table.importTable(table)
+            new_faculty_tables[faculty] = new_table
+        
+        return new_faculty_tables
+    # End of fetch_room_tables
+
         
         
 
@@ -780,7 +836,7 @@ class DataOperation:
     #
     ######################################
     
-    def _init_tables(self, department):
+    def _init_roomTables(self, department):
         """
         Initializes room tables for each room and stores them out to database.
         """
@@ -798,9 +854,45 @@ class DataOperation:
     
         return tables_dict
             
-    # End of init_tables
-    
-    
+    # End of init_roomTables
+
+    def getFacultyList(self, department_abbr):
+        """
+        Gets a list of faculty members from the database
+
+        Args:
+            department_abbr (string): Abbreviation of the department (e.g., CS, ECE) classes to update
+        """
+
+        # Get the Department Dictionary
+        department_dictionary = self.getDB(f"{DatabaseHeaders.COURSES.value}/{department_abbr}")
+
+        # Create faculty list
+        faculty_list = []
+
+        # search through section_info and append the faculty name from the faculty field to the list
+        for section_info in department_dictionary.values():
+            if(section_info[ColumnHeaders.FAC_ASSIGN.value] and faculty_list.count(section_info[ColumnHeaders.FAC_ASSIGN.value]) == 0):
+                faculty_list.append(section_info[ColumnHeaders.FAC_ASSIGN.value])
+        
+        return faculty_list
+
+    def _init_facultyTables(self, department):
+        """
+        Initializes faculty tables for each teacher and stores them out to database.
+        """
+
+        # Get all the teachers
+        faculty_dict = self.getFacultyList(department)
+        tables_dict = {}
+
+        # Creates new dictionary of all faculty, each teacher keying a dictionary to a FacultyTable object
+        for faculty in faculty_dict:
+            tables_dict[faculty] = FacultyTable()
+
+        return tables_dict
+    # End of init_facultyTables
+
     
     def generate_assignments(self, user_department):
         """
@@ -814,7 +906,9 @@ class DataOperation:
         """
         
         # Generates schedule tables for specified department
-        department_room_tables = self._init_tables(user_department)
+        department_room_tables = self._init_roomTables(user_department)
+
+        department_faculty_tables = self._init_facultyTables(user_department)
         
         # Gets courses in the user's department
         department_courses = self.getDB(f"/{DatabaseHeaders.COURSES.value}/{user_department}")
@@ -827,22 +921,28 @@ class DataOperation:
         conflicts_dict = {}
         
         # 1st - Assign courses with Room Preferences
-        department_room_tables, conflicts_dict = self._assign_with_room_pref(department_courses, department_room_tables, conflicts_dict)
+        department_room_tables, department_faculty_tables, conflicts_dict = self._assign_with_room_pref(department_courses, department_room_tables, department_faculty_tables, conflicts_dict)
         
         # 2nd - Assign courses with Day/Time Preferences
-        department_room_tables, conflicts_dict = self._assign_with_day_time_pref(department_courses, department_room_tables, conflicts_dict)
+        department_room_tables, department_faculty_tables, conflicts_dict = self._assign_with_day_time_pref(department_courses, department_room_tables, department_faculty_tables, conflicts_dict)
 
         # 3rd - Assign the rest of the courses
-        department_room_tables, conflicts_dict = self._assign_rest_of_courses(department_courses, department_room_tables, conflicts_dict)
+        department_room_tables, department_faculty_tables, conflicts_dict = self._assign_rest_of_courses(department_courses, department_room_tables, department_faculty_tables, conflicts_dict)
         
         
         # Converts room tables to serializable 2D lists
         serialize_dict = {}
         for room_num, table in department_room_tables.items():
             serialize_dict[room_num] = table.getTable()
+
+        serialize_faculty_dict = {}
+        for faculty, table in department_faculty_tables.items():
+            faculty = faculty.replace('.', ',')
+            serialize_faculty_dict[faculty] = table.getTable()
         
         # Updates Room Tables to Database
         self.updateDB(serialize_dict, f"/{DatabaseHeaders.TABLES.value}/{user_department}")
+        self.updateDB(serialize_faculty_dict, f"/{DatabaseHeaders.FACULTYTABLES.value}/{user_department}")
         
         # Now that department_room_tables is done, loop through tables and update the database with the new assignments
         for room_num, room_table in department_room_tables.items():
@@ -877,7 +977,7 @@ class DataOperation:
     #
     ######################################
     
-    def _assign_rest_of_courses(self, courses_dict, room_tables, conflicts_dict):
+    def _assign_rest_of_courses(self, courses_dict, room_tables, faculty_tables, conflicts_dict):
         """
         Private method to help generate_assignments in handling
         assignments for professors without preferences.
@@ -887,7 +987,12 @@ class DataOperation:
             # Checks if it has a room preference
             room_pref = course_info[ColumnHeaders.ROOM_PREF.value]
             
+            faculty_pref = course_info[ColumnHeaders.FAC_ASSIGN.value]
+
+            
             if len(room_pref) > 3: continue     # Would be > 3 characters if room preference is specified
+
+            selected_faculty_table = faculty_tables[faculty_pref]
             
             # Gets preferred building
             c_building_pref = course_info[ColumnHeaders.ROOM_PREF.value][:3]
@@ -924,8 +1029,9 @@ class DataOperation:
                     for time in c_time_pref: # Will be a letter A-G
                         
                         # Checks if cell is empty, then sets the cell with the course name
-                        if table.isEmptyCell(TableIndex.DAY_REF[day], TableIndex.TIME_REF[time]):
+                        if table.isEmptyCell(TableIndex.DAY_REF[day], TableIndex.TIME_REF[time]) and selected_faculty_table.isEmptyCell(TableIndex.DAY_REF[day], TableIndex.TIME_REF[time]):
                             table.setCell(TableIndex.DAY_REF[day], TableIndex.TIME_REF[time], str=course_name)
+                            selected_faculty_table.setCell(TableIndex.DAY_REF[day], TableIndex.TIME_REF[time], str=course_name)
                             assignment_made = True
                             break
                         # If the cell is not empty, move on to the next preferred one
@@ -946,11 +1052,11 @@ class DataOperation:
         # End of course_dict for loop
         
         
-        return room_tables, conflicts_dict
+        return room_tables, faculty_tables, conflicts_dict
     # End of _assign_rest_of_courses
     
     
-    def _assign_with_day_time_pref(self, courses_dict, room_tables, conflicts_dict):
+    def _assign_with_day_time_pref(self, courses_dict, room_tables, faculty_tables, conflicts_dict):
         """
         Private method to help generate_assignments in handling
         assignments for professors with specific day/time preferences.
@@ -959,8 +1065,12 @@ class DataOperation:
         for course_name, course_info in courses_dict.items():
             # Checks if it has a room preference
             room_pref = course_info[ColumnHeaders.ROOM_PREF.value]
+
+            faculty_pref = course_info[ColumnHeaders.FAC_ASSIGN.value]
             
             if len(room_pref) > 3: continue     # Would be > 3 characters if room preference is specified
+
+            selected_faculty_table = faculty_tables[faculty_pref]
             
             # Gets preferred building
             c_building_pref = course_info[ColumnHeaders.ROOM_PREF.value][:3]
@@ -1000,8 +1110,9 @@ class DataOperation:
                     for time in c_time_pref: # Will be a letter A-G
                         
                         # Checks if cell is empty, then sets the cell with the course name
-                        if table.isEmptyCell(TableIndex.DAY_REF[day], TableIndex.TIME_REF[time]):
+                        if table.isEmptyCell(TableIndex.DAY_REF[day], TableIndex.TIME_REF[time]) and selected_faculty_table.isEmptyCell(TableIndex.DAY_REF[day], TableIndex.TIME_REF[time]):
                             table.setCell(TableIndex.DAY_REF[day], TableIndex.TIME_REF[time], str=course_name)
+                            selected_faculty_table.setCell(TableIndex.DAY_REF[day], TableIndex.TIME_REF[time], str=course_name)
                             assignment_made = True
                             break
                         # If the cell is not empty, move on to the next preferred one
@@ -1022,11 +1133,11 @@ class DataOperation:
         # End of course_dict for loop
         
         
-        return room_tables, conflicts_dict
+        return room_tables, faculty_tables, conflicts_dict
     # End of _assign_with_day_time_pref
     
     
-    def _assign_with_room_pref(self, courses_dict, room_tables, conflicts_dict):
+    def _assign_with_room_pref(self, courses_dict, room_tables, faculty_tables, conflicts_dict):
         """
         Private method to help generate_assignments in handling
         assignments for courses in specific rooms.
@@ -1035,10 +1146,13 @@ class DataOperation:
         for course_name, course_info in courses_dict.items():
             # Checks if it has a room preference
             room_pref = course_info[ColumnHeaders.ROOM_PREF.value]
+
+            faculty_pref = course_info[ColumnHeaders.FAC_ASSIGN.value]
             
             if len(room_pref) <= 3: continue     # Would be > 3 characters if room preference is specified
             # Gets room table
             selected_table = room_tables[room_pref]
+            selected_faculty_table = faculty_tables[faculty_pref]
             
             # Gets time/day fields
             c_time_pref = course_info[ColumnHeaders.TIME_PREF.value]
@@ -1073,8 +1187,9 @@ class DataOperation:
                 for time in c_time_pref: # Will be a letter A-G
                     
                     # Checks if cell is empty, then sets the cell with the course name
-                    if selected_table.isEmptyCell(TableIndex.DAY_REF[day], TableIndex.TIME_REF[time]):
+                    if selected_table.isEmptyCell(TableIndex.DAY_REF[day], TableIndex.TIME_REF[time]) and selected_faculty_table.isEmptyCell(TableIndex.DAY_REF[day], TableIndex.TIME_REF[time]):
                         selected_table.setCell(TableIndex.DAY_REF[day], TableIndex.TIME_REF[time], str=course_name)
+                        selected_faculty_table.setCell(TableIndex.DAY_REF[day], TableIndex.TIME_REF[time], str=course_name)
                         assignment_made = True
                         break
                     # If the cell is not empty, move on to the next preferred one
@@ -1092,7 +1207,7 @@ class DataOperation:
                 
         # End of courses_dict for-loop            
             
-        return room_tables, conflicts_dict
+        return room_tables, faculty_tables, conflicts_dict
     # End of _assign_with_room_pref
     
     
