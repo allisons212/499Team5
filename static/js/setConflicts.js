@@ -132,7 +132,7 @@ async function appendConflicts(conflictSolutions) {
         };
 
         // Check the room dropdown to help prevent user from selecting a day and time without a room
-        conflict.roomsDropDown.addEventListener("input", function () {
+        conflict.roomsDropDown.addEventListener("input", async function () {
             if (conflict.roomsDropDown.value === "") {
                 conflict.dayTimeDropDown.disabled = true;
                 conflict.dayTimeDropDown.options[0].selected = "selected";
@@ -141,6 +141,7 @@ async function appendConflicts(conflictSolutions) {
                 conflict.dayTimeDropDown.disabled = false;
                 conflict.dayTimeDropDown.style.cursor = "pointer";
                 console.log("There")
+                const selectedFaculty = await getSelectedFaculty();
                 conflict.setDayTimeDropDown(getTrueDaysAndTimes(selectedRooms[conflict.roomsDropDown.value], selectedFaculty[conflict.teacher]));
             }
             if (conflict.roomsDropDown.value !== conflict.roomsValue) {
@@ -175,6 +176,7 @@ async function appendConflicts(conflictSolutions) {
             await conflict.setRoomDropDown(selectedRooms);
             // If a room is selected, put the day and times for the selected room in the dropdown menus for each conflict
             if (conflict.room !== "") {
+                const selectedFaculty = await getSelectedFaculty();
                 await conflict.setDayTimeDropDown(getTrueDaysAndTimes(selectedRooms[conflict.room], selectedFaculty[conflict.teacher]));
 
                 // If dayAndTime contain something save the values
@@ -234,6 +236,7 @@ async function removeDaysTimesRooms(conflictSolutions, room, dayAndTime) {
     for (const conflict of conflictSolutions) {
         if (conflict.saved !== true && conflict.roomsDropDown.value === room) {
             var tempValue = conflict.dayTimeDropDown.value;
+            const selectedFaculty = await getSelectedFaculty();
             await conflict.setDayTimeDropDown(getTrueDaysAndTimes(selectedRooms[room], selectedFaculty[conflict.teacher]));
             conflict.dayTimeDropDown.value = tempValue;
         }
@@ -259,6 +262,7 @@ async function addDayTimesRoomsBack(conflictSolutions, room, dayAndTime) {
     for (const conflict of conflictSolutions) {
         if (conflict.saved !== true && conflict.roomsDropDown.value === room) {
             var tempValue = conflict.dayTimeDropDown.value;
+            const selectedFaculty = await getSelectedFaculty();
             conflict.setDayTimeDropDown(getTrueDaysAndTimes(selectedRooms[room], selectedFaculty[conflict.teacher]));
             conflict.dayTimeDropDown.value = tempValue;
         }
