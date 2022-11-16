@@ -456,7 +456,6 @@ class DataOperation:
             department_dict[course_key][ColumnHeaders.SEATS_OPEN.value] = ""
             department_dict[course_key][ColumnHeaders.TIME_ASS.value] = ""
             department_dict[course_key][ColumnHeaders.TIME_PREF.value] = time
-            print("Overwriting")
 
 
         # Update the Department Courses in the database
@@ -593,7 +592,7 @@ class DataOperation:
         fileString = csvfile.getvalue()
         csvfile.close()
         
-        # print("print", fileString)
+
         
         # tempFile.close()
         
@@ -814,11 +813,13 @@ class DataOperation:
         Returns:
             dict: Dictionary of RoomTable objects keyed by room number
         """
-        faculty_tables = self.getFacultyList(department)
+        faculty_tables = self.getDB(f"/{DatabaseHeaders.FACULTYTABLES.value}/{department}")
         new_faculty_tables = {}
         
-        for faculty in faculty_tables:
+        for faculty, table in faculty_tables.items():
+            faculty = faculty.replace(',', '.')
             new_table = FacultyTable()
+            new_table.importTable(table)
             new_faculty_tables[faculty] = new_table
         
         return new_faculty_tables
@@ -936,11 +937,12 @@ class DataOperation:
 
         serialize_faculty_dict = {}
         for faculty, table in department_faculty_tables.items():
+            faculty = faculty.replace('.', ',')
             serialize_faculty_dict[faculty] = table.getTable()
         
         # Updates Room Tables to Database
         self.updateDB(serialize_dict, f"/{DatabaseHeaders.TABLES.value}/{user_department}")
-        # self.updateDB(serialize_faculty_dict, f"/{DatabaseHeaders.FACULTYTABLES.value}/{user_department}")
+        self.updateDB(serialize_faculty_dict, f"/{DatabaseHeaders.FACULTYTABLES.value}/{user_department}")
         
         # Now that department_room_tables is done, loop through tables and update the database with the new assignments
         for room_num, room_table in department_room_tables.items():

@@ -119,7 +119,6 @@ class FacultyTable:
         Returns:
             boolean: Returns True if cell is empty, False if cell is occupied
         """
-        
         if self.table[day][time]: return False
         else: return True
     

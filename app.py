@@ -234,7 +234,6 @@ def upload_csv():
                     manualError = manualError.replace('\n','')
 
                 manualError = manualError.split('\n')
-                print(manualError)
 
                 # IF there were errors then return the render_template to reflect that to the user
                 return render_template('uploadCSV.html', department=user.getUser(), departmentManual=departmentManual, rooms=rooms, manualError=manualError)
@@ -250,7 +249,6 @@ def upload_csv():
             else:
                 manualUploadSuccess = "Entry in database has been OVERWRITTEN!"
             
-            print(manualUploadSuccess)
             # Return the template with the updated information if it was successful 
             return render_template('uploadCSV.html', department=user.getUser(), departmentManual=departmentManual, rooms=rooms, manualUploadSuccess=manualUploadSuccess)
     # END POST IF
@@ -297,9 +295,7 @@ def get_empty_faculty():
 
 @app.get('/get/DB')
 def get_DB():
-    print("test")
     department_path = "Department Courses/" + user.getUser()
-    print(department_path)
     return db.getDB(department_path)
 
 @app.put('/update/solution/assignments')
@@ -307,7 +303,6 @@ def update_solution_assignments():
     # department, course_number, day, time, room_number
     department = user.getUser()
     body = request.get_json()
-    print(body)
     course_number = body["className"]
     dayAndTime = body["dayAndTime"]
     day, time = dayAndTime.split(" - ")
