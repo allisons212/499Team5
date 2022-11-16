@@ -26,7 +26,6 @@
 
 from flask import Flask, render_template, redirect, url_for, request
 from flask_navigation import Navigation #pip install flask_navigation
-from numpy import empty # pip install numpy
 from RoomTable import *
 from DataOperationEnums import *
 from DataOperationException import *
@@ -312,4 +311,4 @@ def update_solution_assignments():
 
 
 if __name__ == '__main__':
-    app.run(debug = True)
+    app.run(host='0.0.0.0', port=int(os.environ.get("PORT", 8080)), debug=True)
