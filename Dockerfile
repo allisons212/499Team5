@@ -6,6 +6,7 @@ ENV PYTHONUNBUFFERED True
 ENV APP_HOME /app
 WORKDIR $APP_HOME
 COPY . ./
+COPY ./credentials ./credentials
 
 RUN pip install Flask flask_navigation configparser werkzeug firebase-admin gunicorn
 EXPOSE $PORT

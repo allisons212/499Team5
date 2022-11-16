@@ -1,4 +1,5 @@
 __pycache__
 cs499env
+ClassData
 .gitignore
-.git
+.gcloudignore
