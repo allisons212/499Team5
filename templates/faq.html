@@ -64,7 +64,7 @@
                 <li><a href="#csvFormatting">How are the CSVs formatted?</a>
                     <ul>
                         <li><a href="#departmentClassDataCSV">How is the Department Class Data CSV formatted?</a></li>
-                        <li><a href="#availableRoomsCSV">How is the Avaliable Room CSV formatted?</a></li>
+                        <li><a href="#availableRoomsCSV">How is the Available Room CSV formatted?</a></li>
                     </ul>
                 </li>
                 <li><a href="#howToGenerateSchedule">How do you generate a schedule?</a></li>
@@ -104,12 +104,12 @@
         <div id ="CSV Upload">
             <h3>CSV Upload</h3>
             <p>
-            When uploading CSVs on the Upload CSV page you must choose two files: <a href="#availableRoomsCSV">AvailableRoomsCSV</a> and
+                When uploading CSVs on the Upload CSV page you must choose two files: <a href="#availableRoomsCSV">AvailableRoomsCSV</a> and
              <a href="#departmentClassDataCSV">DepartmentClassData</a> CSV 
 
-            If you do not choose two files and try to Submit the CSVs then it will give you an error message. 
-            Once you give two files and they are in the <a href="#csvFormatting">correct CSV format</a>, then it will notify you that it has successfully upload the files.
-            After successfully uploading both files, go to Create Schedule and <a href="#howToGenerateSchedule">generate the newly updated schedule</a>.
+             If you do not choose two files and try to submit the CSVs then it will give you an error message. 
+             Once you give two files and they are in the <a href="#csvFormatting">correct CSV format</a>,  then it will notify you that it has successfully uploaded the files. 
+             After successfully uploading both files, go to Create Schedule and <a href="#howToGenerateSchedule">generate the newly updated schedule</a>.
             </p>
             <div class="faqExampleImage">
                 <h4>Example of CSV Upload:</h4>
@@ -121,11 +121,11 @@
             <h3>Manual Upload</h3>
             <p>
                 The manual upload function is specifically for adding courses that you forgot after you have used the CSV function. 
-                There will be six fields that are required to fill out. These fields are Department, Class, Faculty Member, Room, Day, and Time.
-                The Class must follow this format: [3-digit integer]-[2-digit integer]' EX. 102-01 where 01 indicates the section number.
-                With the manual entry, you will also be allowed to rewrite already existing classes. If this is occuring a warning will pop up.
-                The Faculty Member must follow this format: 40 characters or less using only letters, periods, apostrophes, and spaces.
-                Once all fields are filled out, hit the Submit Manual Entry to add class to database.
+                There will be six fields that are required to fill out. These fields are Department, Class, Faculty Member, Room, Day, and Time. 
+                The Class must follow this format: [3-digit integer]-[2-digit integer]' EX. 102-01 where 01 indicates the section number. 
+                With the manual entry, you will also be allowed to rewrite already existing classes. If this is occuring a warning will pop up. 
+                The Faculty Member must follow this format: 40 characters or less using only letters, periods, apostrophes, and spaces. 
+                Once all fields are filled out, hit the Submit Manual Entry to add the class to the database.
                 After submitting, go to Create Schedule and <a href="#howToGenerateSchedule">generate the newly updated schedule</a>.
                 
             </p>
@@ -141,19 +141,20 @@
             <div id="csvFormatting">
                 <h2>How are the CSVs formatted?</h2>
                 <p>
-                    The two CSVs that must be uploaded are the Department Class Data and room table CSVs. These have a
-                    specific form to them that must be followed.
+                    The two CSVs that must be uploaded are the Department Class Data and room table CSVs. 
+                    These have a specific form to them that must be followed.
                 </p>
                 <div id="departmentClassDataCSV">
                 <h3>How is the Department Class Data CSV formatted?</h3>
                 <p>
-                    The Department Class Data CSV has 6 fields. Course Selection which houses the course id that includes
-                    the department, the class number, and section (ex. CS100-01). Faculty Assignment which contains the
-                    teacher who will be teaching the class. Room Preference which contains the room that you wish the class
-                    to be taught. Time Block Preference which contains The time block you wish the class to be held at.
-                    These blocks range from A to G. You can have any combination of them, but you must have them all without
-                    spaces. Day Preference which contains the day you wish the class to be taught. This can either be MW or
-                    TR or a combination of both. Seats Open which contains the amount of seats for the given classroom.
+                    The Department Class Data CSV has 6 fields. 
+                    Course Selection which houses the course id that includes the department, the class number, and section (ex. CS100-01). 
+                    Faculty Assignment which contains the teacher who will be teaching the class. 
+                    Room Preference which contains the room that you wish the class to be taught. 
+                    Time Block Preference which contains The time block you wish the class to be held at. 
+                    These blocks range from A to G. You can have any combination of them, but you must have them all without spaces. 
+                    Day Preference which contains the day you wish the class to be taught. This can either be MW or TR or a combination of both. 
+                    Seats Open which contains the amount of seats for the given classroom.
                 </p>
                 <div class="faqExampleImage">
                     <h4>Example of format of Class Data CSV:</h4>
@@ -167,15 +168,15 @@
             
             
             <div id="availableRoomsCSV">
-                <h3>How is the Avaliable Room CSV formatted?</h3>
+                <h3>How is the Available Room CSV formatted?</h3>
 
                 <p>
-                    The Avaliable Room CSV have only 2 fields. Building which is the building where the rooms are located
-                    and Room Number which holds the room number of a given classroom. In order for a room to be included in
-                    the creation of the schedule, the room must be included in this CSV.
+                    The Available Room CSV has only 2 fields. 
+                    Building which is the building where the rooms are located and Room Number which holds the room number of a given classroom. 
+                    In order for a room to be included in the creation of the schedule, the room must be included in this CSV.
                 </p>
                 <div class="faqExampleImage">
-                    <h4>Example of format of Avaliable Rooms CSV:</h4>
+                    <h4>Example of format of Available Rooms CSV:</h4>
                     <img src="../static/Pictures/ExampleAvaliableRoomCSV.PNG"  style="width: 300px; height:300px;"/>
                     <br>
                     <a href="../static/SampleCSVs/AvailableRooms.csv" download="AvaliableRooms">
@@ -188,14 +189,14 @@
         <div id="howToGenerateSchedule">
             <h2>How do you generate a schedule?</h2>
             <p>
-                After the <a href="#csvUpload">correct CSVs have been uploaded</a>,  Click the generate button on the create schedule page. 
-                This will generate a schedule from the CSVs. The schedule table will then be filled out with the created schedule. 
+                After the <a href="#csvUpload">correct CSVs have been uploaded</a>,   Click the generate button on the create schedule page. 
+                This will generate a schedule from the CSVs. The schedule table will then be filled out with the created schedule.
                 <div class="faqExampleImage">
                     <h4 style="margin-top:0px;">Example of how the schedule will look:</h4>
                     <img src="../static/Pictures/ScheduleGUIExample.PNG" style="width: 1000px; height:600px; margin-bottom: 20px">
                 </div>
-                If there were conflicts that need to be resolved for some classes, a notification will show up on th conflicts icon.
-                These conflicts must be resolved so the classes that all the classes in the CSV can be put into the schedule.
+                If there are conflicts that need to be resolved for some classes, a notification will show up on the conflicts icon. 
+                These conflicts must be resolved so the classes that all the classes in the CSV can be put into the schedule. 
                 For more information on how to resolve conflicts go <a href="#resolveConflicts">here</a>.
                 <div class="faqExampleImage">
                     <h4 style="margin-top:0px;">Example of how the conflict notification will look:</h4>
@@ -214,16 +215,19 @@
                     <h4 style="margin-top:0px;">Conflict Resolution page:</h4>
                     <img src="../static/Pictures/conflictPage.PNG" style="height: 550px; margin-bottom: 20px">
                 </div>
-                Once in this window, you will see all the classes with conflicts. These classes need to be assigned a classroom and day and time. To start resolving
-                the conflict click on the Classroom Selection dropdown for a given class and select a classroom. Once a classroom is selected, you can see all the avaliable
-                days and times for the given classroom in the Day and Time dropdown. Select a day and time for the class. Once you have selected a classroom and a day and time,
-                you will then click the save button to lock this selection in place. Once the save button is successfuly pressed, you cannot edit that given selection. If you wish 
-                to change the selection, click on the edit icon that has appeared next to the save button. Once pressed, the selection that you have previously made will no longer
-                be saved until you click the save icon again. Once you have selected and saved all conflict solutions, click the submit button at the bottom of the conflict page.
-                This will save and send all the conflict solutions that you have completed. Once the conflicts have been submitted, you must 
-                <a href="#howToGenerateSchedule">generate the schedule again</a> with the new changes that you have completed. If you decide to exit the conflicts page before you have
-                submitted all your conflicts, only the conflicts that you have saved will be preserved, so make sure you save all the conflicts you wish to keep before closing out of the 
-                conflict resolution window.
+                Once in this window, you will see all the classes with conflicts. 
+                These classes need to be assigned a classroom and day and time. 
+                To start resolving the conflict click on the Classroom Selection dropdown for a given class and select a classroom. 
+                Once a classroom is selected, you can see all the available days and times for the given classroom in the Day and Time dropdown. 
+                Select a day and time for the class. Once you have selected a classroom and a day and time, you will then click the save button to lock this selection in place. 
+                Once the save button is successfully pressed, you cannot edit that given selection. 
+                If you wish to change the selection, click on the edit icon that has appeared next to the save button. 
+                Once pressed, the selection that you have previously made will no longer be saved until you click the save icon again. Once you have selected and 
+                saved all conflict solutions, click the submit button at the bottom of the conflict page. This will save and send all the conflict solutions that you have completed. 
+                Once the conflicts have been submitted, you must
+                <a href="#howToGenerateSchedule">generate the schedule again</a>  with the new changes that you have completed. 
+                If you decide to exit the conflicts page before you have submitted all your conflicts, only the conflicts that you have saved will be preserved, 
+                so make sure you save all the conflicts you wish to keep before closing out of the conflict resolution window.
 
                 
             </p>
@@ -231,9 +235,8 @@
             <div id="downloadSchedule">
                 <h2>How do you download the generated schedule?</h2>
                 <p>
-                    After the schedule has been generated and all the conflicts that have arisen have been resolved, 
-                    you can then download the schedule in CSV format. To do this, 
-                    click on the download icon and the file will be immediately downloaded to your downloads folder.
+                    After the <a href="#howToGenerateSchedule">schedule has been generated</a> and all the <a href="#resolveConflicts">conflicts that have arisen have been resolved</a>, 
+                    you can then download the schedule in CSV format. To do this, click on the download icon and the file will be immediately downloaded to your downloads folder.
                     <div class="faqExampleImage">
                         <h4 style="margin-top:0px;">Download Icon:</h4>
                         <img src="../static/Pictures/DownloadIcon.PNG" style="height: 100px; width: 80px; margin-bottom: 20px">
@@ -243,7 +246,7 @@
             </div>
 
             <div id="contactUs">
-                <h3>If you have additional questions, feel free to email us at:</h3>
+                <h3 style="color: #27405a;">If you have additional questions, feel free to email us at:</h3>
                 <p>
                     UAHScheduleBuilder@uah.edu
                 </p>
