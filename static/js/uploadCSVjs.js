@@ -26,7 +26,6 @@ const debounce = (func, delay) => {
 // Checks to see if class that is inputted in classTextBox already exists and if so gives a warning that it exists
 if (classTextBox != null) {
     classTextBox.addEventListener("input", debounce(function() {
-        console.log("hello")
         let realClassName = department.value + classTextBox.value;
         for (const className of Object.keys(getDBData)) {
             if (realClassName === className) {

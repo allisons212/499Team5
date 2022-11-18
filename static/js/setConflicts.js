@@ -93,8 +93,6 @@ async function appendConflicts(conflictSolutions) {
 
     const selectedFaculty = await getSelectedFaculty();
 
-     console.log(selectedFaculty)
-
 
     for (const conflict of conflictSolutions) {
         // Put the rooms in the dropdown menus for each conflict
@@ -140,7 +138,6 @@ async function appendConflicts(conflictSolutions) {
             } else {
                 conflict.dayTimeDropDown.disabled = false;
                 conflict.dayTimeDropDown.style.cursor = "pointer";
-                console.log("There")
                 const selectedFaculty = await getSelectedFaculty();
                 conflict.setDayTimeDropDown(getTrueDaysAndTimes(selectedRooms[conflict.roomsDropDown.value], selectedFaculty[conflict.teacher]));
             }
@@ -289,7 +286,6 @@ const handleSubmit = async () => {
             submitWarning.style.display = "inline";
         } else {
             submitWarning.style.display = "none";
-            console.log("submitted");
             for (const conflict of conflictSolutions) {
                 await ky.put("/update/solution/assignments", { json: conflict.toLocal() });
             }
@@ -306,7 +302,6 @@ const handleSubmit = async () => {
 
 // Display the modal that contains all the conflict information
 function showModal() {
-    console.log("conflict solutions", conflictSolutions);
     if (conflictSolutions) {
         appendConflicts(conflictSolutions);
         submitButton.style.display = "inline";
