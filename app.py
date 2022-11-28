@@ -55,6 +55,12 @@ nav = Navigation(app)
 db = DataOperation()
 user = User()
 
+# Define port number
+try:
+    PORT = int(os.environ.get("PORT", 8080))
+except:
+    PORT = 8080
+
 #  Defines where our upload folder is
 app.config["UPLOAD_FOLDER"] = "static/upload/"
 
@@ -311,4 +317,4 @@ def update_solution_assignments():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=int(os.environ.get("PORT", 8080)), debug=True)
+    app.run(host='0.0.0.0', port=PORT, debug=True)
